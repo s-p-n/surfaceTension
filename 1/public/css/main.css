@@ -83,7 +83,7 @@ html, body {
             float: left;
         }
         #rightPanel {
-            background-image: url('assets/rightPanel.png');
+            background-image: url('/assets/rightPanel.png');
             margin: 0;
             float: right;
             width: 200px;
@@ -102,7 +102,7 @@ html, body {
             float: left;
         }
         #chatBox {
-            background-image: url('assets/ui/chatBox.png');
+            background-image: url('/assets/ui/chatBox.png');
             color: black;
             width: 374px;
             height: 133px;
@@ -110,7 +110,7 @@ html, body {
             float: left;
         }
         #chatBtn {
-            background-image: url('assets/ui/chatBtn_up.png');
+            background-image: url('/assets/ui/chatBtn_up.png');
             width: 72px;
             height: 49px;
             float: right;
@@ -125,7 +125,7 @@ html, body {
             margin-top: 84px;
         }
         #infoBox {
-            background-image: url('assets/ui/infoBox.png');
+            background-image: url('/assets/ui/infoBox.png');
             color: white;
             width: 738px;
             height: 133px;
@@ -136,7 +136,7 @@ html, body {
 
         .lambImg {
             display:inline-block;
-            background: url('assets/sheep_sprite.png');
+            background: url('/assets/game/sheep_sprite.png');
             background-position:-200px 0px;
             width:40px;
             height:40px;
