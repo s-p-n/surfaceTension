@@ -30,6 +30,8 @@ module.exports = function (m, session) {
 
 	function initPlayer () {
 		var userId, other;
+		session.state = 4;
+		session.event.emit('game-ready', true);
 		socket.emit('player', {username: player.username, game: player.game});
 		for (userId in m.session) {
 			if (userId === session.id || m.session[userId].user === void 0) {
@@ -42,6 +44,7 @@ module.exports = function (m, session) {
 	session.event.on('logged_in', function (result) {
 		if (result === true) {
 			player = session.user;
+			session.state = 3;
 		}
 	});
 

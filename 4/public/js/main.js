@@ -6,7 +6,7 @@ function initializeGame (main) {
         render: render
     });
 
-    var plugins = [new Map(main), new Player(main), new Others(main)];
+    var plugins = [new Map(main), new Player(main), new Others(main), new Herbs(main)];
 
     function preload() {
         main.game.time.advancedTiming = true;

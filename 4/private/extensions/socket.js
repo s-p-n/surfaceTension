@@ -13,6 +13,7 @@ module.exports = function (m) {
 		m.session[socket.id] = {
 			id: socket.id,
 			socket: socket,
+			state: 1,
 			event: new m.EventEmitter()
 		};
 		socket.on('disconnect', function () {
