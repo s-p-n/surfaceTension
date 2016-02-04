@@ -9,11 +9,17 @@ function initializeGame (main) {
     });
     main.objects;
     main.map = new Map (main);
-    var plugins = new Plugins(
-        new Player(main),
-        new Others(main), 
-        new Herbs(main)
-    );
+    main.player = new Player(main);
+    main.herbs = new Herbs(main);
+    main.utils = {
+        isClose: function (sprite) {
+            var result = main.player.closeRect.intersects(sprite);
+            console.log("is close?", result);
+            return result
+        }
+    }
+    var plugins = new Plugins(main.player, new Others(main), main.herbs);
+
     function preload() {
         main.game.time.advancedTiming = true;
         main.game.stage.disableVisibilityChange = true;
@@ -40,4 +46,5 @@ function initializeGame (main) {
         main.map.render();
         plugins.render();
     }
+    
 }
