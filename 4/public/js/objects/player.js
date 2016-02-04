@@ -42,7 +42,7 @@ function Player(main) {
     };
     self.create = function () {
         // Set up Player
-        self.player = main.game.add.sprite(250, 250, 'player');
+        self.player = main.objects.create(250, 250, 'player');
         self.player.anchor.setTo(0.5, 0.9);
         self.player.animations.add('down', [0, 1, 0, 2], 10, true);
         self.player.animations.add('left', [3, 4, 3, 5], 10, true);
@@ -136,7 +136,6 @@ function Player(main) {
             }
         }
     };
-    self.render = function () {};
     comms.on('player', function (data) {
         self.playerData = data;
     });

@@ -67,8 +67,6 @@ function Others(main) {
             }
         });
     }
-    self.preload = function () {};
-    self.create = function () {};
     self.update = function () {
         if (lastMove + moveTime < Date.now()) {
             lastMove = Date.now();
@@ -81,7 +79,7 @@ function Others(main) {
         if (!(data.username in others)) {
             others[data.username] = {};
             // Set up player sprite
-            others[data.username].sprite = main.game.add.sprite(
+            others[data.username].sprite = main.objects.create(
                 data.game.x, 
                 data.game.y, 
                 'player'
