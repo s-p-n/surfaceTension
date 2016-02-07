@@ -57,9 +57,11 @@ module.exports = function (m, session) {
             typeof herb.place[0] === 'number' &&
             herb.place[0] > 0 &&
             herb.place[0] < 1000 &&
+            herb.place[0] % 25 === 0 &&
             typeof herb.place[1] === 'number' &&
             herb.place[1] > 0 &&
             herb.place[1] < 450 &&
+            herb.place[1] % 25 === 0 &&
             inventoryItem.name === herb.name
         ) {
             session.user.inventory.remove(herb.inventory_id);

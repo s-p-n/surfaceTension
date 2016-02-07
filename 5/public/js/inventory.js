@@ -53,18 +53,18 @@ var inventory = {
 (function () {
     var sprite = null;
     var gridSize = 25;
-    $(document).on('mousedown', '.item', function (e) {
+    $(document).on('click', '.item', function (e) {
         var id = $(this).attr('data-id');
         var item;
         if (id === void 0) {
             return;
         }
-        item = inventory.items[parseInt(id)];
-        if (item.num === 1) {
-            inventory.items.splice(id, 1);
-        } else {
-            item.num -= 1;
+        if (sprite !== null) {
+            sprite.destroy();
+            sprite = null;
+            return;
         }
+        item = inventory.items[parseInt(id)];
         inventory.render();
         sprite = gameObj.game.add.sprite(700, 350, item.name);
         sprite.inventory_id = id;
@@ -91,16 +91,24 @@ var inventory = {
             sprite.y = y - yMod;
         }
     });
-    $(document).on('mouseup', function (e) {
-        var herb = {};
+    $(document).on('click', '#canvas', function (e) {
+        var herb = {}, item;
         if (sprite === null) {
             return true;
+        }
+        item = inventory.items[parseInt(sprite.inventory_id)];
+        if (item.num === 1) {
+            inventory.items.splice(sprite.inventory_id, 1);
+        } else {
+            item.num -= 1;
         }
         herb.inventory_id = sprite.inventory_id;
         herb.name = sprite.key;
         herb.place = [sprite.x, sprite.y];
         comms.emit('herb-planted', herb);
-        sprite.destroy();
-        sprite = null;
+        if (item.num <= 0) {
+            sprite.destroy();
+            sprite = null;
+        }
     });
 }());
