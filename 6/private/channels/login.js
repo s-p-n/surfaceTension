@@ -28,7 +28,7 @@ module.exports = function (m, session) {
 	socket.on("login", function (data) {
 		socket.emit('login', {'status': "Processing Login.."});
 		console.log("Processing Login..");
-		console.log(data, socket.id);
+		console.log(data.username, socket.id);
 		var result = m.form.process(expected, data);
 		
 		if (result === false) {

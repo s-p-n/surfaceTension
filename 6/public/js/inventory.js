@@ -96,6 +96,8 @@ var inventory = {
         item = inventory.items[parseInt(sprite.inventory_id)];
         if (item.num === 1) {
             inventory.items.splice(sprite.inventory_id, 1);
+            sprite.destroy();
+            sprite = null;
         } else {
             item.num -= 1;
         }

@@ -1,7 +1,4 @@
 "use strict";
-var Herbs = require('./objects/herbs.js');
-var IronMines = require('./objects/ironMines.js');
-
 function setupGameObj (obj, objClass) {
     Object.defineProperties(obj, {
         "class": {
@@ -18,12 +15,16 @@ function setupGameObj (obj, objClass) {
         }
     });
 }
-
 module.exports = function (m) {
-	m.game.objects = {
-        herbs: {},
-        ironMines: {}
-    };
-    setupGameObj(m.game.objects.herbs, Herbs);
-    setupGameObj(m.game.objects.ironMines, IronMines);
+    var dir = m.fs.readdirSync('./private/extensions/objects');
+    var index, objName;
+    m.game.objects = {};
+    for (index in dir) {
+        if (dir[index].match(/[a-z]\.js/)) {
+            objName = dir[index].substr(0, dir[index].indexOf('.'));
+            m.game.objects[objName] = {};
+            setupGameObj(m.game.objects[objName], require('./objects/' + dir[index]));
+        }
+    }
+    console.log("Set up game objects:", m.game.objects);
 };

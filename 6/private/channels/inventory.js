@@ -71,6 +71,8 @@ module.exports = function (m, session) {
     });
     socket.on('item-placed', function (item) {
         var groundItem;
+        // TODO: Create educated mapping system to determine what items should do
+        // when they are placed.
         if (item.name === 'slire') {
             session.event.emit('herb-planted', item);
             return;

@@ -7,7 +7,7 @@ module.exports = function (m, session) {
 	socket.on('register', function (data) {
 		socket.emit('login', {'status': "Processing Registration.."});
 		console.log("Processing Registration..");
-		console.log(data, socket.id);
+		console.log(data.username, socket.id);
 		var result = m.form.process(expected, data);
 		
 		if (result === false) {
