@@ -8,23 +8,33 @@ function intersects (a, b) {
 module.exports = function (m, session) {
     "use strict";
     var socket = session.socket;
-    m.event.on('herb-created', function (herb) {
+    var herbs = m.game.objects.herbs;
+    function herbCreated (herb) {
         if (session.state === 4) {
             socket.emit('herb-created', herb);
         }
-    });
-    m.event.on('herb-deleted', function (id) {
+    }
+    function herbDeleted (id) {
         if (session.state === 4) {
             socket.emit('herb-deleted', id);
         }
-    });
+    }
+    if (herbs.instance === null) {
+        console.log("Instantiating Herbs");
+        herbs.instance = new herbs.class(m, function (herb) {
+            herbs[herb._id] = herb;
+            herbCreated(herb);
+            console.log("Herb Created(1)");
+        });
+    }
     session.event.on('game-ready', function (ready) {
         if (ready) {
-            socket.emit('herbs-init', m.game.objects.herbs);
+            console.log("Initializing Herbs:", herbs);
+            socket.emit('herbs-init', herbs);
         }
     });
     socket.on('herb-picked', function (herbId) {
-        var herb = m.game.objects.herbs[herbId];
+        var herb = herbs[herbId];
         if (session.state !== 4 || herb === void 0 || herb.place === void 0) {
             return;
         }
@@ -40,15 +50,18 @@ module.exports = function (m, session) {
             w: 25,
             h: 25
         };
-        if (intersects(playerRect, herbRect)) {
-            console.log("intersection!");
-            m.event.emit('herb-picked', {herb: herb, player: session.user});
+        if (intersects(playerRect, herbRect) &&
+            session.user.inventory.add(herb.name)
+        ) {
+            herbs.instance.remove(herb);
+            delete herbs[herbId];
+            herbDeleted(herbId);
         } else {
-            socket.emit('herb-created', herb);
+            herbCreated(herb);
         }
     });
     socket.on('herb-planted', function (herb) {
-        if (state !== 4 || 
+        if (session.state !== 4 || 
             herb === void 0 || 
             herb.inventory_id === void 0 ||
             herb.name === void 0 ||
@@ -74,9 +87,18 @@ module.exports = function (m, session) {
             inventoryItem.name === herb.name
         ) {
             session.user.inventory.remove(herb.inventory_id);
-            m.event.emit('herb-planted', {
+            herbs.instance.add({
                 name: herb.name,
                 place: herb.place
+            }, function (err, herb) {
+                if (err) {
+                    console.log("Insert error!");
+                    console.error(err);
+                    return;
+                }
+                console.log("herb created(2)");
+                herbs[herb._id] = herb;
+                herbCreated(herb);
             });
         }
     });
