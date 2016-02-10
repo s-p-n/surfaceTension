@@ -14,7 +14,16 @@ module.exports = function (m) {
 			id: socket.id,
 			socket: socket,
 			state: 1,
-			event: new m.EventEmitter()
+			event: new m.EventEmitter(),
+			state4Broadcast: function state4Broadcast(name, data) {
+				var id, sess;
+				for (id in m.session) {
+					sess = m.session[id];
+					if (sess.state === 4) {
+						sess.socket.emit(name, data);
+					}
+				}
+			}
 		};
 		socket.on('disconnect', function () {
 			console.log("someone disconnected");

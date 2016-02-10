@@ -1,11 +1,11 @@
+"use strict";
 var Herbs = require('./objects/herbs.js');
-module.exports = function (m) {
-	m.game.objects = {
-        herbs: {}
-    };
-    Object.defineProperties(m.game.objects.herbs, {
+var IronMines = require('./objects/ironMines.js');
+
+function setupGameObj (obj, objClass) {
+    Object.defineProperties(obj, {
         "class": {
-            value: Herbs,
+            value: objClass,
             writable: false,
             configurable: false,
             enumerable: false
@@ -17,4 +17,13 @@ module.exports = function (m) {
             enumerable: false
         }
     });
+}
+
+module.exports = function (m) {
+	m.game.objects = {
+        herbs: {},
+        ironMines: {}
+    };
+    setupGameObj(m.game.objects.herbs, Herbs);
+    setupGameObj(m.game.objects.ironMines, IronMines);
 };

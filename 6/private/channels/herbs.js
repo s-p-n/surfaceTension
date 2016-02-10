@@ -10,21 +10,17 @@ module.exports = function (m, session) {
     var socket = session.socket;
     var herbs = m.game.objects.herbs;
     function herbCreated (herb) {
-        if (session.state === 4) {
-            socket.emit('herb-created', herb);
-        }
+        session.state4Broadcast('herb-created', herb);
     }
     function herbDeleted (id) {
-        if (session.state === 4) {
-            socket.emit('herb-deleted', id);
-        }
+        session.state4Broadcast('herb-deleted', id);
     }
     if (herbs.instance === null) {
         console.log("Instantiating Herbs");
         herbs.instance = new herbs.class(m, function (herb) {
             herbs[herb._id] = herb;
             herbCreated(herb);
-            console.log("Herb Created(1)");
+            console.log("Herb Created(1)", herb);
         });
     }
     session.event.on('game-ready', function (ready) {
@@ -60,7 +56,7 @@ module.exports = function (m, session) {
             herbCreated(herb);
         }
     });
-    socket.on('herb-planted', function (herb) {
+    session.event.on('herb-planted', function (herb) {
         if (session.state !== 4 || 
             herb === void 0 || 
             herb.inventory_id === void 0 ||

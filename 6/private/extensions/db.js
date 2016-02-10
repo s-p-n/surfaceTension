@@ -1,4 +1,4 @@
-var db = require('mongojs')('surfaceTension', ['users', 'sheep', 'herbs']);
+var db = require('mongojs')('surfaceTension', ['users', 'sheep', 'herbs', 'mines']);
 module.exports = function (m) {
 	m.db = db;
 };

@@ -19,12 +19,10 @@ var inventory = {
         if (firstEmptySlot === 30) {
             return false;
         }
-        console.log('first empty slot:', firstEmptySlot);
         self.items[firstEmptySlot] = {
             name: item,
             num: 1
         };
-        console.log('items:', self.items);
         self.render();
         return true;
     },
@@ -42,7 +40,6 @@ var inventory = {
             $(item).attr('data-id', void 0);
             $(item).css('cursor', 'default');
             if (self.items[i] !== void 0) {
-                console.log("Adding img to inventory:", item, i, self.items[i])
                 $(item).append(self.getItemImage(self.items[i]));
                 $(item).attr('data-id', i);
                 $(item).css('cursor', 'pointer');
@@ -92,7 +89,7 @@ var inventory = {
         }
     });
     $(document).on('click', '#canvas', function (e) {
-        var herb = {}, item;
+        var data = {}, item;
         if (sprite === null) {
             return true;
         }
@@ -102,10 +99,10 @@ var inventory = {
         } else {
             item.num -= 1;
         }
-        herb.inventory_id = sprite.inventory_id;
-        herb.name = sprite.key;
-        herb.place = [sprite.x, sprite.y];
-        comms.emit('herb-planted', herb);
+        data.inventory_id = sprite.inventory_id;
+        data.name = sprite.key;
+        data.place = [sprite.x, sprite.y];
+        comms.emit('item-placed', data);
         if (item.num <= 0) {
             sprite.destroy();
             sprite = null;

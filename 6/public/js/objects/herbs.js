@@ -4,7 +4,6 @@ function Herbs (main) {
     var herbs = {};
     function onDown (sprite) {
         var herb = herbs[sprite._id];
-        console.log("Clicked on ", herb);
         if (main.utils.isClose(sprite) &&
             inventory.add(herbs[sprite._id].name)
         ) {
@@ -18,9 +17,13 @@ function Herbs (main) {
         herbs[herb._id].sprite = sprite;
         sprite._id = herb._id;
         sprite.inputEnabled =  true;
+        sprite.input.useHandCursor = true;
         sprite.events.onInputDown.add(onDown);
     }
     self.deleteHerb = function (id) {
+        if (herbs[id] === void 0) {
+            return;
+        }
         herbs[id].sprite.destroy();
         delete herbs[id];
     }

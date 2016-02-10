@@ -11,6 +11,8 @@ function initializeGame (main) {
     main.map = new Map (main);
     main.player = new Player(main);
     main.herbs = new Herbs(main);
+    main.mines = new Mines(main);
+    main.groundItems = new GroundItems(main);
     main.utils = {
         isClose: function (sprite) {
             var result = main.player.closeRect.intersects(sprite);
@@ -18,7 +20,7 @@ function initializeGame (main) {
             return result
         }
     }
-    var plugins = new Plugins(main.player, new Others(main), main.herbs);
+    var plugins = new Plugins(main.player, new Others(main), main.herbs, main.mines, main.groundItems);
 
     function preload() {
         main.game.time.advancedTiming = true;
