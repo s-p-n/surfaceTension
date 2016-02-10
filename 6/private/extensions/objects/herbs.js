@@ -11,6 +11,13 @@ function Herbs(main, childCallback) {
             ',' + 
             herb.place[1];
     }
+    function placeAvailable(herb) {
+        return (herbPlaces.indexOf(serializePlace(herb)) === -1 &&
+            herb.place[0] > 0 &&
+            herb.place[0] < 512 &&
+            herb.place[1] > 0 &&
+            herb.place[1] < 512);
+    }
     self.db = {
         each: function (fn, done) {
             main.db.herbs.find().forEach(function (err, doc) {
@@ -48,7 +55,7 @@ function Herbs(main, childCallback) {
     };
     self.add = function (data, fn) {
         var herb = new Herb(data);
-        if (herbPlaces.indexOf(serializePlace(herb)) === -1) {
+        if (placeAvailable(herb)) {
             herbs.push(herb);
             herbPlaces.push(serializePlace(herb));
             self.db.add(herb, fn);
@@ -68,7 +75,7 @@ function Herbs(main, childCallback) {
             herbs.forEach(function (herb) {
                 var child = herb.cycle();
                 if (child instanceof Herb && 
-                    (herbPlaces.indexOf(serializePlace(child)) === -1)
+                    (placeAvailable(child))
                 ) {
                     herbPlaces.push(serializePlace(child));
                     herbs.push(child);
