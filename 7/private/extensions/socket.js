@@ -27,6 +27,12 @@ module.exports = function (m) {
 		};
 		socket.on('disconnect', function () {
 			console.log("someone disconnected");
+			if (m.session[socket.id].state === 4) {
+				m.session[socket.id].state4Broadcast(
+					'player-disconnect', 
+					m.session[socket.id].user.username
+				);
+			}
 			delete m.session[socket.id];
 		});
 

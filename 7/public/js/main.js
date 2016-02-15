@@ -1,3 +1,4 @@
+
 function initializeGame (main) {
     var sortInterval = 100;
     var lastSort = 0;

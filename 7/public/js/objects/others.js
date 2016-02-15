@@ -132,4 +132,11 @@ function Others(main) {
         }
         others[data.username].queue.push(data.game);
     });
+    comms.on('player-disconnect', function (player) {
+        if (others[player] !== void 0) {
+            others[player].sprite.destroy();
+            others[player].text.destroy();
+            delete others[player];
+        }
+    });
 }

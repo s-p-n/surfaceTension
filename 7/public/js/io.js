@@ -21,7 +21,13 @@ var comms = (function () {
 		e.preventDefault();
 		return false;
 	});
-
+	socket.on('connect', function () {
+		if (window.gameObj === void 0) {
+		    window.gameObj = {};
+		} else {
+		    window.location.reload();
+		}
+	});
 	socket.on('content', function (data) {
 		console.log("content:", data);
 		$(data.selector).html(data.html);

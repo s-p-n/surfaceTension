@@ -35,6 +35,7 @@ module.exports = function (m, session) {
 		session.state = 4;
 		session.event.emit('game-ready', true);
 		socket.emit('player', {username: player.username, game: player.game});
+		m.event.emit('player-update', player);
 		for (userId in m.session) {
 			if (userId === session.id || m.session[userId].user === void 0) {
 				continue;
