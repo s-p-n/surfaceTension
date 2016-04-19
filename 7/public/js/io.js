@@ -15,7 +15,6 @@ var comms = (function () {
 			}
 			formData.push(result);
 		});
-		console.log('action:', $(this).attr('action'), formData);
 		socket.emit($(this).attr('action'), formData);
 		e.stopPropagation();
 		e.preventDefault();
@@ -29,12 +28,10 @@ var comms = (function () {
 		}
 	});
 	socket.on('content', function (data) {
-		console.log("content:", data);
 		$(data.selector).html(data.html);
 	});
 
 	socket.on('cookie', function (data) {
-		console.log("setting cookie:", data);
 		cookies.create(data.name, data.value, data.days);
 	});
 

@@ -16,16 +16,16 @@ module.exports = function (m, session) {
         session.state4Broadcast('herb-deleted', id);
     }
     if (herbs.instance === null) {
-        console.log("Instantiating Herbs");
+        //console.log("Instantiating Herbs");
         herbs.instance = new herbs.class(m, function (herb) {
             herbs[herb._id] = herb;
             herbCreated(herb);
-            console.log("Herb Created(1)", herb);
+            //console.log("Herb Created(1)", herb);
         });
     }
     session.event.on('game-ready', function (ready) {
         if (ready) {
-            console.log("Initializing Herbs:", herbs);
+            //console.log("Initializing Herbs:", herbs);
             socket.emit('herbs-init', herbs);
         }
     });
@@ -66,9 +66,9 @@ module.exports = function (m, session) {
             return;
         }
         var inventoryItem = session.user.game.inventory[herb.inventory_id];
-        console.log("herb planted:");
-        console.log(inventoryItem);
-        console.log(herb);
+        //console.log("herb planted:");
+        //console.log(inventoryItem);
+        //console.log(herb);
         if (inventoryItem !== void 0 &&
             herb.place instanceof Array && 
             herb.place.length === 2 && 
@@ -88,11 +88,11 @@ module.exports = function (m, session) {
                 place: herb.place
             }, function (err, herb) {
                 if (err) {
-                    console.log("Insert error!");
+                    //console.log("Insert error!");
                     console.error(err);
                     return;
                 }
-                console.log("herb created(2)");
+                //console.log("herb created(2)");
                 herbs[herb._id] = herb;
                 herbCreated(herb);
             });

@@ -69,14 +69,21 @@ var inventory = {
         return false;
     });
     $(document).on('mousemove', function (e) {
-        var xMod, yMod;
-        var x = e.pageX - 12.5;
-        var y = e.pageY - 12.5;
+        var xMod, yMod, x, y;
+        if (gameObj.utils === void 0) {
+            return;
+        }
+        x = e.pageX - (12.5 * gameObj.scale) + gameObj.game.camera.x;
+        y = e.pageY - (12.5 * gameObj.scale) + gameObj.game.camera.y;
         if (sprite === null) {
             return true;
         }
-        xMod = x % gridSize;
-        yMod = y % gridSize;
+        xMod = x % (gridSize * gameObj.scale);
+        yMod = y % (gridSize * gameObj.scale);
+        x /= gameObj.scale;
+        y /= gameObj.scale;
+        xMod /= gameObj.scale;
+        yMod /= gameObj.scale;
         if (xMod > 12.5) {
             sprite.x = x + (gridSize - xMod);
         } else {

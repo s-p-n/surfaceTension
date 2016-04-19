@@ -18,7 +18,7 @@ var exec = {
 module.exports = function (m, session) {
 	var socket = session.socket;
 	var player;
-	var intervalTime = 100;
+	var intervalTime = 75;
 	var lastCmdTime = 0;
 
 	function updatePlayer () {
@@ -76,8 +76,8 @@ module.exports = function (m, session) {
 		if (cmd in exec) {
 			if ((lastCmdTime + intervalTime) > now) {
 				console.log("Client moving too fast!", lastCmdTime, now);
-			} else if (isNaN(lag) || lag < 0) {
-				console.log("Client supplied invalid lag data!", data.lag);
+			//} else if (isNaN(lag) || lag < 0) {
+			//	console.log("Client supplied invalid lag data!", data.time);
 			} else {
 				exec[cmd](player);
 			}

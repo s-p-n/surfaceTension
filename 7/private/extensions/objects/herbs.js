@@ -2,7 +2,7 @@ var Herb = require('./ai/herb.js');
 function Herbs(main, childCallback) {
     "use strict";
     var self = this;
-    var herbPlaces = [];
+    var herbRemoval = [];
     var herbs = [];
     var interval = void 0;
     var intervalTime = 1000;
@@ -12,11 +12,11 @@ function Herbs(main, childCallback) {
             herb.place[1];
     }
     function placeAvailable(herb) {
-        return (herbPlaces.indexOf(serializePlace(herb)) === -1 &&
+        return (main.map.places[serializePlace(herb)] === false &&
             herb.place[0] > 0 &&
-            herb.place[0] < 512 &&
+            herb.place[0] < main.map.bounds[0] &&
             herb.place[1] > 0 &&
-            herb.place[1] < 512);
+            herb.place[1] < main.map.bounds[1]);
     }
     self.db = {
         each: function (fn, done) {
@@ -57,14 +57,14 @@ function Herbs(main, childCallback) {
         var herb = new Herb(data);
         if (placeAvailable(herb)) {
             herbs.push(herb);
-            herbPlaces.push(serializePlace(herb));
+            main.map.places[serializePlace(herb)] = true;
             self.db.add(herb, fn);
         }
     };
     self.remove = function (data) {
-        var index = herbPlaces.indexOf(serializePlace(data));
-        herbPlaces.splice(index, 1);
-        herbs.splice(index, 1);
+        var serialPlace = serializePlace(data)
+        main.map.places[serialPlace] = false;
+        herbRemoval.push(serialPlace);
         self.db.remove(data._id);
     }
     self.stop = function () {
@@ -72,12 +72,19 @@ function Herbs(main, childCallback) {
     }
     self.start = function () {
         interval = setInterval(function () {
-            herbs.forEach(function (herb) {
-                var child = herb.cycle();
+            herbs.forEach(function (herb, index) {
+                var serialPlace = serializePlace(herb);
+                var child;
+                // remove if marked for removal
+                if (herbRemoval.indexOf(serialPlace) !== -1) {
+                    herbs.splice(index, 1);
+                    return;
+                }
+                child = herb.cycle();
                 if (child instanceof Herb && 
                     (placeAvailable(child))
                 ) {
-                    herbPlaces.push(serializePlace(child));
+                    main.map.places[serializePlace(child)] = true;
                     herbs.push(child);
                     self.db.add(child, function (err, doc) {
                         if (!err) {
@@ -95,7 +102,7 @@ function Herbs(main, childCallback) {
     // Construct the herbs list from db:
     self.db.each(function (doc) {
         var herb = new Herb(doc);
-        herbPlaces.push(serializePlace(herb));
+        main.map.places[serializePlace(herb)] = true;
         herbs.push(herb);
         self.cycleCallback(doc);
     }, function () {

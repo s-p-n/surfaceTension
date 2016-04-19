@@ -2,7 +2,12 @@ var Iron = require('./mines/iron.js');
 function IronMines(m, bitUpdateCallback) {
     var self = this;
     self.mines = Object.create(null);
-
+    function addToPlaces(mine) {
+        var a = mine.place[0] + ',' + mine.place[1];
+        var b = mine.place[0] + 25 + ',' + mine.place[1];
+        m.map.places[a] = true;
+        m.map.places[b] = true;
+    }
     self.db = {
         each: function (fn, done) {
             m.db.mines.find({name: 'iron'}).forEach(function (err, doc) {
@@ -56,6 +61,7 @@ function IronMines(m, bitUpdateCallback) {
             }
         };
         self.mines[doc._id] = new Iron(params);
+        addToPlaces(doc);
         self.cycleCallback(self.mines[doc._id]);
     }, function () {
         self.start();
