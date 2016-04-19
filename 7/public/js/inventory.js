@@ -101,20 +101,17 @@ var inventory = {
             return true;
         }
         item = inventory.items[parseInt(sprite.inventory_id)];
+        
+        data.inventory_id = sprite.inventory_id;
+        data.name = sprite.key;
+        data.place = [sprite.x, sprite.y];
+        comms.emit('item-placed', data);
         if (item.num === 1) {
             inventory.items.splice(sprite.inventory_id, 1);
             sprite.destroy();
             sprite = null;
         } else {
             item.num -= 1;
-        }
-        data.inventory_id = sprite.inventory_id;
-        data.name = sprite.key;
-        data.place = [sprite.x, sprite.y];
-        comms.emit('item-placed', data);
-        if (item.num <= 0) {
-            sprite.destroy();
-            sprite = null;
         }
     });
 }());
