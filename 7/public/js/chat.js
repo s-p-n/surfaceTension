@@ -10,7 +10,10 @@ var sendMsg = function () {
 
 var recvMsg = function (data) {
    
-    $('#chatText').append($('<li class="chatItem">').text(data.text));
+    $('#chatText').prepend($('<li class="chatItem">').text(data.text));
+    $('#chatText').animate({
+        scrollTop: 0
+    }, 700);
 }
 
 $('#chatInput').keypress(function (e) {
