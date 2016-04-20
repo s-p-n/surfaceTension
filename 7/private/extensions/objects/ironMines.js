@@ -24,6 +24,13 @@ function IronMines(m, bitUpdateCallback) {
                 fn(doc);
             });
         },
+        add: function (place, fn) {
+            if (typeof fn === 'function') {
+                m.db.mines.insert({name: 'iron', place: place, bits: 0}, fn);
+            } else {
+                m.db.mines.insert({name: 'iron', place: place, bits: 0});
+            }
+        },
         updateBits: function (id, newBits, fn) {
             if (typeof fn === "function") {
                 m.db.mines.update({_id: id}, {$set: {bits: newBits}}, fn);
@@ -36,6 +43,29 @@ function IronMines(m, bitUpdateCallback) {
         self.mines[id].bits = newBits;
         self.db.updateBits(id, newBits, fn);
     };
+    self.add = function (place, fn) {
+        self.db.add(place, function (err, doc) {
+            if (err) {
+                console.log("Add Iron Mine Error:");
+                console.log(err);
+                return;
+            }
+            var params = {
+                _id: doc._id,
+                place: doc.place,
+                bits: doc.bits,
+                callback: function (iron) {
+                    self.mines[iron._id].bits = iron.bits;
+                    self.db.updateBits(iron._id, iron.bits);
+                    self.cycleCallback(iron);
+                }
+            };
+            self.mines[doc._id] = new Iron(params);
+            addToPlaces(doc);
+            fn(self.mines[doc._id]);
+            self.mines[doc._id].start();
+        });
+    }
     self.start = function () {
         var id;
         for(id in self.mines) {

@@ -17,7 +17,6 @@ function initializeGame (main) {
     main.utils = {
         isClose: function (sprite) {
             var result = main.player.closeRect.intersects(sprite);
-            console.log("is close?", result);
             return result
         }
     }
@@ -25,7 +24,6 @@ function initializeGame (main) {
     var plugins = new Plugins(main.player, new Others(main), main.herbs, main.mines, main.groundItems);
 
     function preload() {
-        console.log(main.game);
         main.game.time.advancedTiming = true;
         main.game.stage.disableVisibilityChange = true;
         main.game.world.setBounds(0, 0, 2048 * main.scale, 2048 * main.scale);

@@ -19,6 +19,13 @@ function Player(main) {
         };
         var cursors = game.input.keyboard.createCursorKeys();
         this.isDown = function isDown(key) {
+            //console.log(key, keyList[key]);
+            if (window.bypassPhaserInput) {
+                game.input.enabled = false;
+                return false;
+            } else {
+                game.input.enabled = true;
+            }
             if (key in keyList && keyList[key].isDown) {
                 return true;
             }
@@ -39,15 +46,25 @@ function Player(main) {
     }
     self.preload = function () {
         main.game.load.spritesheet('player', '/assets/game/dude_sprite.png', 25, 50);
+        main.game.load.spritesheet('player_pants', '/assets/game/dude_pants_sprite.png', 25, 50);
     };
     self.create = function () {
         // Set up Player
+        
         self.player = main.objects.create(250, 250, 'player');
-        self.player.anchor.setTo(0.35, 0.8);
+        self.pants = self.player.addChild(main.game.add.sprite(0, 0, 'player_pants'));
+        self.player.anchor.setTo(0.35, 0.9);
+        self.pants.anchor.setTo(0.35, 0.9);
+
         self.player.animations.add('down', [0, 1, 0, 2], 10, true);
         self.player.animations.add('left', [3, 4, 3, 5], 10, true);
         self.player.animations.add('right', [3, 4, 3, 5], 10, true);
         self.player.animations.add('up', [6, 7, 6, 8], 10, true);
+        
+        self.pants.animations.add('down', [0, 1, 0, 2], 10, true);
+        self.pants.animations.add('left', [3, 4, 3, 5], 10, true);
+        self.pants.animations.add('right', [3, 4, 3, 5], 10, true);
+        self.pants.animations.add('up', [6, 7, 6, 8], 10, true);
 
         // Set up close rectangle
         self.closeRect = new Phaser.Rectangle(0, 0, 0, 0);
@@ -99,38 +116,48 @@ function Player(main) {
                 // Move to left
                 if (self.player.scale.x < 0) {
                     self.player.scale.x *= -1;
+                    //self.pants.scale.x *= -1;
                 }
                 self.player.anchor.x = 0.35;
+                self.pants.anchor.x = 0.35;
                 newPos.x -= horrSpeed;
                 serverCommand('left');
                 self.player.animations.play('left');
+                self.pants.animations.play('left');
                 self.stillFrame = 3;
             } else if (self.key.isDown('right')) {
                 // Move to right
                 if (self.player.scale.x > 0) {
                     self.player.scale.x *= -1;
+                    //self.pants.scale.x *= -1;
                 }
                 self.player.anchor.x = 0.5;
+                self.pants.anchor.x = 0.5;
                 newPos.x += horrSpeed;
                 serverCommand('right');
                 self.player.animations.play('right');
+                self.pants.animations.play('right');
                 self.stillFrame = 3;
             } else if (self.key.isDown('up')) {
                 // Move up
                 newPos.y -= vertSpeed;
                 serverCommand('up');
                 self.player.animations.play('up');
+                self.pants.animations.play('up');
                 self.stillFrame = 6;
             } else if (self.key.isDown('down')) {
                 // Move down
                 newPos.y += vertSpeed;
                 serverCommand('down');
                 self.player.animations.play('down');
+                self.pants.animations.play('down');
                 self.stillFrame = 0;
             } else {
                 // Player not moving
                 self.player.animations.stop();
+                self.pants.animations.stop();
                 self.player.frame = self.stillFrame;
+                self.pants.frame = self.stillFrame;
             }
             if (self.player.x !== newPos.x || self.player.y !== newPos.y) {
                 main.game.add.tween(self.player).

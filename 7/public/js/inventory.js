@@ -70,7 +70,7 @@ var inventory = {
     });
     $(document).on('mousemove', function (e) {
         var xMod, yMod, x, y;
-        if (gameObj.utils === void 0) {
+        if (gameObj === void 0 || gameObj.utils === void 0) {
             return;
         }
         x = e.pageX - (12.5 * gameObj.scale) + gameObj.game.camera.x;

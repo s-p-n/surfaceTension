@@ -61,7 +61,7 @@ function Herbs (main) {
                 disable(id);
             }
         }
-        console.log("visible herbs:", visibleHerbs);
+        //console.log("visible herbs:", visibleHerbs);
     };
     self.createHerb = function (herb) {
         herbs[herb._id] = herb;
@@ -76,7 +76,7 @@ function Herbs (main) {
         if (!herbInView(herb._id)) {
             disable(herb._id);
         } else {
-            console.log("Herb not displayed:", herb);
+            //console.log("Herb not displayed:", herb);
         }
     };
     self.deleteHerb = function (id) {
@@ -90,8 +90,8 @@ function Herbs (main) {
         main.game.load.image('slire', './assets/game/slire.png');
     };
     comms.on('herbs-init', function (herbs) {
-        console.log("got herbs init:");
-        console.log(herbs);
+        //console.log("got herbs init:");
+        //console.log(herbs);
         var id;
         for (id in herbs) {
             self.createHerb(herbs[id]);

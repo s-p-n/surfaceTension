@@ -11,6 +11,9 @@
 		
 	</div>
 	<div id="rightPanel">
+	<div style="text-align: center; margin: 25px">
+		<a class="logout" href="/">Log out</a>
+	</div>
 		<div id="rightPanelItems">
 			<div class="item"> </div>
 			<div class="item"> </div>
@@ -53,7 +56,9 @@
 	<div id="bottomPanel">
 		<div id="chatPanel">
 			<div id="chatBox">
-
+				<ul id="chatText">
+				</ul>
+				<input id="chatInput" type="text" maxlength="100">
 			</div>
 			<div id="chatBtn">
 			</div>
@@ -66,6 +71,7 @@
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="/js/jquery.js"></script>
 	<script src="/js/io.js"></script>
+	<script src="/js/chat.js"></script>
 	<script src="/js/phaser.min.js"></script>
 	<script src="/js/plugins.js"></script>
 	<script src="/js/inventory.js"></script>

@@ -20,6 +20,9 @@ var comms = (function () {
 		e.preventDefault();
 		return false;
 	});
+	$('.logout').click(function () {
+		cookies.erase('sessionID');
+	});
 	socket.on('connect', function () {
 		if (window.gameObj === void 0) {
 		    window.gameObj = {};
