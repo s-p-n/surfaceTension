@@ -43,7 +43,8 @@ module.exports = function (m, session) {
 			other = m.session[userId].user;
 			socket.emit('others-update', {username: other.username, game: {
 				x: other.game.x,
-				y: other.game.y
+				y: other.game.y,
+				gear: other.game.gear
 			}});
 		}
 	}

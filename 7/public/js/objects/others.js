@@ -25,18 +25,22 @@ function Others(main) {
             }
             player.sprite.animations.play('left');
             player.stillFrame = 3;
+            gearLeft(player);
         } else if (destination.x > player.sprite.x) {
             if (player.sprite.scale.x > 0) {
                 player.sprite.scale.x *= -1;
             }
             player.sprite.animations.play('right');
             player.stillFrame = 3;
+            gearRight(player);
         } else if (destination.y < player.sprite.y) {
             player.sprite.animations.play('up');
             player.stillFrame = 6;
+            gearUp(player);
         } else if (destination.y > player.sprite.y) {
             player.sprite.animations.play('down');
             player.stillFrame = 0;
+            gearDown(player);
         }
         main.game.add.tween(player.sprite).
             to(destination, moveTime * tweenTime, 'Linear').
@@ -64,9 +68,59 @@ function Others(main) {
             } else {
                 player.sprite.animations.stop();
                 player.sprite.frame = player.stillFrame;
+                gearStop(player);
             }
         });
     }
+    function setUpGear(p) {
+        var gear = p.game.gear;
+        console.log('other gear:', gear);
+        if (gear.pants.type === 1) {
+            p.pants = p.sprite.addChild(main.game.add.sprite(0, 0, 'player_pants'));
+            p.pants.anchor.setTo(0.5, 0.9);
+
+            p.pants.animations.add('down', [0, 1, 0, 2], 10, true);
+            p.pants.animations.add('left', [3, 4, 3, 5], 10, true);
+            p.pants.animations.add('right', [3, 4, 3, 5], 10, true);
+            p.pants.animations.add('up', [6, 7, 6, 8], 10, true);
+
+            p.pants.tint = gear.pants.color;
+        }
+    }
+
+    function gearLeft(p) {
+        if (p.pants) {
+            p.pants.animations.play('left');
+        }
+    }
+
+    function gearRight(p) {
+        if (p.pants) {
+            p.pants.animations.play('right');
+        }
+    }
+
+    function gearUp(p) {
+        if (p.pants) {
+            p.pants.animations.play('up');
+        }
+    }
+
+    function gearDown(p) {
+        if (p.pants) {
+            p.pants.animations.play('down');
+        }
+    }
+
+    function gearStop(p) {
+        if (p.pants) {
+            p.pants.animations.stop();
+            p.pants.frame = p.stillFrame;
+        }
+    }
+
+
+
     self.update = function () {
         if (lastMove + moveTime < Date.now()) {
             lastMove = Date.now();
@@ -127,6 +181,7 @@ function Others(main) {
             // Set up miscellaneous data for player.
             others[data.username].stillFrame = 0;
             others[data.username].game = data.game;
+            setUpGear(others[data.username]);
             others[data.username].queue = [];
             others[data.username].ready = true;
         }

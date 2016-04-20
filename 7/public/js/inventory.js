@@ -50,7 +50,7 @@ var inventory = {
 (function () {
     var sprite = null;
     var gridSize = 25;
-    $(document).on('click', '.item', function (e) {
+    $(document).on('click', '#rightPanel .item', function (e) {
         var id = $(this).attr('data-id');
         var item;
         if (id === void 0) {
@@ -70,7 +70,7 @@ var inventory = {
     });
     $(document).on('mousemove', function (e) {
         var xMod, yMod, x, y;
-        if (gameObj === void 0 || gameObj.utils === void 0) {
+        if (gameObj === null || gameObj.utils === void 0) {
             return;
         }
         x = e.pageX - (12.5 * gameObj.scale) + gameObj.game.camera.x;

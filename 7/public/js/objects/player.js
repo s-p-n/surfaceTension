@@ -35,6 +35,56 @@ function Player(main) {
             return false;
         };
     }
+
+    function setUpGear() {
+        var gear = self.playerData.game.gear;
+        console.log('gear:', gear);
+        if (gear.pants.type === 1) {
+            self.pants = self.player.addChild(main.game.add.sprite(0, 0, 'player_pants'));
+            self.pants.anchor.setTo(0.35, 0.9);
+
+            self.pants.animations.add('down', [0, 1, 0, 2], 10, true);
+            self.pants.animations.add('left', [3, 4, 3, 5], 10, true);
+            self.pants.animations.add('right', [3, 4, 3, 5], 10, true);
+            self.pants.animations.add('up', [6, 7, 6, 8], 10, true);
+
+            self.pants.tint = gear.pants.color;
+        }
+    }
+
+    function gearLeft() {
+        if (self.pants) {
+            self.pants.anchor.x = 0.35;
+            self.pants.animations.play('left');
+        }
+    }
+
+    function gearRight() {
+        if (self.pants) {
+            self.pants.anchor.x = 0.5;
+            self.pants.animations.play('right');
+        }
+    }
+
+    function gearUp() {
+        if (self.pants) {
+            self.pants.animations.play('up');
+        }
+    }
+
+    function gearDown() {
+        if (self.pants) {
+            self.pants.animations.play('down');
+        }
+    }
+
+    function gearStop() {
+        if (self.pants) {
+            self.pants.animations.stop();
+            self.pants.frame = self.stillFrame;
+        }
+    }
+
     function serverCommand(command) {
         var t = 500;//Math.floor(Math.random() * 1000);
         var data;
@@ -52,19 +102,12 @@ function Player(main) {
         // Set up Player
         
         self.player = main.objects.create(250, 250, 'player');
-        self.pants = self.player.addChild(main.game.add.sprite(0, 0, 'player_pants'));
         self.player.anchor.setTo(0.35, 0.9);
-        self.pants.anchor.setTo(0.35, 0.9);
 
         self.player.animations.add('down', [0, 1, 0, 2], 10, true);
         self.player.animations.add('left', [3, 4, 3, 5], 10, true);
         self.player.animations.add('right', [3, 4, 3, 5], 10, true);
         self.player.animations.add('up', [6, 7, 6, 8], 10, true);
-        
-        self.pants.animations.add('down', [0, 1, 0, 2], 10, true);
-        self.pants.animations.add('left', [3, 4, 3, 5], 10, true);
-        self.pants.animations.add('right', [3, 4, 3, 5], 10, true);
-        self.pants.animations.add('up', [6, 7, 6, 8], 10, true);
 
         // Set up close rectangle
         self.closeRect = new Phaser.Rectangle(0, 0, 0, 0);
@@ -95,6 +138,7 @@ function Player(main) {
             return;
         }
         if (self.playerData.username !== self.text.text) {
+            setUpGear();
             self.text.text = self.playerData.username;
             newPos = self.playerData.game;
             main.game.camera.focusOnXY(self.playerData.game.x, self.playerData.game.y);
@@ -119,12 +163,11 @@ function Player(main) {
                     //self.pants.scale.x *= -1;
                 }
                 self.player.anchor.x = 0.35;
-                self.pants.anchor.x = 0.35;
                 newPos.x -= horrSpeed;
                 serverCommand('left');
                 self.player.animations.play('left');
-                self.pants.animations.play('left');
                 self.stillFrame = 3;
+                gearLeft();
             } else if (self.key.isDown('right')) {
                 // Move to right
                 if (self.player.scale.x > 0) {
@@ -132,32 +175,30 @@ function Player(main) {
                     //self.pants.scale.x *= -1;
                 }
                 self.player.anchor.x = 0.5;
-                self.pants.anchor.x = 0.5;
                 newPos.x += horrSpeed;
                 serverCommand('right');
                 self.player.animations.play('right');
-                self.pants.animations.play('right');
                 self.stillFrame = 3;
+                gearRight();
             } else if (self.key.isDown('up')) {
                 // Move up
                 newPos.y -= vertSpeed;
                 serverCommand('up');
                 self.player.animations.play('up');
-                self.pants.animations.play('up');
                 self.stillFrame = 6;
+                gearUp();
             } else if (self.key.isDown('down')) {
                 // Move down
                 newPos.y += vertSpeed;
                 serverCommand('down');
                 self.player.animations.play('down');
-                self.pants.animations.play('down');
                 self.stillFrame = 0;
+                gearDown();
             } else {
                 // Player not moving
                 self.player.animations.stop();
-                self.pants.animations.stop();
                 self.player.frame = self.stillFrame;
-                self.pants.frame = self.stillFrame;
+                gearStop();
             }
             if (self.player.x !== newPos.x || self.player.y !== newPos.y) {
                 main.game.add.tween(self.player).
@@ -181,6 +222,7 @@ function Player(main) {
     comms.on('player', function (data) {
         self.playerData = data;
         inventory.restore(data.game.inventory);
+        gear.restore(data.game.gear);
     });
     comms.on('inventory-update', function (data) {
         inventory.restore(data);

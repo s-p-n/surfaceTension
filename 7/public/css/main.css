@@ -97,7 +97,23 @@ html, body {
             width: 200px;
             height: 700px;
         }
-        #rightPanel .item {
+        .head,.pants {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 7px;
+            padding: 2px;
+            text-align: center;
+            overflow: hidden;
+            display: block;
+            margin: 5px auto;
+        }
+        .middle, .bottom {
+            display: block;
+            margin: 5px auto;
+            text-align: center;
+        }
+        #rightPanel .item, .shirt, .leftGlove, .rightGlove, .leftShoe, .rightShoe {
             width: 32px;
             height: 32px;
             background: rgba(255, 255, 255, 0.5);
@@ -119,7 +135,6 @@ html, body {
             font-size: 12px;
         }
         #rightPanelItems {
-            margin-top: 210px;
         }
         #bottomPanel {
             padding: 3px;

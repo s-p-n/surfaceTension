@@ -35,7 +35,15 @@ module.exports = function (m, session) {
 					username: result.username, 
 					password: m.form.hash(result.password),
 					key: myKey,
-					game: {x: 250, y: 250, inventory: [{name: 'slire', num: 5}]}
+					game: {x: 250, y: 250, inventory: [{name: 'slire', num: 5}], gear: {
+						head: {type: 0, color: 0xFFFFFF},
+						pants: {type: 0, color: 0xFFFFFF},
+						shirt: {type: 0, color: 0xFFFFFF},
+						rightGlove: {type: 0, color: 0xFFFFFF},
+						leftGlove: {type: 0, color: 0xFFFFFF},
+						rightShoe: {type: 0, color: 0xFFFFFF},
+						leftShoe: {type: 0, color: 0xFFFFFF}
+					}}
 				}, function (err, user) {
 					session.user = user;
 					session.event.emit('logged_in', true);

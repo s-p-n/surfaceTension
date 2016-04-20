@@ -1,3 +1,4 @@
+var gameObj = null;
 var comms = (function () {
 	var socket = io();
 
@@ -24,7 +25,7 @@ var comms = (function () {
 		cookies.erase('sessionID');
 	});
 	socket.on('connect', function () {
-		if (window.gameObj === void 0) {
+		if (window.gameObj === null) {
 		    window.gameObj = {};
 		} else {
 		    window.location.reload();

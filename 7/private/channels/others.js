@@ -5,7 +5,8 @@ module.exports = function (m, session) {
 			//console.log('player updated:', player);
 			socket.emit('others-update', {username: player.username, game: {
                 x: player.game.x,
-                y: player.game.y
+                y: player.game.y,
+                gear: player.game.gear
             }});
 		}
 	});
