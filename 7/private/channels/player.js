@@ -74,7 +74,7 @@ module.exports = function (m, session) {
 		}
 		console.log('cmd:', cmd, 'lag:', lag, 'step:', data.step);
 		if (cmd in exec) {
-			if ((lastCmdTime + intervalTime) > now/2) {
+			if ((lastCmdTime + intervalTime) > now * 2) {
 				console.log("Client moving too fast!", lastCmdTime, now);
 			//} else if (isNaN(lag) || lag < 0) {
 			//	console.log("Client supplied invalid lag data!", data.time);
