@@ -12,6 +12,11 @@ function Herbs(main, childCallback) {
             herb.place[1];
     }
     function placeAvailable(herb) {
+        console.log((main.map.places[serializePlace(herb)] === false),
+            herb.place[0] > 0 ,
+            herb.place[0] < main.map.bounds[0] ,
+            herb.place[1] > 0 ,
+            herb.place[1] < main.map.bounds[1]);
         return (main.map.places[serializePlace(herb)] === false &&
             herb.place[0] > 0 &&
             herb.place[0] < main.map.bounds[0] &&

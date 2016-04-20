@@ -66,19 +66,19 @@ module.exports = function (m, session) {
             return;
         }
         var inventoryItem = session.user.game.inventory[herb.inventory_id];
-        //console.log("herb planted:");
-        //console.log(inventoryItem);
-        //console.log(herb);
+        console.log("herb planted:");
+        console.log(inventoryItem);
+        console.log(herb);
         if (inventoryItem !== void 0 &&
             herb.place instanceof Array && 
             herb.place.length === 2 && 
             typeof herb.place[0] === 'number' &&
             herb.place[0] > 0 &&
-            herb.place[0] < 1000 &&
+            herb.place[0] < m.map.bounds[0] &&
             herb.place[0] % 25 === 0 &&
             typeof herb.place[1] === 'number' &&
             herb.place[1] > 0 &&
-            herb.place[1] < 450 &&
+            herb.place[1] < m.map.bounds[1] &&
             herb.place[1] % 25 === 0 &&
             inventoryItem.name === herb.name
         ) {

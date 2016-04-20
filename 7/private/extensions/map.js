@@ -6,6 +6,7 @@ module.exports = function (m) {
     function initWorld () {
         var gridSize = 25;
         var x, y;
+        console.log('map bounds:', m.map.bounds);
         for (x = 0; x < m.map.bounds[0]; x += gridSize) {
             for (y = 0; y < m.map.bounds[1]; y += gridSize) {
                 m.map.places[x + "," + y] = false;
