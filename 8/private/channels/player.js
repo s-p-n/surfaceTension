@@ -56,13 +56,13 @@ module.exports = function (m, session) {
 				continue;
 			}
 			other = m.session[userId].user;
-			if (other.section === player.section) {
+			//if (other.section === player.section) {
 				socket.emit('others-update', {username: other.username, game: {
 					x: other.game.x,
 					y: other.game.y,
 					gear: other.game.gear
 				}});
-			}
+			//}
 		}
 	}
 	session.event.on('logged_in', function (result) {
