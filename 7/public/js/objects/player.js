@@ -147,7 +147,7 @@ function Player(main) {
         self.stillFrame = 0;
 
         // Set up text above player
-        self.text = main.game.add.text(self.playerData.game.x - 2, self.playerData.game.x - 60, self.playerData.username);
+        self.text = main.game.add.text(self.playerData.game.x - 2, self.playerData.game.y - 60, self.playerData.username);
         self.text.anchor.setTo(0.5);
         self.text.align = 'center';
         self.text.font = 'Arial Black';
