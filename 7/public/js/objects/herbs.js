@@ -2,6 +2,8 @@ function Herbs (main) {
     "use strict";
     var self = this;
     var herbs = {};
+    var lastSort = 0;
+    var sortInterval = 500;
     function intersects (a, b) {
         return !(a.x + a.w < b.x ||
             a.y + a.h < b.y ||
@@ -40,6 +42,9 @@ function Herbs (main) {
         sprite.events.onInputDown.add(onDown);
         sprite.events.onInputOver.add(onOver);
         sprite.events.onInputOut.add(onOut);
+        if (Date.now() > lastSort + sortInterval) {
+            main.objects.sort('bottom', Phaser.Group.SORT_ASCENDING);
+        }
         return true;
     }
     function disable (id) {
@@ -119,8 +124,7 @@ function Herbs (main) {
         for (id in herbs) {
             self.createHerb(herbs[id]);
         }
-
-        console.log(main.objects);
+        main.objects.sort('bottom', Phaser.Group.SORT_ASCENDING);
     });
     comms.on('herb-created', function (herb) {
         self.createHerb(herb);

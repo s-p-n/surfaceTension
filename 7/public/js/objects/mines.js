@@ -46,6 +46,7 @@ function Mines(main) {
         for (id in mines) {
             self.createMine(mines[id]);
         }
+        main.objects.sort('bottom', Phaser.Group.SORT_ASCENDING);
     });
     comms.on('iron-updated', function (mine) {
         self.updateMine(mine);

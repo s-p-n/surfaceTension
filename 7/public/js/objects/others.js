@@ -42,9 +42,20 @@ function Others(main) {
             player.stillFrame = 0;
             gearDown(player);
         }
-        main.game.add.tween(player.sprite).
-            to(destination, moveTime * tweenTime, 'Linear').
-            start();
+        var pTween = main.game.add.tween(player.sprite);
+        pTween.to(destination, moveTime * tweenTime, 'Linear');
+        pTween.start();
+        if (destination.y < player.sprite.y) {
+            pTween.onComplete.add(function () {
+                //console.log("bottom:", self.player.bottom);
+                main.utils.sortUp(player.sprite);
+            });
+        } else if (destination.y > player.sprite.y) {
+            pTween.onComplete.add(function () {
+                //console.log("bottom:", self.player.bottom);
+                main.utils.sortDown(player.sprite);
+            });
+        }
         main.game.add.tween(player.text).
             to({
                 x: destination.x - 2,

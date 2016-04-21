@@ -129,10 +129,10 @@ function Player(main) {
         main.game.load.spritesheet('player_shirt', '/assets/game/dude_shirt_sprite.png', 25, 50);
         main.game.load.spritesheet('player_pants', '/assets/game/dude_pants_sprite.png', 25, 50);
     };
-    self.create = function () {
+    self.createPlayer = function () {
         // Set up Player
         
-        self.player = main.objects.create(250, 250, 'player');
+        self.player = main.objects.create(self.playerData.game.x, self.playerData.game.y, 'player');
         self.player.anchor.setTo(0.35, 0.9);
 
         self.player.animations.add('down', [0, 1, 0, 2], 10, true);
@@ -147,7 +147,7 @@ function Player(main) {
         self.stillFrame = 0;
 
         // Set up text above player
-        self.text = main.game.add.text(250, 190, 'Loading..');
+        self.text = main.game.add.text(250, 190, self.playerData.username);
         self.text.anchor.setTo(0.5);
         self.text.align = 'center';
         self.text.font = 'Arial Black';
@@ -161,20 +161,25 @@ function Player(main) {
 
         // Make camera follow this player
         main.game.camera.follow(self.player);
+        setUpGear();
+        main.objects.sort('bottom', Phaser.Group.SORT_ASCENDING);
     };
     self.update = function () {
-        var now = Date.now();
-        var newPos = {x: self.player.x, y: self.player.y};
         if (self.playerData === void 0) {
             return;
         }
+        var now = Date.now();
+        var newPos = {x: self.player.x, y: self.player.y};
+        /*
         if (self.playerData.username !== self.text.text) {
             setUpGear();
             self.text.text = self.playerData.username;
             newPos = self.playerData.game;
             main.game.camera.focusOnXY(self.playerData.game.x, self.playerData.game.y);
             main.game.camera.follow(self.player);
+            main.objects.sort('bottom', Phaser.Group.SORT_ASCENDING);
         }
+        */
         self.closeRect.x = self.player.x - 50;
         self.closeRect.y = self.player.y - 40;
         self.closeRect.width = 100;
@@ -232,9 +237,20 @@ function Player(main) {
                 gearStop();
             }
             if (self.player.x !== newPos.x || self.player.y !== newPos.y) {
-                main.game.add.tween(self.player).
-                    to(newPos, moveTime * tweenTime, 'Linear').
-                    start();
+                var pTween = main.game.add.tween(self.player);
+                pTween.to(newPos, moveTime * tweenTime, 'Linear');
+                pTween.start();
+                if (newPos.y < self.player.y) {
+                    pTween.onComplete.add(function () {
+                        //console.log("bottom:", self.player.bottom);
+                        main.utils.sortUp(self.player);
+                    });
+                } else if (newPos.y > self.player.y) {
+                    pTween.onComplete.add(function () {
+                        //console.log("bottom:", self.player.bottom);
+                        main.utils.sortDown(self.player);
+                    });
+                }
                 main.game.add.tween(self.text).
                     to({
                         x: newPos.x - 2, 
@@ -252,6 +268,7 @@ function Player(main) {
     */
     comms.on('player', function (data) {
         self.playerData = data;
+        self.createPlayer();
         inventory.restore(data.game.inventory);
         gear.restore(data.game.gear);
     });

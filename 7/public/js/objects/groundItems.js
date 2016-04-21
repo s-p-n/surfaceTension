@@ -32,10 +32,12 @@ function GroundItems(main) {
         for (id in items) {
             self.createItem(items[id]);
         }
+        main.objects.sort('bottom', Phaser.Group.SORT_ASCENDING);
     });
     comms.on('ground-item-added', function (item) {
         console.log("Ground item added:", item);
         self.createItem(item);
+        main.objects.sort('bottom', Phaser.Group.SORT_ASCENDING);
     });
     comms.on('ground-item-removed', function (id) {
         console.log("Ground item removed:", id);

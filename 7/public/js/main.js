@@ -18,6 +18,24 @@ function initializeGame (main) {
         isClose: function (sprite) {
             var result = main.player.closeRect.intersects(sprite);
             return result
+        },
+        sortUp: function (sprite) {
+            var curIndex = main.objects.getIndex(sprite);
+            var i = curIndex - 1;
+            var sprBottom = sprite.bottom;
+            while (i > 0 && sprBottom < main.objects.children[i].bottom) {
+                main.objects.swap(main.objects.children[i], sprite);
+                i -= 1;
+            }
+        },
+        sortDown: function (sprite) {
+            var curIndex = main.objects.getIndex(sprite);
+            var i = curIndex + 1;
+            var sprBottom = sprite.bottom;
+            while (i < main.objects.length && sprBottom > main.objects.children[i].bottom) {
+                main.objects.swap(main.objects.children[i], sprite);
+                i += 1;
+            }
         }
     }
     main.scale = 2;
@@ -59,10 +77,12 @@ function initializeGame (main) {
         }
         cameraXY[0] = main.game.camera.x;
         cameraXY[1] = main.game.camera.y;
+        /*
         if (lastSort + sortInterval < now) {
             lastSort = now;
             main.objects.sort('bottom', Phaser.Group.SORT_ASCENDING);
         }
+        */
     }
     function render () {
         main.game.debug.text(main.game.time.fps + 'fps', 2, 15, "#00ff00");
