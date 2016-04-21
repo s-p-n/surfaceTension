@@ -16,12 +16,12 @@ module.exports = function (m, session) {
         mines.instance = new mines.class(m, function (iron) {
             mines[iron._id] = iron;
             mineUpdated(iron);
-            console.log("Iron Mine Updated(1)", iron);
+            //console.log("Iron Mine Updated(1)", iron);
         });
     }
     session.event.on('game-ready', function (ready) {
         if (ready) {
-            console.log("Initializing Mines:", mines);
+            //console.log("Initializing Mines:", mines);
             socket.emit('mines-init', mines);
         }
     });
@@ -49,14 +49,14 @@ module.exports = function (m, session) {
         if (intersects(playerRect, ironRect) &&
             session.user.inventory.add(iron.name)
         ) {
-            console.log("Mining iron:", iron._id);
+            //console.log("Mining iron:", iron._id);
             iron.bits -= 1;
             mines.instance.updateBits(iron._id, iron.bits, function (err, iron) {
                 if (err) {
-                    console.log("Iron Update Error!", err);
+                    //console.log("Iron Update Error!", err);
                     return;
                 }
-                console.log("Updated iron in db:", iron);
+                //console.log("Updated iron in db:", iron);
             });
         }
         mineUpdated(iron);

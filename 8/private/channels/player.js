@@ -1,15 +1,23 @@
 var exec = {
-	up: function (player) {
-		player.game.y -= 7.5;
+	up: function (player, m) {
+		if (player.game.y - 7.5 > 0) {
+			player.game.y -= 7.5;
+		}
 	},
-	down: function (player) {
-		player.game.y += 7.5;
+	down: function (player, m) {
+		if (player.game.y + 7.5 < m.map.bounds[1]) {
+			player.game.y += 7.5;
+		}
 	},
-	left: function (player) {
-		player.game.x -= 7.5;
+	left: function (player, m) {
+		if (player.game.x - 7.5 > 0) {
+			player.game.x -= 7.5;
+		}
 	},
-	right: function (player) {
-		player.game.x += 7.5;
+	right: function (player, m) {
+		if (player.game.x + 7.5 < m.map.bounds[0]) {
+			player.game.x += 7.5;
+		}
 	}
 };
 
@@ -22,17 +30,25 @@ module.exports = function (m, session) {
 	var lastCmdTime = 0;
 
 	function updatePlayer () {
+		var sect;
 		m.db.users.update({
 			'username': player.username
 		}, {
 			$set: {game: player.game}
 		}, {multi: false});
+		sect = m.map.getSection([player.game.x, player.game.y]);
+		if (player.section !== sect) {
+			player.section = sect;
+			session.event.emit('game-ready', true);
+		}
 		m.event.emit('player-update', player);
 	}
 
 	function initPlayer () {
 		var userId, other;
 		session.state = 4;
+		player.section = m.map.getSection([player.game.x, player.game.y]);
+		console.log('sect:', player.section);
 		session.event.emit('game-ready', true);
 		socket.emit('player', {username: player.username, game: player.game});
 		m.event.emit('player-update', player);
@@ -41,11 +57,13 @@ module.exports = function (m, session) {
 				continue;
 			}
 			other = m.session[userId].user;
-			socket.emit('others-update', {username: other.username, game: {
-				x: other.game.x,
-				y: other.game.y,
-				gear: other.game.gear
-			}});
+			if (other.section === player.section) {
+				socket.emit('others-update', {username: other.username, game: {
+					x: other.game.x,
+					y: other.game.y,
+					gear: other.game.gear
+				}});
+			}
 		}
 	}
 	session.event.on('logged_in', function (result) {
@@ -80,7 +98,7 @@ module.exports = function (m, session) {
 			//} else if (isNaN(lag) || lag < 0) {
 			//	console.log("Client supplied invalid lag data!", data.time);
 			} else {
-				exec[cmd](player);
+				exec[cmd](player, m);
 			}
 			lastCmdTime = now;
 			

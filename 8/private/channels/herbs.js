@@ -24,9 +24,17 @@ module.exports = function (m, session) {
         });
     }
     session.event.on('game-ready', function (ready) {
+        var result = {};
+        var i;
+        for (i in herbs) {
+            //console.log('herb:', herbs[i]);
+            if (m.map.inSection(herbs[i].place, session.user.section)) {
+                result[i] = herbs[i];
+            }
+        }
         if (ready) {
-            //console.log("Initializing Herbs:", herbs);
-            socket.emit('herbs-init', herbs);
+            //console.log("Initializing Herbs:", result);
+            socket.emit('herbs-init', result);
         }
     });
     socket.on('herb-picked', function (herbId) {
@@ -66,9 +74,9 @@ module.exports = function (m, session) {
             return;
         }
         var inventoryItem = session.user.game.inventory[herb.inventory_id];
-        console.log("herb planted:");
-        console.log(inventoryItem);
-        console.log(herb);
+        //console.log("herb planted:");
+        //console.log(inventoryItem);
+        //console.log(herb);
         if (inventoryItem !== void 0 &&
             herb.place instanceof Array && 
             herb.place.length === 2 && 

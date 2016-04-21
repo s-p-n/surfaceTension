@@ -14,13 +14,18 @@ function Mines(main) {
         }
     }
     self.createMine = function (mine) {
-        var sprite = main.objects.create(mine.place[0], mine.place[1], 'ironRock');
-        mines[mine._id] = mine;
-        mines[mine._id].sprite = sprite;
-        sprite._id = mine._id;
-        sprite.inputEnabled =  true;
-        sprite.input.useHandCursor = true;
-        sprite.events.onInputDown.add(onDown);
+        var sprite;
+        if (!(mine._id in mines)) {
+            sprite = main.objects.create(mine.place[0], mine.place[1], 'ironRock');
+            mines[mine._id] = mine;
+            mines[mine._id].sprite = sprite;
+            sprite._id = mine._id;
+            sprite.inputEnabled =  true;
+            sprite.input.useHandCursor = true;
+            sprite.events.onInputDown.add(onDown);
+        } else {
+            mines[mine._id].sprite.revive();
+        }
     }
     self.updateMine = function (mine) {
         console.log("Updating mine:", mine);
@@ -39,12 +44,15 @@ function Mines(main) {
         main.game.load.image('ironRock', './assets/game/ironrock.png');
         main.game.load.image('iron', './assets/game/items/iron.png')
     };
-    comms.on('mines-init', function (mines) {
+    comms.on('mines-init', function (minesList) {
         console.log("got mines init:");
-        console.log(mines);
+        console.log(minesList);
         var id;
         for (id in mines) {
-            self.createMine(mines[id]);
+            mines[id].sprite.kill();
+        }
+        for (id in minesList) {
+            self.createMine(minesList[id]);
         }
         main.objects.sort('bottom', Phaser.Group.SORT_ASCENDING);
     });

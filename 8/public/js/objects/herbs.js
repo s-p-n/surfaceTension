@@ -76,6 +76,7 @@ function Herbs (main) {
         return intersects(obj1, obj2);
     }
     self.viewChange = function () {
+        /*
         var id;
         var visibleHerbs = 0;
         //console.log((main.game.camera.view.x / main.game.camera.scale.x));
@@ -87,25 +88,32 @@ function Herbs (main) {
                 disable(id);
             }
         }
+        */
         //console.log("visible herbs:", visibleHerbs);
     };
     self.createHerb = function (herb) {
-        herbs[herb._id] = herb;
+        var sprite;
+        if (!(herb._id in herbs)) {
+            herbs[herb._id] = herb;
+            
+            sprite = main.objects.create(herb.place[0], herb.place[1], herb.name);
+            sprite._id = herb._id;
+            sprite.inputEnabled =  true;
+            sprite.input.useHandCursor = true;
+            sprite.events.onInputDown.add(onDown);
+            sprite.events.onInputOver.add(onOver);
+            sprite.events.onInputOut.add(onOut);
+            herbs[herb._id].sprite = sprite;
+        } else {
+            herbs[herb._id].sprite.revive();
+        }
         /*
-        var sprite = main.objects.create(herb.place[0], herb.place[1], herb.name);
-        sprite._id = herb._id;
-        sprite.inputEnabled =  true;
-        sprite.input.useHandCursor = true;
-        sprite.events.onInputDown.add(onDown);
-        sprite.events.onInputOver.add(onOver);
-        sprite.events.onInputOut.add(onOut);
-        herbs[herb._id].sprite = sprite;
-        */
         if (!herbInView(herb._id)) {
             disable(herb._id);
         } else {
             enable(herb._id)
         }
+        */
     };
     self.deleteHerb = function (id) {
         if (herbs[id] === void 0) {
@@ -117,12 +125,15 @@ function Herbs (main) {
     self.preload = function () {
         main.game.load.image('slire', './assets/game/slire.png');
     };
-    comms.on('herbs-init', function (herbs) {
+    comms.on('herbs-init', function (herbList) {
         //console.log("got herbs init:");
         //console.log(herbs);
         var id;
         for (id in herbs) {
-            self.createHerb(herbs[id]);
+            herbs[id].sprite.kill();
+        }
+        for (id in herbList) {
+            self.createHerb(herbList[id]);
         }
         main.objects.sort('bottom', Phaser.Group.SORT_ASCENDING);
     });

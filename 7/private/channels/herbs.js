@@ -66,9 +66,9 @@ module.exports = function (m, session) {
             return;
         }
         var inventoryItem = session.user.game.inventory[herb.inventory_id];
-        console.log("herb planted:");
-        console.log(inventoryItem);
-        console.log(herb);
+        //console.log("herb planted:");
+        //console.log(inventoryItem);
+        //console.log(herb);
         if (inventoryItem !== void 0 &&
             herb.place instanceof Array && 
             herb.place.length === 2 && 

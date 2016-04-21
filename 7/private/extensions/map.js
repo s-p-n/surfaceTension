@@ -3,6 +3,21 @@ module.exports = function (m) {
     m.map = [];
     m.map.bounds = [0, 0];
     m.map.sections = [];
+    m.map.getSection = function (place) {
+        var i, s;
+        for (i = 0; i < m.map.sections.length; i += 1) {
+            if (m.map.inSection(place, i)) {
+                return i;
+            }
+        }
+    }
+    m.map.inSection = function (place, sectionIndex) {
+        return (place[0] >= m.map.sections[sectionIndex].x && 
+                place[0] < m.map.sections[sectionIndex].w &&
+                place[1] >= m.map.sections[sectionIndex].y &&
+                place[1] < m.map.sections[sectionIndex].h
+            )
+    }
     m.map.places = {};
     function initWorld () {
         var gridSize = 25;
@@ -19,12 +34,12 @@ module.exports = function (m) {
                 m.map.sections.push({
                     x: x,
                     y: y,
-                    width: sectSize,
-                    height: sectSize
+                    w: sectSize,
+                    h: sectSize
                 });
             }
         }
-        console.log(m.map.sections);
+        //console.log(m.map.sections);
     }
     var tileSize = 512;
     m.db.map.find().forEach(function (err, tile) {
