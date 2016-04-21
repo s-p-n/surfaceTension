@@ -2,6 +2,12 @@ function Herbs (main) {
     "use strict";
     var self = this;
     var herbs = {};
+    function intersects (a, b) {
+        return !(a.x + a.w < b.x ||
+            a.y + a.h < b.y ||
+            b.x + b.w < a.x ||
+            b.y + b.h < a.y);
+    }
     function onDown (sprite) {
         var herb = herbs[sprite._id];
         if (main.utils.isClose(sprite) &&
@@ -44,15 +50,30 @@ function Herbs (main) {
             return true;
         }
         herbs[id].sprite.kill();
-        delete herbs[id].sprite;
+        //herbs[id].sprite.destroy();
+        //delete herbs[id].sprite;
         return true;
     }
     function herbInView (id) {
-        return herbs[id].sprite.inCamera;
+        var obj1 = {
+            x: herbs[id].place[0],
+            y: herbs[id].place[1],
+            w: 25,
+            h: 25
+        };
+        var obj2 = {
+            x: (main.game.camera.view.x / main.game.camera.scale.x) || 0,
+            y: (main.game.camera.view.y / main.game.camera.scale.y) || 0,
+            w: (main.game.camera.view.width / main.game.camera.scale.x) || 0,
+            h: (main.game.camera.view.height / main.game.camera.scale.y) || 0
+        };
+        //console.log(main.game.camera);
+        return intersects(obj1, obj2);
     }
     self.viewChange = function () {
         var id;
         var visibleHerbs = 0;
+        console.log((main.game.camera.view.x / main.game.camera.scale.x));
         for (id in herbs) {
             if (herbInView(id)) {
                 visibleHerbs += 1;
@@ -61,10 +82,11 @@ function Herbs (main) {
                 disable(id);
             }
         }
-        //console.log("visible herbs:", visibleHerbs);
+        console.log("visible herbs:", visibleHerbs);
     };
     self.createHerb = function (herb) {
         herbs[herb._id] = herb;
+        /*
         var sprite = main.objects.create(herb.place[0], herb.place[1], herb.name);
         sprite._id = herb._id;
         sprite.inputEnabled =  true;
@@ -73,10 +95,11 @@ function Herbs (main) {
         sprite.events.onInputOver.add(onOver);
         sprite.events.onInputOut.add(onOut);
         herbs[herb._id].sprite = sprite;
+        */
         if (!herbInView(herb._id)) {
             disable(herb._id);
         } else {
-            //console.log("Herb not displayed:", herb);
+            enable(herb._id)
         }
     };
     self.deleteHerb = function (id) {
@@ -96,6 +119,8 @@ function Herbs (main) {
         for (id in herbs) {
             self.createHerb(herbs[id]);
         }
+
+        console.log(main.objects);
     });
     comms.on('herb-created', function (herb) {
         self.createHerb(herb);
