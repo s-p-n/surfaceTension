@@ -1,0 +1,13 @@
+module.exports = function (m, session) {
+	var socket = session.socket;
+	m.event.on('player-update', function (player) {
+		if (session.state === 4 && player.username !== session.user.username) {
+			//console.log('player updated:', player);
+			socket.emit('others-update', {username: player.username, game: {
+                x: player.game.x,
+                y: player.game.y,
+                gear: player.game.gear
+            }});
+		}
+	});
+}
