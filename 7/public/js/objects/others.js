@@ -75,6 +75,17 @@ function Others(main) {
     function setUpGear(p) {
         var gear = p.game.gear;
         console.log('other gear:', gear);
+        if (gear.shirt.type === 1) {
+            p.shirt = p.sprite.addChild(main.game.add.sprite(0, 0, 'player_shirt'));
+            p.shirt.anchor.setTo(0.5, 0.9);
+
+            p.shirt.animations.add('down', [0, 1, 0, 2], 10, true);
+            p.shirt.animations.add('left', [3, 4, 3, 5], 10, true);
+            p.shirt.animations.add('right', [3, 4, 3, 5], 10, true);
+            p.shirt.animations.add('up', [6, 7, 6, 8], 10, true);
+
+            p.shirt.tint = gear.shirt.color;
+        }
         if (gear.pants.type === 1) {
             p.pants = p.sprite.addChild(main.game.add.sprite(0, 0, 'player_pants'));
             p.pants.anchor.setTo(0.5, 0.9);
@@ -89,30 +100,46 @@ function Others(main) {
     }
 
     function gearLeft(p) {
+        if (p.shirt) {
+            p.shirt.animations.play('left');
+        }
         if (p.pants) {
             p.pants.animations.play('left');
         }
     }
 
     function gearRight(p) {
+        if (p.shirt) {
+            p.shirt.animations.play('right');
+        }
         if (p.pants) {
             p.pants.animations.play('right');
         }
     }
 
     function gearUp(p) {
+        if (p.shirt) {
+            p.shirt.animations.play('up');
+        }
         if (p.pants) {
             p.pants.animations.play('up');
         }
     }
 
     function gearDown(p) {
+        if (p.shirt) {
+            p.shirt.animations.play('down');
+        }
         if (p.pants) {
             p.pants.animations.play('down');
         }
     }
 
     function gearStop(p) {
+        if (p.shirt) {
+            p.shirt.animations.stop();
+            p.shirt.frame = p.stillFrame;
+        }
         if (p.pants) {
             p.pants.animations.stop();
             p.pants.frame = p.stillFrame;
