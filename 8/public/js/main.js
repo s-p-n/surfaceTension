@@ -70,6 +70,7 @@ function initializeGame (main) {
         var now = Date.now();
         main.map.update();
         plugins.update();
+        /*
         if (main.game.camera.x !== cameraXY[0] || 
             main.game.camera.y !== cameraXY[1]
         ) {
