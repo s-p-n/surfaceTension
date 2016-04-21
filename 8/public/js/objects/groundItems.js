@@ -12,12 +12,16 @@ function GroundItems(main) {
         }
     }
     self.createItem = function (item) {
-        item.sprite = main.objects.create(item.place[0], item.place[1], item.name);
-        item.sprite._id = item._id;
-        item.sprite.inputEnabled = true;
-        item.sprite.input.useHandCursor = true;
-        item.sprite.events.onInputDown.add(onDown);
-        self.items[item._id] = item;
+        if ((item._id in self.items)) {
+            item.sprite = main.objects.create(item.place[0], item.place[1], item.name);
+            item.sprite._id = item._id;
+            item.sprite.inputEnabled = true;
+            item.sprite.input.useHandCursor = true;
+            item.sprite.events.onInputDown.add(onDown);
+            self.items[item._id] = item;
+        } else {
+            self.items[item._id].sprite.revive();
+        }
     };
     self.removeItem = function (id) {
         if (self.items[id] === void 0) {
@@ -29,6 +33,9 @@ function GroundItems(main) {
     comms.on('ground-items-init', function (items) {
         var id;
         console.log("Ground items init:", items);
+        for (id in self.items) {
+            self.items[id].sprite.kill();
+        }
         for (id in items) {
             self.createItem(items[id]);
         }

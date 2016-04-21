@@ -62,11 +62,18 @@ function generateId () {
 var groundItems = {};
 module.exports = function (m, session) {
     var socket = session.socket;
-
+    var result = {};
+    var i;
+    for (i in groundItems) {
+        //console.log('herb:', herbs[i]);
+        if (m.map.inSection(groundItems[i].place, session.user.section)) {
+            result[i] = groundItems[i];
+        }
+    }
     session.event.on('game-ready', function(ready) {
         if (ready) {
             session.user.inventory = new Inventory(m, session);
-            socket.emit('ground-items-init', groundItems);
+            socket.emit('ground-items-init', result);
         }
     });
     socket.on('item-placed', function (item) {
