@@ -48,7 +48,6 @@ module.exports = function (m, session) {
 		var userId, other;
 		session.state = 4;
 		player.section = m.map.getSection([player.game.x, player.game.y]);
-		console.log('sect:', player.section);
 		session.event.emit('game-ready', true);
 		socket.emit('player', {username: player.username, game: player.game});
 		m.event.emit('player-update', player);
@@ -91,12 +90,8 @@ module.exports = function (m, session) {
 		if (session.state !== 4) {
 			return;
 		}
-		console.log('cmd:', cmd, 'lag:', lag, 'step:', data.step);
 		if (cmd in exec) {
 			if ((lastCmdTime + intervalTime) > now * 2) {
-				console.log("Client moving too fast!", lastCmdTime, now);
-			//} else if (isNaN(lag) || lag < 0) {
-			//	console.log("Client supplied invalid lag data!", data.time);
 			} else {
 				exec[cmd](player, m);
 			}
@@ -104,8 +99,6 @@ module.exports = function (m, session) {
 			
 			socket.emit('player-move', {game: player.game, time: now - lag, step: data.step});
 			updatePlayer();
-		} else if (cmd === 'still') {
-			//m.event.emit('player-update', player);
 		}
 	});
 }
