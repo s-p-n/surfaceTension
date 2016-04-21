@@ -39,6 +39,17 @@ function Player(main) {
     function setUpGear() {
         var gear = self.playerData.game.gear;
         console.log('gear:', gear);
+        if (gear.shirt.type === 1) {
+            self.shirt = self.player.addChild(main.game.add.sprite(0, 0, 'player_shirt'));
+            self.shirt.anchor.setTo(0.35, 0.9);
+
+            self.shirt.animations.add('down', [0, 1, 0, 2], 10, true);
+            self.shirt.animations.add('left', [3, 4, 3, 5], 10, true);
+            self.shirt.animations.add('right', [3, 4, 3, 5], 10, true);
+            self.shirt.animations.add('up', [6, 7, 6, 8], 10, true);
+
+            self.shirt.tint = gear.shirt.color;
+        }
         if (gear.pants.type === 1) {
             self.pants = self.player.addChild(main.game.add.sprite(0, 0, 'player_pants'));
             self.pants.anchor.setTo(0.35, 0.9);
@@ -50,9 +61,14 @@ function Player(main) {
 
             self.pants.tint = gear.pants.color;
         }
+
     }
 
     function gearLeft() {
+        if (self.shirt) {
+            self.shirt.anchor.x = 0.35;
+            self.shirt.animations.play('left');
+        }
         if (self.pants) {
             self.pants.anchor.x = 0.35;
             self.pants.animations.play('left');
@@ -60,6 +76,10 @@ function Player(main) {
     }
 
     function gearRight() {
+        if (self.shirt) {
+            self.shirt.anchor.x = 0.5;
+            self.shirt.animations.play('right');
+        }
         if (self.pants) {
             self.pants.anchor.x = 0.5;
             self.pants.animations.play('right');
@@ -67,18 +87,28 @@ function Player(main) {
     }
 
     function gearUp() {
+        if (self.shirt) {
+            self.shirt.animations.play('up');
+        }
         if (self.pants) {
             self.pants.animations.play('up');
         }
     }
 
     function gearDown() {
+        if (self.shirt) {
+            self.shirt.animations.play('down');
+        }
         if (self.pants) {
             self.pants.animations.play('down');
         }
     }
 
     function gearStop() {
+        if (self.shirt) {
+            self.shirt.animations.stop();
+            self.shirt.frame = self.stillFrame;
+        }
         if (self.pants) {
             self.pants.animations.stop();
             self.pants.frame = self.stillFrame;
@@ -96,6 +126,7 @@ function Player(main) {
     }
     self.preload = function () {
         main.game.load.spritesheet('player', '/assets/game/dude_sprite.png', 25, 50);
+        main.game.load.spritesheet('player_shirt', '/assets/game/dude_shirt_sprite.png', 25, 50);
         main.game.load.spritesheet('player_pants', '/assets/game/dude_pants_sprite.png', 25, 50);
     };
     self.create = function () {
