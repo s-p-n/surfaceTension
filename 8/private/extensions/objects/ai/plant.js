@@ -78,7 +78,7 @@ function Plant(params) {
     self.brain = new Brain();
     memories = self.brain.left.memories;
     memories.maxSeeds = optional('maxSeeds', 2);
-    memories.seedTime = optional('seedTime', 360); //3600000 = 1 hour
+    memories.seedTime = optional('seedTime', 3600000); //3600000 = 1 hour
     memories.place = optional('place', [0, 0]);
     memories.size = optional('size', [25, 25]);
     memories.offspring = optional('offspring', makeChild);
