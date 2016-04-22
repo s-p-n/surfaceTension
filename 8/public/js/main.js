@@ -85,11 +85,15 @@ function initializeGame (main) {
         }
         */
     }
+    var renderThrottle = 1000;
+    var lastRender = Date.now();
     function render () {
-        main.game.debug.text(main.game.time.fps + 'fps', 2, 15, "#00ff00");
-        main.game.debug.text(main.objects.length + ' objects', 2, 45, "#00ff00");
-        main.map.render();
-        plugins.render();
+        if (Date.now() > lastRender + renderThrottle) {
+            main.game.debug.text(main.game.time.fps + 'fps', 2, 15, "#00ff00");
+            main.game.debug.text(main.objects.length + ' objects', 2, 45, "#00ff00");
+            main.map.render();
+            plugins.render();
+        }
     }
     
 }
