@@ -21,7 +21,7 @@ module.exports = function (m) {
     m.map.places = {};
     function initWorld () {
         var gridSize = 25;
-        var sectSize = 512 * 2;
+        var sectSize = 512;
         var x, y;
         for (x = 0; x < m.map.bounds[0]; x += gridSize) {
             for (y = 0; y < m.map.bounds[1]; y += gridSize) {
