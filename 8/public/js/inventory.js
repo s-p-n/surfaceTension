@@ -114,4 +114,67 @@ var inventory = {
             item.num -= 1;
         }
     });
+
+    $(document).on('mouseover', '#rightPanelGear div', function (e) {
+        var gear;
+        if (sprite === null) {
+            return true;
+        }
+        gear = {
+            type: sprite.key.split($(this).attr('class'))[1],
+            slot: $(this).attr('class')
+        };
+        if (gear.type !== void 0) {
+            $(this).css({
+                'box-shadow': '0px 0px 5px 5px rgba(0,187,255,0.55)',
+                'cursor': 'pointer'
+            });
+        }
+    });
+    $(document).on('mouseout', '#rightPanelGear div', function (e) {
+        var gear;
+        if (sprite === null) {
+            return true;
+        }
+        gear = {
+            type: sprite.key.split($(this).attr('class'))[1],
+            slot: $(this).attr('class')
+        };
+        if (gear.type !== void 0) {
+            $(this).css({
+                'box-shadow': '',
+                'cursor': 'default'
+            });
+        }
+    });
+
+    $(document).on('click', '#rightPanelGear div', function (e) {
+        var data = {}, item;
+        if (sprite === null) {
+            return true;
+        }
+
+        item = inventory.items[parseInt(sprite.inventory_id)];
+        data.inventory_id = sprite.inventory_id;
+        data.name = sprite.key;
+        data.gear = {
+            type: data.name.split($(this).attr('class'))[1],
+            slot: $(this).attr('class')
+        };
+        if (data.gear.type === void 0) {
+            return;
+        }
+        $(this).css({
+            'box-shadow': '',
+            'cursor': 'default'
+        });
+        comms.emit('gear-equipped', data);
+        if (item.num === 1) {
+            inventory.items.splice(sprite.inventory_id, 1);
+            sprite.destroy();
+            sprite = null;
+        } else {
+            item.num -= 1;
+        }
+    });
 }());

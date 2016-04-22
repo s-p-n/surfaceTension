@@ -42,7 +42,6 @@ function Mines(main) {
     }
     self.preload = function () {
         main.game.load.image('ironRock', './assets/game/ironrock.png');
-        main.game.load.image('iron', './assets/game/items/iron.png')
     };
     comms.on('mines-init', function (minesList) {
         console.log("got mines init:");

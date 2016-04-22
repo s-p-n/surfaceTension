@@ -12,7 +12,7 @@ function GroundItems(main) {
         }
     }
     self.createItem = function (item) {
-        if ((item._id in self.items)) {
+        if (!(item._id in self.items)) {
             item.sprite = main.objects.create(item.place[0], item.place[1], item.name);
             item.sprite._id = item._id;
             item.sprite.inputEnabled = true;
@@ -30,6 +30,11 @@ function GroundItems(main) {
         self.items[id].sprite.destroy();
         delete self.items[id];
     };
+    self.preload = function () {
+        main.game.load.image('iron', './assets/game/items/iron.png');
+        main.game.load.image('shirt1', './assets/game/items/shirt1.png');
+        main.game.load.image('pants1', './assets/game/items/pants1.png');
+    }
     comms.on('ground-items-init', function (items) {
         var id;
         console.log("Ground items init:", items);

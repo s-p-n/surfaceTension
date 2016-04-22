@@ -39,9 +39,15 @@ function Player(main) {
     function setUpGear() {
         var gear = self.playerData.game.gear;
         console.log('gear:', gear);
+        if (self.shirt) {
+            self.shirt.destroy();
+        }
+        if (self.pants) {
+            self.pants.destroy();
+        }
         if (gear.shirt.type === 1) {
             self.shirt = self.player.addChild(main.game.add.sprite(0, 0, 'player_shirt'));
-            self.shirt.anchor.setTo(0.35, 0.9);
+            self.shirt.anchor.setTo(self.player.anchor.x, self.player.anchor.y);
 
             self.shirt.animations.add('down', [0, 1, 0, 2], 10, true);
             self.shirt.animations.add('left', [3, 4, 3, 5], 10, true);
@@ -52,7 +58,7 @@ function Player(main) {
         }
         if (gear.pants.type === 1) {
             self.pants = self.player.addChild(main.game.add.sprite(0, 0, 'player_pants'));
-            self.pants.anchor.setTo(0.35, 0.9);
+            self.pants.anchor.setTo(self.player.anchor.x, self.player.anchor.y);
 
             self.pants.animations.add('down', [0, 1, 0, 2], 10, true);
             self.pants.animations.add('left', [3, 4, 3, 5], 10, true);
@@ -61,7 +67,7 @@ function Player(main) {
 
             self.pants.tint = gear.pants.color;
         }
-
+        console.log("my pants sprite:", self.pants);
     }
 
     function gearLeft() {
@@ -275,6 +281,13 @@ function Player(main) {
     });
     comms.on('inventory-update', function (data) {
         inventory.restore(data);
+    });
+
+    comms.on('gear-update', function (data) {
+        console.log("got gear-update", data);
+        self.playerData.game.gear = data;
+        setUpGear();
+        gear.restore(data);
     });
     comms.on('player-move', function (data) {
         //console.log('player-move:', data.game);

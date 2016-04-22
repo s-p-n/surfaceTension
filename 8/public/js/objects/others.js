@@ -76,6 +76,7 @@ function Others(main) {
                 }
                 movePlayer(player, destination);
                 player.game = destination;
+                setUpGear(player);
             } else {
                 player.sprite.animations.stop();
                 player.sprite.frame = player.stillFrame;
@@ -86,6 +87,12 @@ function Others(main) {
     function setUpGear(p) {
         var gear = p.game.gear;
         console.log('other gear:', gear);
+        if (p.shirt) {
+            p.shirt.destroy();
+        }
+        if (p.pants) {
+            p.pants.destroy();
+        }
         if (gear.shirt.type === 1) {
             p.shirt = p.sprite.addChild(main.game.add.sprite(0, 0, 'player_shirt'));
             p.shirt.anchor.setTo(0.5, 0.9);
@@ -219,7 +226,6 @@ function Others(main) {
             // Set up miscellaneous data for player.
             others[data.username].stillFrame = 0;
             others[data.username].game = data.game;
-            setUpGear(others[data.username]);
             others[data.username].queue = [];
             others[data.username].ready = true;
         }

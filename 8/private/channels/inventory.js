@@ -71,7 +71,7 @@ module.exports = function (m, session) {
         }
     }
     session.event.on('game-ready', function(ready) {
-        if (ready) {
+        if (ready && session.user.inventory === void 0) {
             session.user.inventory = new Inventory(m, session);
             socket.emit('ground-items-init', result);
         }
@@ -88,6 +88,13 @@ module.exports = function (m, session) {
             groundItem = {name: item.name, place: item.place, _id: generateId()};
             groundItems[groundItem._id] = groundItem;
             session.state4Broadcast('ground-item-added', groundItem);
+        }
+    });
+    socket.on('gear-equipped', function (item) {
+        if (session.user.inventory.remove(item.inventory_id)) {
+            if (!session.user.gear.add(item.gear.slot, parseInt(item.gear.type))) {
+                session.user.inventory.add(item.name);
+            }
         }
     });
     socket.on('item-picked', function (id) {
