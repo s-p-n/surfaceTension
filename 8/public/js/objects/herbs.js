@@ -76,7 +76,7 @@ function Herbs (main) {
         return intersects(obj1, obj2);
     }
     self.viewChange = function () {
-        /*
+        
         var id;
         var visibleHerbs = 0;
         //console.log((main.game.camera.view.x / main.game.camera.scale.x));
@@ -88,7 +88,7 @@ function Herbs (main) {
                 disable(id);
             }
         }
-        */
+        
         //console.log("visible herbs:", visibleHerbs);
     };
     self.createHerb = function (herb) {
@@ -107,13 +107,13 @@ function Herbs (main) {
         } else {
             herbs[herb._id].sprite.revive();
         }
-        /*
+        
         if (!herbInView(herb._id)) {
             disable(herb._id);
         } else {
             enable(herb._id)
         }
-        */
+        
     };
     self.deleteHerb = function (id) {
         if (herbs[id] === void 0) {
