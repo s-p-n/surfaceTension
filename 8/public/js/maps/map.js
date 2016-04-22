@@ -17,7 +17,6 @@ function Map (main) {
         self.map = main.game.add.group();
         self.map._tiles = {};
     };
-    self.update = function () {};
     self.render = function () {};
     comms.on('map-tile', addTile);
     comms.on('map-init', function (tiles) {

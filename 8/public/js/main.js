@@ -68,22 +68,7 @@ function initializeGame (main) {
     var cameraXY = [0, 0];
     function update() {
         var now = Date.now();
-        main.map.update();
         plugins.update();
-        /*
-        if (main.game.camera.x !== cameraXY[0] || 
-            main.game.camera.y !== cameraXY[1]
-        ) {
-            main.herbs.viewChange();
-        }
-        cameraXY[0] = main.game.camera.x;
-        cameraXY[1] = main.game.camera.y;
-        /*
-        if (lastSort + sortInterval < now) {
-            lastSort = now;
-            main.objects.sort('bottom', Phaser.Group.SORT_ASCENDING);
-        }
-        */
     }
     var renderThrottle = 1000;
     var lastRender = Date.now();

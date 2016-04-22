@@ -180,10 +180,6 @@ function Player(main) {
             main.objects.sort('bottom', Phaser.Group.SORT_ASCENDING);
         }
         */
-        self.closeRect.x = self.player.x - 50;
-        self.closeRect.y = self.player.y - 40;
-        self.closeRect.width = 100;
-        self.closeRect.height = 70;
         if (lastMove + moveTime < now) {
             lastMove = now;
             if (step === serverStep) {
@@ -257,6 +253,11 @@ function Player(main) {
                         y: newPos.y - 60
                     }, moveTime * tweenTime, 'Linear').
                     start();
+                
+                self.closeRect.x = self.player.x - 50;
+                self.closeRect.y = self.player.y - 40;
+                self.closeRect.width = 100;
+                self.closeRect.height = 70;
             }
         }
     };
