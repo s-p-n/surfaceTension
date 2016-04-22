@@ -2,7 +2,7 @@
 function initializeGame (main) {
     var sortInterval = 100;
     var lastSort = 0;
-    main.game = new Phaser.Game(512, 420, Phaser.CANVAS, 'canvas', {
+    main.game = new Phaser.Game(1000, 700, Phaser.CANVAS, 'canvas', {
         preload: preload, 
         create: create,
         update: update,
