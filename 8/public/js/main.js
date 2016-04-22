@@ -38,7 +38,7 @@ function initializeGame (main) {
             }
         }
     }
-    main.scale = 1;
+    main.scale = 4;
     var plugins = new Plugins(main.player, new Others(main), main.herbs, main.mines, main.groundItems);
 
     function preload() {
