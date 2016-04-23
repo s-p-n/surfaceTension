@@ -18,6 +18,12 @@ var exec = {
 		if (player.game.x + 7.5 < m.map.bounds[0]) {
 			player.game.x += 7.5;
 		}
+	},
+	startHit: function (player, m) {
+		player.hitMode = true;
+	},
+	stopHit: function (player, m) {
+		player.hitMode = false;
 	}
 };
 
@@ -48,6 +54,7 @@ module.exports = function (m, session) {
 		var userId, other;
 		session.state = 4;
 		player.section = m.map.getSection([player.game.x, player.game.y]);
+		player.hitMode = false;
 		session.event.emit('game-ready', true);
 		socket.emit('player', {username: player.username, game: player.game});
 		m.event.emit('player-update', player);

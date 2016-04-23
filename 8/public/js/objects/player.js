@@ -81,6 +81,7 @@ function Player(main) {
     function startHitMode () {
         if (hitSwitchInterval === null && !inHitMode) {
             console.log("Starting hit mode.");
+            serverCommand('startHit');
             hitModeOn();
             hitSwitchInterval = setInterval(hitModeToggle, hitSwitchIntervalTime);
         }
@@ -89,6 +90,7 @@ function Player(main) {
     function stopHitMode () {
         if (hitSwitchInterval !== null && !inHitMode) {
             console.log("Stopping hit mode.");
+            serverCommand('stopHit');
             clearInterval(hitSwitchInterval);
             hitSwitchInterval = null;
             hitModeOff();

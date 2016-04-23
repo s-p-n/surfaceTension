@@ -7,7 +7,7 @@ module.exports = function (m, session) {
                 x: player.game.x,
                 y: player.game.y,
                 gear: player.game.gear
-            }});
+            }, hitMode: player.hitMode});
 		}
 	});
 }
