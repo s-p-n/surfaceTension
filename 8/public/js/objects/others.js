@@ -88,10 +88,7 @@ function Others(main) {
                 } else {
                     destination = player.queue.shift();
                 }
-                if (gearShouldUpdate(player, destination.gear)) {
-                    console.log('updating other players gear');
-                    setUpGear(player);
-                }
+                
                 movePlayer(player, destination);
                 player.game = destination;
             } else {
@@ -380,6 +377,11 @@ function Others(main) {
             startHitMode(others[data.username]);
         } else {
             stopHitMode(others[data.username]);
+        }
+        if (gearShouldUpdate(player, data.game.gear)) {
+            console.log('updating other players gear');
+            player.game.gear = data.game.gear;
+            setUpGear(player);
         }
     });
     comms.on('player-disconnect', function (player) {
