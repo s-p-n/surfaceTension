@@ -378,10 +378,10 @@ function Others(main) {
         } else {
             stopHitMode(others[data.username]);
         }
-        if (gearShouldUpdate(player, data.game.gear)) {
+        if (gearShouldUpdate(others[data.username], data.game.gear)) {
             console.log('updating other players gear');
             player.game.gear = data.game.gear;
-            setUpGear(player);
+            setUpGear(others[data.username]);
         }
     });
     comms.on('player-disconnect', function (player) {
