@@ -11,6 +11,7 @@ function Player(main) {
     var hitSwitchInterval = null;
     var hitSwitchIntervalTime = 500;
     var inHitMode = false;
+    var lastDirection = 'down';
     self.playerData;
     function Keys(game) {
         var keyList = {
@@ -298,6 +299,7 @@ function Player(main) {
             }
             if (self.key.isDown('left')) {
                 // Move to left
+                lastDirection = 'left';
                 self.player.anchor.x = 0.35;
                 self.hit_player.anchor.x = 0.35;
                 newPos.x -= horrSpeed;
@@ -308,6 +310,7 @@ function Player(main) {
                 gearLeft();
             } else if (self.key.isDown('right')) {
                 // Move to right
+                lastDirection = 'right';
                 if (self.player.scale.x > 0) {
                     self.player.scale.x *= -1;
                     self.hit_player.scale.x *= -1;
@@ -322,6 +325,7 @@ function Player(main) {
                 gearRight();
             } else if (self.key.isDown('up')) {
                 // Move up
+                lastDirection = 'up';
                 newPos.y -= vertSpeed;
                 serverCommand('up');
                 self.player.animations.play('up');
@@ -330,6 +334,7 @@ function Player(main) {
                 gearUp();
             } else if (self.key.isDown('down')) {
                 // Move down
+                lastDirection = 'down';
                 newPos.y += vertSpeed;
                 serverCommand('down');
                 self.player.animations.play('down');
@@ -338,6 +343,14 @@ function Player(main) {
                 gearDown();
             } else {
                 // Player not moving
+                if (lastDirection === 'right') {
+                    // force player to look right
+                    if (self.player.scale.x > 0) {
+                        self.player.scale.x *= -1;
+                        self.hit_player.scale.x *= -1;
+                    }
+                }
+
                 self.player.animations.stop();
                 self.player.frame = self.stillFrame;
 
