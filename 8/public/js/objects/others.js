@@ -380,7 +380,7 @@ function Others(main) {
         }
         if (gearShouldUpdate(others[data.username], data.game.gear)) {
             console.log('updating other players gear');
-            player.game.gear = data.game.gear;
+            others[data.username].game.gear = data.game.gear;
             setUpGear(others[data.username]);
         }
     });
