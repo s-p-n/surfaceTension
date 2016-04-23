@@ -8,6 +8,9 @@ function Player(main) {
     var step = 0;
     var serverStep = 0;
     var tweenTime = 0.9;
+    var hitSwitchInterval = null;
+    var hitSwitchIntervalTime = 500;
+    var inHitMode = false;
     self.playerData;
     function Keys(game) {
         var keyList = {
@@ -36,11 +39,67 @@ function Player(main) {
         };
     }
 
+    function hitModeOn () {
+        inHitMode = true;
+        self.hit_player.revive();
+        self.player.kill();
+
+        if (self.shirt) {
+            self.hit_shirt.revive();
+            self.shirt.kill();
+        }
+
+        if (self.pants) {
+            self.hit_player.addChild(self.pants);
+        }
+    }
+
+    function hitModeOff () {
+        inHitMode = false;
+        self.player.revive();
+        self.hit_player.kill();
+
+        if (self.shirt) {
+            self.shirt.revive();
+            self.hit_shirt.kill();
+        }
+        if (self.pants) {
+            self.player.addChild(self.pants);
+        }
+    }
+
+    function hitModeToggle () {
+        console.log("HitModeToggle:", inHitMode);
+        if (inHitMode) {
+            hitModeOff();
+        } else {
+            hitModeOn();
+        }
+    }
+
+    function startHitMode () {
+        if (hitSwitchInterval === null && !inHitMode) {
+            console.log("Starting hit mode.");
+            hitModeOn();
+            hitSwitchInterval = setInterval(hitModeToggle, hitSwitchIntervalTime);
+        }
+    }
+
+    function stopHitMode () {
+        if (hitSwitchInterval !== null && !inHitMode) {
+            console.log("Stopping hit mode.");
+            clearInterval(hitSwitchInterval);
+            hitSwitchInterval = null;
+            hitModeOff();
+        }
+    }
+
     function setUpGear() {
         var gear = self.playerData.game.gear;
         console.log('gear:', gear);
         if (self.shirt) {
             self.shirt.destroy();
+            self.hit_shirt.destroy();
         }
         if (self.pants) {
             self.pants.destroy();
@@ -55,6 +114,18 @@ function Player(main) {
             self.shirt.animations.add('up', [6, 7, 6, 8], 10, true);
 
             self.shirt.tint = gear.shirt.color;
+
+            self.hit_shirt = self.hit_player.addChild(main.game.add.sprite(0, 0, 'player_hit_shirt'));
+            self.hit_shirt.anchor.setTo(self.hit_player.anchor.x, self.hit_player.anchor.y);
+
+            self.hit_shirt.animations.add('down', [0, 1, 0, 2], 10, true);
+            self.hit_shirt.animations.add('left', [3, 4, 3, 5], 10, true);
+            self.hit_shirt.animations.add('right', [3, 4, 3, 5], 10, true);
+            self.hit_shirt.animations.add('up', [6, 7, 6, 8], 10, true);
+
+            self.hit_shirt.tint = gear.shirt.color;
+
+            self.hit_shirt.kill();
         }
         if (gear.pants.type === 1) {
             self.pants = self.player.addChild(main.game.add.sprite(0, 0, 'player_pants'));
@@ -74,6 +145,8 @@ function Player(main) {
         if (self.shirt) {
             self.shirt.anchor.x = 0.35;
             self.shirt.animations.play('left');
+            self.hit_shirt.anchor.x = 0.35;
+            self.hit_shirt.animations.play('left');
         }
         if (self.pants) {
             self.pants.anchor.x = 0.35;
@@ -85,6 +158,8 @@ function Player(main) {
         if (self.shirt) {
             self.shirt.anchor.x = 0.5;
             self.shirt.animations.play('right');
+            self.hit_shirt.anchor.x = 0.5;
+            self.hit_shirt.animations.play('right');
         }
         if (self.pants) {
             self.pants.anchor.x = 0.5;
@@ -95,6 +170,7 @@ function Player(main) {
     function gearUp() {
         if (self.shirt) {
             self.shirt.animations.play('up');
+            self.hit_shirt.animations.play('up');
         }
         if (self.pants) {
             self.pants.animations.play('up');
@@ -104,6 +180,7 @@ function Player(main) {
     function gearDown() {
         if (self.shirt) {
             self.shirt.animations.play('down');
+            self.hit_shirt.animations.play('down');
         }
         if (self.pants) {
             self.pants.animations.play('down');
@@ -114,6 +191,8 @@ function Player(main) {
         if (self.shirt) {
             self.shirt.animations.stop();
             self.shirt.frame = self.stillFrame;
+            self.hit_shirt.animations.stop();
+            self.hit_shirt.frame = self.stillFrame;
         }
         if (self.pants) {
             self.pants.animations.stop();
@@ -132,7 +211,9 @@ function Player(main) {
     }
     self.preload = function () {
         main.game.load.spritesheet('player', '/assets/game/dude_sprite.png', 25, 50);
+        main.game.load.spritesheet('player_hit', '/assets/game/dude_hit_sprite.png', 25, 50);
         main.game.load.spritesheet('player_shirt', '/assets/game/dude_shirt_sprite.png', 25, 50);
+        main.game.load.spritesheet('player_hit_shirt', '/assets/game/dude_hit_shirt_sprite.png', 25, 50);
         main.game.load.spritesheet('player_pants', '/assets/game/dude_pants_sprite.png', 25, 50);
     };
     self.createPlayer = function () {
@@ -145,6 +226,16 @@ function Player(main) {
         self.player.animations.add('left', [3, 4, 3, 5], 10, true);
         self.player.animations.add('right', [3, 4, 3, 5], 10, true);
         self.player.animations.add('up', [6, 7, 6, 8], 10, true);
+
+        self.hit_player = main.objects.create(self.playerData.game.x, self.playerData.game.y, 'player_hit');
+        self.hit_player.anchor.setTo(0.35, 0.9);
+
+        self.hit_player.animations.add('down', [0, 1, 0, 2], 10, true);
+        self.hit_player.animations.add('left', [3, 4, 3, 5], 10, true);
+        self.hit_player.animations.add('right', [3, 4, 3, 5], 10, true);
+        self.hit_player.animations.add('up', [6, 7, 6, 8], 10, true);
+
+        self.hit_player.kill();
 
         // Set up close rectangle
         self.closeRect = new Phaser.Rectangle(0, 0, 0, 0);
@@ -186,6 +277,8 @@ function Player(main) {
             main.objects.sort('bottom', Phaser.Group.SORT_ASCENDING);
         }
         */
+        self.hit_player.x = self.player.x;
+        self.hit_player.y = self.player.y;
         if (lastMove + moveTime < now) {
             lastMove = now;
             if (step === serverStep) {
@@ -194,28 +287,37 @@ function Player(main) {
             } else if (step !== 0) {
                 //console.log("steps:", step, serverStep);
             }
+            if (self.player.scale.x < 0) {
+                self.player.scale.x *= -1;
+                self.hit_player.scale.x *= -1;
+            }
+            if (self.key.isDown('space') || main.game.input.activePointer.isDown) {
+                startHitMode();
+            } else {
+                stopHitMode();
+            }
             if (self.key.isDown('left')) {
                 // Move to left
-                if (self.player.scale.x < 0) {
-                    self.player.scale.x *= -1;
-                    //self.pants.scale.x *= -1;
-                }
                 self.player.anchor.x = 0.35;
+                self.hit_player.anchor.x = 0.35;
                 newPos.x -= horrSpeed;
                 serverCommand('left');
                 self.player.animations.play('left');
+                self.hit_player.animations.play('left');
                 self.stillFrame = 3;
                 gearLeft();
             } else if (self.key.isDown('right')) {
                 // Move to right
                 if (self.player.scale.x > 0) {
                     self.player.scale.x *= -1;
-                    //self.pants.scale.x *= -1;
+                    self.hit_player.scale.x *= -1;
                 }
                 self.player.anchor.x = 0.5;
+                self.hit_player.anchor.x = 0.5;
                 newPos.x += horrSpeed;
                 serverCommand('right');
                 self.player.animations.play('right');
+                self.hit_player.animations.play('right');
                 self.stillFrame = 3;
                 gearRight();
             } else if (self.key.isDown('up')) {
@@ -223,6 +325,7 @@ function Player(main) {
                 newPos.y -= vertSpeed;
                 serverCommand('up');
                 self.player.animations.play('up');
+                self.hit_player.animations.play('up');
                 self.stillFrame = 6;
                 gearUp();
             } else if (self.key.isDown('down')) {
@@ -230,12 +333,16 @@ function Player(main) {
                 newPos.y += vertSpeed;
                 serverCommand('down');
                 self.player.animations.play('down');
+                self.hit_player.animations.play('down');
                 self.stillFrame = 0;
                 gearDown();
             } else {
                 // Player not moving
                 self.player.animations.stop();
                 self.player.frame = self.stillFrame;
+
+                self.hit_player.animations.stop();
+                self.hit_player.frame = self.stillFrame;
                 gearStop();
             }
             if (self.player.x !== newPos.x || self.player.y !== newPos.y) {
@@ -251,6 +358,7 @@ function Player(main) {
                     pTween.onComplete.add(function () {
                         //console.log("bottom:", self.player.bottom);
                         main.utils.sortDown(self.player);
+                        main.utils.sortDown(self.hit_player);
                     });
                 }
                 main.game.add.tween(self.text).
