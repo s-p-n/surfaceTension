@@ -37,8 +37,19 @@ module.exports = function (m, session) {
 	var hungerIntervalTime = 5000;
 	var hungerInterval = null;
 
+	function handleDeath () {
+		if (player.game.wellness.hp > 0) {
+			return false;
+		}
+		
+		return true;
+	}
+
 	function updatePlayer () {
 		var sect;
+		if (handleDeath()) {
+			return;
+		}
 		m.db.users.update({
 			'username': player.username
 		}, {

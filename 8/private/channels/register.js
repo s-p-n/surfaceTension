@@ -38,6 +38,7 @@ module.exports = function (m, session) {
 					game: {
 						x: 250, 
 						y: 250, 
+						spawn: [250, 250],
 						inventory: [{name: 'slire', num: 5}], 
 						gear: {
 							head: {type: 0, color: 0xFFFFFF},

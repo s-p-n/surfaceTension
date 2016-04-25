@@ -36,6 +36,7 @@ function GroundItems(main) {
         main.game.load.image('slire_seed', './assets/game/items/slire_seed.png');
         main.game.load.image('shirt1', './assets/game/items/shirt1.png');
         main.game.load.image('pants1', './assets/game/items/pants1.png');
+        main.game.load.image('shoe1', './assets/game/items/shoe1.png');
     }
     comms.on('ground-items-init', function (items) {
         var id;

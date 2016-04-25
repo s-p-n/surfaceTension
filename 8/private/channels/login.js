@@ -59,7 +59,7 @@ module.exports = function (m, session) {
 				myKey = m.form.hash(Date.now() + '' + Math.random() + socket.id);
 				socket.emit('cookie', {'name': 'sessionID', 'value': myKey, 'days': 14});
 			}
-			m.db.users.update({username: result.username}, {$set: {key: myKey}}, {multi: false});
+			m.db.users.update({username: result.username}, {$set: {key: myKey, 'game.spawn': [user.game.x, user.game.y]}}, {multi: false});
 		});
 	});
 };

@@ -120,12 +120,13 @@ var inventory = {
     });
 
     $(document).on('mouseover', '#rightPanelGear div', function (e) {
-        var gear;
+        var gear, gearSlot;
         if (sprite === null) {
             return true;
         }
+        gearSlot = $(this).attr('class').replace('rightS', 's').replace('leftS', 's').replace('rightG', 'g').replace('leftG', 'g');
         gear = {
-            type: sprite.key.split($(this).attr('class'))[1],
+            type: sprite.key.split(gearSlot)[1],
             slot: $(this).attr('class')
         };
         if (gear.type !== void 0) {
@@ -136,12 +137,13 @@ var inventory = {
         }
     });
     $(document).on('mouseout', '#rightPanelGear div', function (e) {
-        var gear;
+        var gear, gearSlot;
         if (sprite === null) {
             return true;
         }
+        gearSlot = $(this).attr('class').replace('rightS', 's').replace('leftS', 's').replace('rightG', 'g').replace('leftG', 'g');
         gear = {
-            type: sprite.key.split($(this).attr('class'))[1],
+            type: sprite.key.split(gearSlot)[1],
             slot: $(this).attr('class')
         };
         if (gear.type !== void 0) {
@@ -153,16 +155,17 @@ var inventory = {
     });
 
     $(document).on('click', '#rightPanelGear div', function (e) {
-        var data = {}, item;
+        var data = {}, item, gearSlot;
         if (sprite === null) {
             return true;
         }
 
         item = inventory.items[parseInt(sprite.inventory_id)];
+        gearSlot = $(this).attr('class').replace('rightS', 's').replace('leftS', 's').replace('rightG', 'g').replace('leftG', 'g');
         data.inventory_id = sprite.inventory_id;
         data.name = sprite.key;
         data.gear = {
-            type: data.name.split($(this).attr('class'))[1],
+            type: data.name.split(gearSlot)[1],
             slot: $(this).attr('class')
         };
         if (data.gear.type === void 0) {

@@ -35,8 +35,10 @@ var gear = {
         }
     },
     remove: function (slot) {
+        var invItem = slot.replace('rightS', 's').replace('leftS', 's').replace('rightG', 'g').replace('leftG', 'g') + this.slots[slot].type;
+        console.log('slots inventory item name:', invItem);
         if (this.slots[slot].type !== 0 &&
-            inventory.add(slot + this.slots[slot].type)
+            inventory.add(invItem)
         ) {
             this.slots[slot].type = 0;
             comms.emit('gear-removed', slot);

@@ -44,3 +44,12 @@ db.users.update(
     }, 
     {multi: true}
 );
+
+db.users.find().forEach(function (doc) {
+    doc.game.inventory.forEach(function (item) {
+        if (item.name === 'slire') {
+            item.name = 'slire_roll';
+        }
+    });
+    db.users.update({_id: doc._id}, {$set:{'game.inventory':doc.game.inventory}})
+});

@@ -20,8 +20,9 @@ function Gear (main, session) {
         return true;
     }
     self.remove = function (slot) {
+        var invItem = slot.replace('rightS', 's').replace('leftS', 's').replace('rightG', 'g').replace('leftG', 'g') + self.slots[slot].type;
         if (self.slots[slot].type !== 0 &&
-            player.inventory.add(slot + self.slots[slot].type)
+            player.inventory.add(invItem)
             ) {
             self.slots[slot].type = 0;
             self.update();
