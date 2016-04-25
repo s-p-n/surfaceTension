@@ -94,21 +94,23 @@ var commands = {
             return true;
         }
         if (subCmd === 'online') {
-            var users = "";
-            var id;
-            for (id in m.session) {
-                m.session[id];
-                console.log(m.session[id]);
-                if (m.session[id].state === 4) {
-                    if (users.length === 0) {
-                        users = m.session[id].user.username;
-                    } else {
-                        users += ", " + m.session[id].user.username;
+            process.nextTick(function () {
+                var users = "";
+                var id;
+                for (id in m.session) {
+                    m.session[id];
+                    console.log(m.session[id]);
+                    if (m.session[id].state === 4) {
+                        if (users.length === 0) {
+                            users = m.session[id].user.username;
+                        } else {
+                            users += ", " + m.session[id].user.username;
+                        }
                     }
                 }
-            }
-            console.log('list online:', users);
-            session.socket.emit('chat-msg', {text: 'Server: ' + users});
+                console.log('list online:', users);
+                session.socket.emit('chat-msg', {text: 'Server: ' + users});
+            });
             return true;
         }
         return false;
