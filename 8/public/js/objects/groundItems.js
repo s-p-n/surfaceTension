@@ -37,6 +37,7 @@ function GroundItems(main) {
         main.game.load.image('shirt1', './assets/game/items/shirt1.png');
         main.game.load.image('pants1', './assets/game/items/pants1.png');
         main.game.load.image('shoe1', './assets/game/items/shoe1.png');
+        main.game.load.image('shoe2', './assets/game/items/shoe2.png');
     }
     comms.on('ground-items-init', function (items) {
         var id;

@@ -47,9 +47,11 @@ module.exports = function (m, session) {
 
 	function updatePlayer () {
 		var sect;
+		/*
 		if (handleDeath()) {
 			return;
 		}
+		*/
 		m.db.users.update({
 			'username': player.username
 		}, {

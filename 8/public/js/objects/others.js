@@ -116,9 +116,14 @@ function Others(main) {
             p.hit_shirt.revive();
             p.shirt.kill();
         }
-
         if (p.pants) {
             p.hit_sprite.addChild(p.pants);
+        }
+        if (p.leftShoe) {
+            p.hit_sprite.addChild(p.leftShoe);
+        }
+        if (p.rightShoe) {
+            p.hit_sprite.addChild(p.rightShoe);
         }
     }
 
@@ -133,6 +138,12 @@ function Others(main) {
         }
         if (p.pants) {
             p.sprite.addChild(p.pants);
+        }
+        if (p.leftShoe) {
+            p.sprite.addChild(p.leftShoe);
+        }
+        if (p.rightShoe) {
+            p.sprite.addChild(p.rightShoe);
         }
     }
 
@@ -170,11 +181,19 @@ function Others(main) {
         if (p.pants) {
             p.pants.destroy();
         }
+        if (p.leftShoe) {
+            p.leftShoe.destroy();
+        }
+        if (p.rightShoe) {
+            p.rightShoe.destroy();
+        }
     }
 
     function gearShouldUpdate(p, newGear) {
         if (p.game.gear.shirt.type !== newGear.shirt.type ||
-            p.game.gear.pants.type !== newGear.pants.type) {
+            p.game.gear.pants.type !== newGear.pants.type ||
+            p.game.gear.leftShoe.type !== newGear.leftShoe.type ||
+            p.game.gear.rightShoe.type !== newGear.rightShoe.type) {
             return true;
         }
         return false;
@@ -216,6 +235,50 @@ function Others(main) {
 
             p.pants.tint = gear.pants.color;
         }
+        if (gear.leftShoe.type === 1) {
+            p.leftShoe = p.sprite.addChild(main.game.add.sprite(0, 0, 'player_leftShoe'));
+            p.leftShoe.anchor.setTo(0.5, 0.9);
+
+            p.leftShoe.animations.add('down', [0, 1, 0, 2], 10, true);
+            p.leftShoe.animations.add('left', [3, 4, 3, 5], 10, true);
+            p.leftShoe.animations.add('right', [3, 4, 3, 5], 10, true);
+            p.leftShoe.animations.add('up', [6, 7, 6, 8], 10, true);
+
+            p.leftShoe.tint = gear.leftShoe.color;
+        }
+        if (gear.rightShoe.type === 1) {
+            p.rightShoe = p.sprite.addChild(main.game.add.sprite(0, 0, 'player_rightShoe'));
+            p.rightShoe.anchor.setTo(0.5, 0.9);
+
+            p.rightShoe.animations.add('down', [0, 1, 0, 2], 10, true);
+            p.rightShoe.animations.add('left', [3, 4, 3, 5], 10, true);
+            p.rightShoe.animations.add('right', [3, 4, 3, 5], 10, true);
+            p.rightShoe.animations.add('up', [6, 7, 6, 8], 10, true);
+
+            p.rightShoe.tint = gear.rightShoe.color;
+        }
+        if (gear.leftShoe.type === 2) {
+            p.leftShoe = p.sprite.addChild(main.game.add.sprite(0, 0, 'player_leftShoe2'));
+            p.leftShoe.anchor.setTo(0.5, 0.9);
+
+            p.leftShoe.animations.add('down', [0, 1, 0, 2], 10, true);
+            p.leftShoe.animations.add('left', [3, 4, 3, 5], 10, true);
+            p.leftShoe.animations.add('right', [3, 4, 3, 5], 10, true);
+            p.leftShoe.animations.add('up', [6, 7, 6, 8], 10, true);
+
+            p.leftShoe.tint = gear.leftShoe.color;
+        }
+        if (gear.rightShoe.type === 2) {
+            p.rightShoe = p.sprite.addChild(main.game.add.sprite(0, 0, 'player_rightShoe2'));
+            p.rightShoe.anchor.setTo(0.5, 0.9);
+
+            p.rightShoe.animations.add('down', [0, 1, 0, 2], 10, true);
+            p.rightShoe.animations.add('left', [3, 4, 3, 5], 10, true);
+            p.rightShoe.animations.add('right', [3, 4, 3, 5], 10, true);
+            p.rightShoe.animations.add('up', [6, 7, 6, 8], 10, true);
+
+            p.rightShoe.tint = gear.rightShoe.color;
+        }
     }
 
     function gearLeft(p) {
@@ -225,6 +288,12 @@ function Others(main) {
         }
         if (p.pants) {
             p.pants.animations.play('left');
+        }
+        if (p.leftShoe) {
+            p.leftShoe.animations.play('left');
+        }
+        if (p.rightShoe) {
+            p.rightShoe.animations.play('left');
         }
     }
 
@@ -236,6 +305,12 @@ function Others(main) {
         if (p.pants) {
             p.pants.animations.play('right');
         }
+        if (p.leftShoe) {
+            p.leftShoe.animations.play('right');
+        }
+        if (p.rightShoe) {
+            p.rightShoe.animations.play('right');
+        }
     }
 
     function gearUp(p) {
@@ -246,6 +321,12 @@ function Others(main) {
         if (p.pants) {
             p.pants.animations.play('up');
         }
+        if (p.leftShoe) {
+            p.leftShoe.animations.play('up');
+        }
+        if (p.rightShoe) {
+            p.rightShoe.animations.play('up');
+        }
     }
 
     function gearDown(p) {
@@ -255,6 +336,12 @@ function Others(main) {
         }
         if (p.pants) {
             p.pants.animations.play('down');
+        }
+        if (p.leftShoe) {
+            p.leftShoe.animations.play('down');
+        }
+        if (p.rightShoe) {
+            p.rightShoe.animations.play('down');
         }
     }
 
@@ -268,6 +355,14 @@ function Others(main) {
         if (p.pants) {
             p.pants.animations.stop();
             p.pants.frame = p.stillFrame;
+        }
+        if (p.leftShoe) {
+            p.leftShoe.animations.stop();
+            p.leftShoe.frame = p.stillFrame;
+        }
+        if (p.rightShoe) {
+            p.rightShoe.animations.stop();
+            p.rightShoe.frame = p.stillFrame;
         }
     }
 
