@@ -105,7 +105,11 @@ var inventory = {
         data.inventory_id = sprite.inventory_id;
         data.name = sprite.key;
         data.place = [sprite.x, sprite.y];
-        comms.emit('item-placed', data);
+        if (e.ctrlKey) {
+            comms.emit('item-planted', data);
+        } else {
+            comms.emit('item-placed', data);
+        }
         if (item.num === 1) {
             inventory.items.splice(sprite.inventory_id, 1);
             sprite.destroy();

@@ -54,12 +54,17 @@ module.exports = function (m, session) {
             w: 25,
             h: 25
         };
+        var numSeeds = Math.floor(Math.random() * 3);
         if (intersects(playerRect, herbRect) &&
-            session.user.inventory.add(herb.name)
+            session.user.inventory.add(herb.name + '_roll')
         ) {
             herbs.instance.remove(herb);
             delete herbs[herbId];
             herbDeleted(herbId);
+            while (numSeeds > 0) {
+                numSeeds -= 1;
+                session.user.inventory.add(herb.name + '_seed');
+            }
         } else {
             herbCreated(herb);
         }
@@ -92,7 +97,7 @@ module.exports = function (m, session) {
         ) {
             session.user.inventory.remove(herb.inventory_id);
             herbs.instance.add({
-                name: herb.name,
+                name: herb.name.replace('_seed', ''),
                 place: herb.place
             }, function (err, herb) {
                 if (err) {

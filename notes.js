@@ -34,3 +34,13 @@ function toohard (maxKills) {
     }
     return [lvl, kills];
 }
+
+db.users.update(
+    {}, 
+    {
+        '$set': {
+            'game.spawn': [250, 250]
+        }
+    }, 
+    {multi: true}
+);

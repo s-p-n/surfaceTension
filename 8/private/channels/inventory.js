@@ -52,7 +52,13 @@ function Inventory (main, session) {
     self.update = function () {
         console.log('inventory update:');
         console.log(player._id, self.items);
-        db.users.update({_id: player._id}, {$set: {'game.inventory': self.items}});
+        db.users.update({_id: player._id}, {$set: {'game.inventory': self.items}}, function (err, result) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log("inventory update result:", result);
+        });
         socket.emit('inventory-update', self.items);
     }
 }
@@ -62,6 +68,19 @@ function generateId () {
 var groundItems = {};
 module.exports = function (m, session) {
     var socket = session.socket;
+
+    function placeItem (item) {
+        var groundItem;
+        // TODO: Create educated mapping system to determine what items should do
+        // when they are placed.
+        
+        if (session.user.inventory.remove(item.inventory_id)) {
+            groundItem = {name: item.name, place: item.place, _id: generateId()};
+            groundItems[groundItem._id] = groundItem;
+            session.state4Broadcast('ground-item-added', groundItem);
+        }
+    }
+
     session.event.on('game-ready', function(ready) {
         var result = {};
         var i;
@@ -76,18 +95,15 @@ module.exports = function (m, session) {
             socket.emit('ground-items-init', result);
         }
     });
-    socket.on('item-placed', function (item) {
-        var groundItem;
-        // TODO: Create educated mapping system to determine what items should do
-        // when they are placed.
-        if (item.name === 'slire') {
+    session.event.on('death', function() {
+
+    });
+    socket.on('item-placed', placeItem);
+    socket.on('item-planted', function (item) {
+        if (item.name === 'slire_seed') {
             session.event.emit('herb-planted', item);
-            return;
-        }
-        if (session.user.inventory.remove(item.inventory_id)) {
-            groundItem = {name: item.name, place: item.place, _id: generateId()};
-            groundItems[groundItem._id] = groundItem;
-            session.state4Broadcast('ground-item-added', groundItem);
+        } else {
+            placeItem(item);
         }
     });
     socket.on('gear-equipped', function (item) {

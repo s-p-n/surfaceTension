@@ -61,14 +61,27 @@ var commands = {
         return true;
     },
     'clear': function (subCmd, m, session) {
-        var id;
-        var herbs = m.game.objects.herbs;
+        
         if (subCmd === 'herbs') {
-            for (id in herbs) {
-                herbs.instance.remove(herbs[id]);
-                delete herbs[id];
-            }
-            session.state4Broadcast('herbs-init', herbs);
+            process.nextTick(function () {
+                var id;
+                var herbs = m.game.objects.herbs;
+                for (id in herbs) {
+                    herbs.instance.remove(herbs[id]);
+                    delete herbs[id];
+                }
+                session.state4Broadcast('herbs-init', herbs);
+            });
+            return true;
+        }
+        if (subCmd === 'inventory') {
+            process.nextTick(function () {
+                var i;
+                session.user.inventory.items.length = 0;
+                session.user.inventory.update();
+                console.log(session.user.inventory.items);
+                console.log(session.user.game.inventory);
+            });
             return true;
         }
         return false;
