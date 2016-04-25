@@ -89,7 +89,7 @@ var commands = {
                     }
                 });
                 console.log("list users:", users);
-                session.socket.emit('chat-msg', {text: users});
+                session.socket.emit('chat-msg', {text: 'Server: ' + users});
             });
             return true;
         }
@@ -108,7 +108,7 @@ var commands = {
                 }
             }
             console.log('list online:', users);
-            session.socket.emit('chat-msg', {text: users});
+            session.socket.emit('chat-msg', {text: 'Server: ' + users});
             return true;
         }
         return false;

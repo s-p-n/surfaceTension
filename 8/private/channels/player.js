@@ -58,13 +58,11 @@ module.exports = function (m, session) {
 		}
 	});
 	function hungerIntervalFunction () {
-		console.log("hungerInterval");
-		
-		if (player.game.wellness.hunger < 100) {
-			player.game.wellness.hunger += 1;
-		} else {
-			player.game.wellness.hp -= 1;
-		}
+	if (player.game.wellness.hunger < 100) {
+		player.game.wellness.hunger += 1;
+	} else {
+		player.game.wellness.hp -= 1;
+	}
 		socket.emit('player-wellness', player.game.wellness);
 		updatePlayer();
 	}

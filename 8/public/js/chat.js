@@ -9,11 +9,14 @@ var sendMsg = function () {
 }
 
 var recvMsg = function (data) {
-   
-    $('#chatText').prepend($('<li class="chatItem">').text(data.text));
-    $('#chatText').animate({
-        scrollTop: 0
-    }, 700);
+    var scrollHeight = $('#chatText')[0].scrollHeight;
+    var scrollPos = $('#chatText').innerHeight() + $('#chatText').scrollTop();
+    $('#chatText').append($('<li class="chatItem">').text(data.text));
+    if (((scrollHeight - scrollPos) / scrollHeight) === 0) {
+        $('#chatText').animate({
+            scrollTop: $('#chatText')[0].scrollHeight
+        }, 700);
+    }
 }
 
 $('#chatInput').keypress(function (e) {
