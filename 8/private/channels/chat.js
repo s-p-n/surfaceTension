@@ -72,6 +72,46 @@ var commands = {
             return true;
         }
         return false;
+    },
+    'list': function (subCmd, m, session) {
+        if (subCmd === 'users') {
+            m.db.users.find({}, {'username': true, '_id': false}, function (err, docs) {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                var users = "";
+                docs.forEach(function (item, index) {
+                    if (index === 0) {
+                        users = item.username;
+                    } else {
+                        users += ', ' + item.username;
+                    }
+                });
+                console.log("list users:", users);
+                session.socket.emit('chat-msg', {text: users});
+            });
+            return true;
+        }
+        if (subCmd === 'online') {
+            var users = "";
+            var id;
+            for (id in m.session) {
+                m.session[id];
+                console.log(m.session[id]);
+                if (m.session[id].state === 4) {
+                    if (users.length === 0) {
+                        users = m.session[id].user.username;
+                    } else {
+                        users += ", " + m.session[id].user.username;
+                    }
+                }
+            }
+            console.log('list online:', users);
+            session.socket.emit('chat-msg', {text: users});
+            return true;
+        }
+        return false;
     }
 }
 
