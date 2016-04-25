@@ -401,6 +401,7 @@ function Player(main) {
         self.createPlayer();
         inventory.restore(data.game.inventory);
         gear.restore(data.game.gear);
+        wellnessUpdate(data.game.wellness);
     });
     comms.on('inventory-update', function (data) {
         inventory.restore(data);
@@ -418,5 +419,9 @@ function Player(main) {
         self.playerData.game = data.game;
         //console.log("lag:", lag);
         serverStep = data.step;
+    });
+    comms.on('player-wellness', function (data) {
+        self.playerData.game.welness = data;
+        wellnessUpdate(data);
     });
 }

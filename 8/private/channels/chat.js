@@ -59,6 +59,19 @@ var commands = {
                 return false;
         }
         return true;
+    },
+    'clear': function (subCmd, m, session) {
+        var id;
+        var herbs = m.game.objects.herbs;
+        if (subCmd === 'herbs') {
+            for (id in herbs) {
+                herbs.instance.remove(herbs[id]);
+                delete herbs[id];
+            }
+            session.state4Broadcast('herbs-init', herbs);
+            return true;
+        }
+        return false;
     }
 }
 

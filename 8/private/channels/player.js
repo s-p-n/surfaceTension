@@ -34,6 +34,8 @@ module.exports = function (m, session) {
 	var player;
 	var intervalTime = 75;
 	var lastCmdTime = 0;
+	var hungerIntervalTime = 5000;
+	var hungerInterval = null;
 
 	function updatePlayer () {
 		var sect;
@@ -49,12 +51,30 @@ module.exports = function (m, session) {
 		}
 		m.event.emit('player-update', player);
 	}
+	socket.on('disconnect', function () {
+		if (hungerInterval !== null) {
+			clearInterval(hungerInterval);
+			hungerInterval = null;
+		}
+	});
+	function hungerIntervalFunction () {
+		console.log("hungerInterval");
+		
+		if (player.game.wellness.hunger < 100) {
+			player.game.wellness.hunger += 1;
+		} else {
+			player.game.wellness.hp -= 1;
+		}
+		socket.emit('player-wellness', player.game.wellness);
+		updatePlayer();
+	}
 
 	function initPlayer () {
 		var userId, other;
 		session.state = 4;
 		player.section = m.map.getSection([player.game.x, player.game.y]);
 		player.hitMode = false;
+		hungerInterval = setInterval(hungerIntervalFunction, hungerIntervalTime);
 		session.event.emit('game-ready', true);
 		socket.emit('player', {username: player.username, game: player.game});
 		m.event.emit('player-update', player);
