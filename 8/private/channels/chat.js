@@ -99,7 +99,7 @@ var commands = {
                 var id;
                 for (id in m.session) {
                     m.session[id];
-                    console.log(m.session[id]);
+                    //console.log(m.session[id]);
                     if (m.session[id].state === 4) {
                         if (users.length === 0) {
                             users = m.session[id].user.username;
