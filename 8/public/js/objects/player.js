@@ -49,9 +49,14 @@ function Player(main) {
             self.hit_shirt.revive();
             self.shirt.kill();
         }
-
         if (self.pants) {
             self.hit_player.addChild(self.pants);
+        }
+        if (self.leftShoe) {
+            self.hit_player.addChild(self.leftShoe);
+        }
+        if (self.rightShoe) {
+            self.hit_player.addChild(self.rightShoe);
         }
     }
 
@@ -66,6 +71,12 @@ function Player(main) {
         }
         if (self.pants) {
             self.player.addChild(self.pants);
+        }
+        if (self.leftShoe) {
+            self.player.addChild(self.leftShoe);
+        }
+        if (self.rightShoe) {
+            self.player.addChild(self.rightShoe);
         }
     }
 
