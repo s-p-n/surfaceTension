@@ -376,7 +376,7 @@ function Player(main) {
         self.stillFrame = 0;
 
         // Set up text above player
-        self.text = main.game.add.text(self.playerData.game.x - 2, self.playerData.game.y - 60, self.playerData.username);
+        self.text = main.game.add.text(self.playerData.game.x - 2, self.playerData.game.y - 60, self.playerData.username + ' (' + (self.playerData.game.skills.life.level * 10) + ')');
         self.text.anchor.setTo(0.5);
         self.text.align = 'center';
         self.text.font = 'Arial Black';
@@ -415,6 +415,7 @@ function Player(main) {
         self.hit_player.x = self.player.x;
         self.hit_player.y = self.player.y;
         if (lastMove + moveTime < now) {
+            self.text.text = self.playerData.username + ' (' + (self.playerData.game.skills.life.level * 10) + ')';
             lastMove = now;
             if (step === serverStep) {
                 step = 0;
@@ -541,7 +542,7 @@ function Player(main) {
         inventory.restore(data.game.inventory);
         gear.restore(data.game.gear);
         eatQueue.restore(data.game.eatQueue);
-        wellnessUpdate(data.game.wellness);
+        statsUpdate(data.game);
     });
     comms.on('inventory-update', function (data) {
         inventory.restore(data);
@@ -560,7 +561,7 @@ function Player(main) {
         if (lastHp !== data.game.wellness.hp) {
             updateHpBar();
         }
-        wellnessUpdate(data.game.wellness);
+        statsUpdate(data.game);
         if (data.step) {
             serverStep = data.step;
         }
@@ -571,7 +572,7 @@ function Player(main) {
         if (lastHp !== data.hp) {
             updateHpBar();
         }
-        wellnessUpdate(data);
+        statsUpdate(self.playerData.game);
     });
     comms.on('eatqueue-update', function (data) {
         self.playerData.game.eatQueue = data;

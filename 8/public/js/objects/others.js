@@ -483,7 +483,7 @@ function Others(main) {
             others[data.username].text = main.game.add.text(
                 data.game.x - 2, 
                 data.game.y - 60, 
-                data.username
+                data.username + ' (' + data.maxHp + ')'
             );
             others[data.username].text.anchor.setTo(0.5);
             others[data.username].text.align = 'center';
@@ -505,6 +505,7 @@ function Others(main) {
             updateHpBar(others[data.username]);
             others[data.username].ready = true;
         }
+        others[data.username].text.text = data.username + ' (' + data.maxHp + ')';
         others[data.username].maxHp = data.maxHp;
         others[data.username].queue.push(data.game);
         if (data.hitMode) {
