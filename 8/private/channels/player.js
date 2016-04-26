@@ -142,6 +142,10 @@ module.exports = function (m, session) {
 					player.game.skills.melee.level += 1;
 					player.game.skills.melee.experience = 0;
 				}
+				if (player.game.skills.life.experience >= calcLvlXp(player.game.skills.life.level)) {
+					player.game.skills.life.level += 1;
+					player.game.skills.life.experience = 0;
+				}
 				if (other.game.skills.life.experience >= calcLvlXp(other.game.skills.life.level)) {
 					other.game.skills.life.level += 1;
 					other.game.skills.life.experience = 0;
