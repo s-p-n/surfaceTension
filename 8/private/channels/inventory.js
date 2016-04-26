@@ -256,6 +256,7 @@ module.exports = function (m, session) {
             session.state4Broadcast('ground-item-removed', id);
         } else {
             socket.emit('ground-item-added', item);
+            session.user.inventory.update();
         }
     });
 }
