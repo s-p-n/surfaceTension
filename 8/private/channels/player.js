@@ -135,8 +135,9 @@ module.exports = function (m, session) {
 			if (intersects(playerRect, otherRect)) {
 				console.log(other.username, hit);
 				other.game.wellness.hp -= hit;
-				player.game.skills.melee.experience += Math.ceil(hit);
-				other.game.skills.life.experience += Math.ceil(hit);
+				player.game.skills.melee.experience += Math.round(hit);
+				player.game.skills.life.experience += Math.round(hit/2);
+				other.game.skills.life.experience += Math.round(hit/2);
 				if (player.game.skills.melee.experience >= calcLvlXp(player.game.skills.melee.level)) {
 					player.game.skills.melee.level += 1;
 					player.game.skills.melee.experience = 0;
