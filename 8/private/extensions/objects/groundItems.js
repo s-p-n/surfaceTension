@@ -9,12 +9,12 @@ function GroundItems(main, childCallback) {
             item.place[1];
     }
     function placeAvailable(item) {
-        console.log((main.map.places[serializePlace(item)] === false),
+        console.log((groundPlaces[serializePlace(item)] === false),
             item.place[0] > 0 ,
             item.place[0] < main.map.bounds[0] ,
             item.place[1] > 0 ,
             item.place[1] < main.map.bounds[1]);
-        return (main.map.places[serializePlace(item)] === false &&
+        return (groundPlaces[serializePlace(item)] === false &&
             item.place[0] > 0 &&
             item.place[0] < main.map.bounds[0] &&
             item.place[1] > 0 &&
@@ -56,21 +56,15 @@ function GroundItems(main, childCallback) {
         }
     };
     self.add = function (item, fn) {
-        if (placeAvailable(item)) {
-            items.push(item);
-            main.map.places[serializePlace(item)] = true;
-            self.db.add(item, fn);
-        }
+        items.push(item);
+        self.db.add(item, fn);
     };
     self.remove = function (item) {
-        var serialPlace = serializePlace(item)
-        main.map.places[serialPlace] = false;
         self.db.remove(item._id);
     };
     self.cycleCallback = childCallback;
     // Construct the items list from db:
     self.db.each(function (item) {
-        main.map.places[serializePlace(item)] = true;
         items.push(item);
         self.cycleCallback(item);
     });

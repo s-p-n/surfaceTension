@@ -19,6 +19,7 @@ function Player(main) {
             down: game.input.keyboard.addKey(Phaser.Keyboard.S),
             left: game.input.keyboard.addKey(Phaser.Keyboard.A),
             right: game.input.keyboard.addKey(Phaser.Keyboard.D),
+            t: game.input.keyboard.addKey(Phaser.Keyboard.T),
             space: game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR),
             enter: game.input.keyboard.addKey(Phaser.Keyboard.ENTER)
         };
@@ -28,6 +29,7 @@ function Player(main) {
             if (window.bypassPhaserInput) {
                 game.input.enabled = false;
                 keyList.enter.reset();
+                keyList.t.reset();
                 return false;
             } else {
                 game.input.enabled = true;
@@ -398,7 +400,7 @@ function Player(main) {
                 self.player.scale.x *= -1;
                 self.hit_player.scale.x *= -1;
             }
-            if (self.key.isDown('enter')) {
+            if (self.key.isDown('enter') || self.key.isDown('t')) {
                 console.log("Game focusing chat");
                 $('#chatInput:not(:focus)').focus();
             }
@@ -509,6 +511,7 @@ function Player(main) {
         self.createPlayer();
         inventory.restore(data.game.inventory);
         gear.restore(data.game.gear);
+        eatQueue.restore(data.game.eatQueue);
         wellnessUpdate(data.game.wellness);
     });
     comms.on('inventory-update', function (data) {
@@ -531,5 +534,9 @@ function Player(main) {
     comms.on('player-wellness', function (data) {
         self.playerData.game.welness = data;
         wellnessUpdate(data);
+    });
+    comms.on('eatqueue-update', function (data) {
+        self.playerData.game.eatQueue = data;
+        eatQueue.restore(data);
     });
 }

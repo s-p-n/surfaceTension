@@ -1,8 +1,29 @@
+var edibleItems = ['slire_roll'];
+
 function intersects (a, b) {
     return !(a.x + a.w < b.x ||
         a.y + a.h < b.y ||
         b.x + b.w < a.x ||
         b.y + b.h < a.y);
+}
+function makePlace(x, y) {
+    x = Math.round(x);
+    y = Math.round(y);
+    var gridSize = 25;
+    var xMod = x % gridSize;
+    var yMod = y % gridSize;
+    var result = [0, 0];
+    if (xMod > gridSize / 2) {
+       result[0] = x + (gridSize - xMod);
+    } else {
+        result[0] = x - xMod;
+    }
+    if (yMod > gridSize / 2) {
+        result[1] = y + (gridSize - yMod);
+    } else {
+        result[1] = y - yMod;
+    }
+    return result;
 }
 function Inventory (main, session) {
     "use strict";
@@ -109,8 +130,51 @@ module.exports = function (m, session) {
             socket.emit('ground-items-init', result);
         }
     });
-    session.event.on('death', function() {
-
+    session.event.on('death-1', function() {
+        var items = session.user.inventory.items;
+        var place = makePlace(session.user.game.x, session.user.game.y);
+        var bulk = m.db.groundItems.initializeOrderedBulkOp();
+        console.log("Handling Death Drop");
+        items.forEach(function (item) {
+            while (item.num > 0) {
+                item.num -= 1;
+                bulk.insert({name: item.name, place: place});
+            }
+        });
+        var gearName;
+        var gear = session.user.gear.slots;
+        for (gearName in gear) {
+            if (gear[gearName].type > 0) {
+                console.log(gearName, gear[gearName]);
+                bulk.insert({
+                    name: gearName.replace('rightS', 's').
+                        replace('leftS', 's').
+                        replace('rightG', 'g').
+                        replace('leftG', 'g') + 
+                        gear[gearName].type, 
+                    place: place
+                });
+                gear[gearName].type = 0;
+                gear[gearName].tint = 0xFFFFFF;
+            }
+        }
+        items.length = 0;
+        session.user.inventory.update();
+        session.user.gear.update();
+        bulk.execute();
+        m.db.groundItems.find({place: place}, function (err, docs) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            docs.forEach(function(item) {
+                if (!(item._id in groundItems)) {
+                    groundItems[item._id] = item;
+                    session.state4Broadcast('ground-item-added', item);
+                }
+            });
+        });
+        session.event.emit('death-2');
     });
     socket.on('item-placed', placeItem);
     socket.on('item-planted', function (item) {
@@ -126,6 +190,41 @@ module.exports = function (m, session) {
                 session.user.inventory.add(item.name);
             }
         }
+    });
+    socket.on('eatQueue-item-added', function (item) {
+        if ((session.user.game.eatQueue !== null && 
+            item.name !== session.user.game.eatQueue.name) ||
+            (edibleItems.indexOf(item.name) === -1) ||
+            (!session.user.inventory.remove(item.inventory_id))
+        ) {
+            console.log("eatQueue add failed");
+            // do nothing
+        } else {
+            if (session.user.game.eatQueue === null) {
+                session.user.game.eatQueue = {name: item.name, num: 1};
+            } else {
+                session.user.game.eatQueue.num += 1;
+            }
+            m.db.users.update({_id: session.user._id}, {$set:{
+                'game.eatQueue': session.user.game.eatQueue
+            }});
+        }
+        socket.emit('eatqueue-update', session.user.game.eatQueue);
+    });
+    socket.on('eatQueue-item-removed', function () {
+        if (session.user.game.eatQueue !== null && 
+            session.user.inventory.add(session.user.game.eatQueue.name)
+        ) {
+            if (session.user.game.eatQueue.num > 1) {
+                session.user.game.eatQueue.num -= 1;
+            } else {
+                session.user.game.eatQueue = null;
+            }
+            m.db.users.update({_id: session.user._id}, {$set:{
+                'game.eatQueue': session.user.game.eatQueue
+            }});
+        }
+        socket.emit('eatqueue-update', session.user.game.eatQueue);
     });
     socket.on('item-picked', function (id) {
         var item = groundItems[id];

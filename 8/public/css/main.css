@@ -97,7 +97,7 @@ html, body {
             width: 200px;
             height: 700px;
         }
-        .head,.pants {
+        .head,.pants,.eatQueue {
             width: 32px;
             height: 32px;
             background: rgba(255, 255, 255, 0.5);
@@ -123,7 +123,8 @@ html, body {
             text-align: center;
             overflow: hidden;
         }
-        #rightPanel .item>.multiplier {
+        .multiplier {
+            text-shadow: 0px 0px 2px black;
             color: yellow;
             position: absolute;
             display: block;

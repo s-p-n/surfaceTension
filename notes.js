@@ -39,8 +39,9 @@ db.users.update(
     {}, 
     {
         '$set': {
-            'game.gear.leftShoe.type': 1,
-            'game.gear.rightShoe.type': 1
+            'game.skills.life.level': 1,
+            'game.skills.medic.level': 1,
+            'game.skills.melee.level': 1
         }
     }, 
     {multi: true}

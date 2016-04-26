@@ -27,7 +27,12 @@ var exec = {
 	}
 };
 
-
+var itemStats = {
+	'slire_roll': {
+		'hunger': 10,
+		'hp': 4
+	}
+};
 
 module.exports = function (m, session) {
 	var socket = session.socket;
@@ -36,22 +41,24 @@ module.exports = function (m, session) {
 	var lastCmdTime = 0;
 	var hungerIntervalTime = 5000;
 	var hungerInterval = null;
+	var isDead = false;
 
 	function handleDeath () {
-		if (player.game.wellness.hp > 0) {
+		if (isDead || player.game.wellness.hp > 0) {
 			return false;
 		}
-		
+		isDead = true;
+		session.event.emit('death-1');
 		return true;
 	}
 
 	function updatePlayer () {
 		var sect;
-		/*
+		
 		if (handleDeath()) {
 			return;
 		}
-		*/
+		
 		m.db.users.update({
 			'username': player.username
 		}, {
@@ -71,11 +78,35 @@ module.exports = function (m, session) {
 		}
 	});
 	function hungerIntervalFunction () {
-	if (player.game.wellness.hunger < 100) {
-		player.game.wellness.hunger += 1;
-	} else {
-		player.game.wellness.hp -= 1;
-	}
+		var maxHP = player.game.skills.life.level * 10;
+		if (player.game.wellness.hunger < 100) {
+			player.game.wellness.hunger += 1;
+		} else {
+			player.game.wellness.hp -= 1;
+		}
+		if (player.game.eatQueue !== null) {
+			if (player.game.wellness.hunger > (.75 * itemStats[player.game.eatQueue.name].hunger) ||
+				(maxHP - player.game.wellness.hp) > (.75 * itemStats[player.game.eatQueue.name].hp)
+			) {
+				player.game.wellness.hunger -= itemStats[player.game.eatQueue.name].hunger;
+				player.game.wellness.hp += itemStats[player.game.eatQueue.name].hp;
+				if (player.game.eatQueue.num > 1) { 
+					player.game.eatQueue.num -= 1;
+				} else {
+					player.game.eatQueue = null;
+				}
+				m.db.users.update({id: player._id}, {$set:{
+					'game.eatQueue': player.game.eatQueue
+				}});
+				socket.emit('eatqueue-update', player.game.eatQueue)
+			}
+		}
+		if (player.game.wellness.hunger < 0) {
+			player.game.wellness.hunger = 0;
+		}
+		if (player.game.wellness.hp > maxHP) {
+			player.game.wellness.hp = maxHP;
+		}
 		socket.emit('player-wellness', player.game.wellness);
 		updatePlayer();
 	}
@@ -103,6 +134,31 @@ module.exports = function (m, session) {
 			//}
 		}
 	}
+	session.event.on('death-2', function () {
+		player.game.x = player.game.spawn[0];
+		player.game.y = player.game.spawn[1];
+		player.game.wellness = {
+			"hp": player.game.skills.life.level * 10,
+			"hunger": 0,
+			"infection" : {
+                    "minor" : [],
+                    "normal" : [],
+                    "chronic" : []
+            },
+            "illness" : {
+                    "minor" : [],
+                    "normal" : [],
+                    "chronic" : []
+            },
+            "disease" : {
+                    "minor" : [],
+                    "normal" : [],
+                    "chronic" : []
+            }
+        };
+        isDead = false;
+        updatePlayer();
+	})
 	session.event.on('logged_in', function (result) {
 		if (result === true) {
 			player = session.user;

@@ -184,4 +184,60 @@ var inventory = {
             item.num -= 1;
         }
     });
+
+    $('#rightPanelEatQueue').on('mouseover', '.eatQueue', function (e) {
+        var name;
+        if (sprite === null) {
+            return true;
+        }
+        name = sprite.key;
+        if (edibleItems.indexOf(name) !== -1) {
+            $(this).css({
+                'box-shadow': '0px 0px 5px 5px rgba(0,187,255,0.55)',
+                'cursor': 'pointer'
+            });
+        }
+    });
+    $('#rightPanelEatQueue').on('mouseout', '.eatQueue', function (e) {
+        var name;
+        if (sprite === null) {
+            return true;
+        }
+        name = sprite.key;
+        if (edibleItems.indexOf(name) !== -1) {
+            $(this).css({
+                'box-shadow': '',
+                'cursor': 'default'
+            });
+        }
+    });
+    $('#rightPanelEatQueue').on('click', '.eatQueue', function () {
+        var data = {}, item;
+        if (sprite === null) {
+            if (eatQueue.food !== null) {
+                var item = eatQueue.food;
+                if (inventory.add(item.name)) {
+                    eatQueue.remove();
+                }
+            }
+            return;
+        }
+        item = inventory.items[parseInt(sprite.inventory_id)];
+        data.inventory_id = sprite.inventory_id;
+        data.name = sprite.key;
+        $(this).css({
+            'box-shadow': '',
+            'cursor': 'default'
+        });
+        if(eatQueue.add(data.name)) {
+            comms.emit('eatQueue-item-added', data);
+            if (item.num === 1) {
+                inventory.items.splice(sprite.inventory_id, 1);
+                sprite.destroy();
+                sprite = null;
+            } else {
+                item.num -= 1;
+            }
+        }
+});
 }());

@@ -39,6 +39,7 @@ module.exports = function (m, session) {
 						x: 250, 
 						y: 250, 
 						spawn: [250, 250],
+						eatQueue: null,
 						inventory: [{name: 'slire', num: 5}], 
 						gear: {
 							head: {type: 0, color: 0xFFFFFF},
@@ -71,15 +72,15 @@ module.exports = function (m, session) {
 						skills: {
 							life: {
 								experience: 0,
-								level: 0
+								level: 1
 							},
 							medic: {
 								experience: 0,
-								level: 0
+								level: 1
 							},
 							melee: {
 								experience: 0,
-								level: 0
+								level: 1
 							}
 						}
 					}
