@@ -80,8 +80,7 @@ module.exports = function (m, session) {
 	function hungerIntervalFunction () {
 		var maxHP = player.game.skills.life.level * 10;
 		if (player.game.wellness.hunger < 100) {
-			//player.game.wellness.hunger += 1;
-			player.game.wellness.hunger = 100;
+			player.game.wellness.hunger += 1;
 		} else {
 			player.game.wellness.hp -= 1;
 		}
