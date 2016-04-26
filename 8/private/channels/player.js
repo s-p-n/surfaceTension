@@ -102,7 +102,9 @@ module.exports = function (m, session) {
 	socket.on('disconnect', function () {
 		if (hungerInterval !== null) {
 			clearInterval(hungerInterval);
+			clearInterval(hitInterval)
 			hungerInterval = null;
+			hitInterval = null;
 		}
 	});
 	function hitIntervalFunction () {
