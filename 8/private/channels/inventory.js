@@ -29,12 +29,12 @@ function Inventory (main, session) {
         if (firstEmptySlot === 30) {
             return false;
         }
-        console.log('first empty slot:', firstEmptySlot);
+        //console.log('first empty slot:', firstEmptySlot);
         self.items[firstEmptySlot] = {
             name: item,
             num: 1
         };
-        console.log('items:', self.items);
+        //console.log('items:', self.items);
         self.update();
         return true;
     };
@@ -50,14 +50,14 @@ function Inventory (main, session) {
         return true;
     };
     self.update = function () {
-        console.log('inventory update:');
-        console.log(player._id, self.items);
+        //console.log('inventory update:');
+        //console.log(player._id, self.items);
         db.users.update({_id: player._id}, {$set: {'game.inventory': self.items}}, function (err, result) {
             if (err) {
                 console.error(err);
                 return;
             }
-            console.log("inventory update result:", result);
+            //console.log("inventory update result:", result);
         });
         socket.emit('inventory-update', self.items);
     }

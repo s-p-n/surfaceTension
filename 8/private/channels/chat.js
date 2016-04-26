@@ -127,6 +127,24 @@ var commands = {
             return true;
         }
         return false;
+    },
+    'give': function (subCmd, m, session) {
+        process.nextTick(function () {
+            var num = parseInt(subCmd);
+            var item = subCmd.replace(num, '');
+            if (isNaN(num)) {
+                num = 1;
+            }
+            console.log("Giving", num, item + 's');
+            while(num > 0 && !(
+                session.user.inventory.items.length >= 30 &&
+                session.user.inventory.items[29].num >= 64
+            )) {
+                num -= 1;
+                session.user.inventory.add(item);
+            }
+        });
+        return true;
     }
 }
 
