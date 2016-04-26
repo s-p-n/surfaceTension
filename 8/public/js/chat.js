@@ -1,4 +1,5 @@
 (function ($) {
+
 var sendMsg = function () {
     var val = $('#chatInput').val();
     if (val.replace(/\s/g, '').length === 0) {
@@ -19,9 +20,14 @@ var recvMsg = function (data) {
     }
 }
 
-$('#chatInput').keypress(function (e) {
+$('#chatInput').keyup(function (e) {
     if (e.keyCode === 13) {
         sendMsg();
+        if (e.shiftKey) {
+            console.log("shift+enter");
+            $('#chatInput').blur();
+            //$('#canvas').focus();
+        }
         e.preventDefault();
         return false;
     }

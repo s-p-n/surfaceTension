@@ -62,25 +62,39 @@ function Inventory (main, session) {
         socket.emit('inventory-update', self.items);
     }
 }
+/*
 function generateId () {
     return Date.now() + '.' + Math.floor(Math.random() * 100);
 }
 var groundItems = {};
+*/
 module.exports = function (m, session) {
     var socket = session.socket;
-
+    var groundItems = m.game.objects.groundItems;
     function placeItem (item) {
         var groundItem;
         // TODO: Create educated mapping system to determine what items should do
         // when they are placed.
         
         if (session.user.inventory.remove(item.inventory_id)) {
-            groundItem = {name: item.name, place: item.place, _id: generateId()};
-            groundItems[groundItem._id] = groundItem;
-            session.state4Broadcast('ground-item-added', groundItem);
+            groundItem = {name: item.name, place: item.place};
+            groundItems.instance.add(groundItem, function (err, doc) {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                groundItems[doc._id] = doc;
+                session.state4Broadcast('ground-item-added', doc);
+            });
+
         }
     }
-
+    if (groundItems.instance === null) {
+        //console.log("Instantiating Herbs");
+        groundItems.instance = new groundItems.class(m, function (item) {
+            groundItems[item._id] = item;
+        });
+    }
     session.event.on('game-ready', function(ready) {
         var result = {};
         var i;
@@ -138,6 +152,7 @@ module.exports = function (m, session) {
             session.user.inventory.add(item.name)
         ) {
             console.log("Picking ground item:", item);
+            groundItems.instance.remove(item);
             delete groundItems[id];
             session.state4Broadcast('ground-item-removed', id);
         } else {

@@ -39,7 +39,8 @@ db.users.update(
     {}, 
     {
         '$set': {
-            'game.spawn': [250, 250]
+            'game.gear.leftShoe.type': 1,
+            'game.gear.rightShoe.type': 1
         }
     }, 
     {multi: true}

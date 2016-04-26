@@ -19,13 +19,15 @@ function Player(main) {
             down: game.input.keyboard.addKey(Phaser.Keyboard.S),
             left: game.input.keyboard.addKey(Phaser.Keyboard.A),
             right: game.input.keyboard.addKey(Phaser.Keyboard.D),
-            space: game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
+            space: game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR),
+            enter: game.input.keyboard.addKey(Phaser.Keyboard.ENTER)
         };
         var cursors = game.input.keyboard.createCursorKeys();
         this.isDown = function isDown(key) {
             //console.log(key, keyList[key]);
             if (window.bypassPhaserInput) {
                 game.input.enabled = false;
+                keyList.enter.reset();
                 return false;
             } else {
                 game.input.enabled = true;
@@ -395,6 +397,10 @@ function Player(main) {
             if (self.player.scale.x < 0) {
                 self.player.scale.x *= -1;
                 self.hit_player.scale.x *= -1;
+            }
+            if (self.key.isDown('enter')) {
+                console.log("Game focusing chat");
+                $('#chatInput:not(:focus)').focus();
             }
             if (self.key.isDown('space') || main.game.input.activePointer.isDown) {
                 startHitMode();

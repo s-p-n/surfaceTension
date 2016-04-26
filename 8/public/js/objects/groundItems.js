@@ -31,6 +31,7 @@ function GroundItems(main) {
         delete self.items[id];
     };
     self.preload = function () {
+        main.game.load.image('block', './assets/game/items/block.png');
         main.game.load.image('iron', './assets/game/items/iron.png');
         main.game.load.image('slire_roll', './assets/game/items/slire_roll.png');
         main.game.load.image('slire_seed', './assets/game/items/slire_seed.png');
