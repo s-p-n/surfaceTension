@@ -126,7 +126,7 @@ module.exports = function (m, session) {
 	    maxHit = weaponMaxHit + (player.game.skills.melee.level * 0.3);
 	    hit = parseFloat((Math.random() * maxHit).toFixed(1));
 	    for (userId in m.session) {
-			if (userId === session.id || m.session[userId].user === void 0) {
+			if (userId === session.id || m.session[userId].user === void 0 || m.session[userId].user.username === player.username) {
 				continue;
 			}
 			other = m.session[userId].user;
