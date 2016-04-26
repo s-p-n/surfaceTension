@@ -6,8 +6,11 @@ module.exports = function (m, session) {
 			socket.emit('others-update', {username: player.username, game: {
                 x: player.game.x,
                 y: player.game.y,
-                gear: player.game.gear
-            }, hitMode: player.hitMode});
+                gear: player.game.gear,
+                wellness: {
+                    hp: player.game.wellness.hp
+                },
+            }, hitMode: player.hitMode, maxHp: player.game.skills.life.level * 10});
 		}
 	});
 }

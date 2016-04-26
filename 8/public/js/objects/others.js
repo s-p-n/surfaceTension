@@ -21,9 +21,18 @@ function Others(main) {
         player.sprite.x = player.game.x;
         player.sprite.y = player.game.y;
 
-        if (player.sprite.scale.x < 0) {
-            player.sprite.scale.x *= -1;
-            player.hit_sprite.scale.x *= -1;
+        if (player.lastDirection === 'right') {
+            if (player.sprite.scale.x > 0) {
+                player.sprite.scale.x *= -1;
+                player.hit_sprite.scale.x *= -1;
+                player.hpBar.scale.x *= -1;
+            }
+        } else {
+            if (player.sprite.scale.x < 0) {
+                player.sprite.scale.x *= -1;
+                player.hit_sprite.scale.x *= -1;
+                player.hpBar.scale.x *= -1;
+            }
         }
         if (destination.x < player.sprite.x) {
             player.lastDirection = 'left';
@@ -36,6 +45,7 @@ function Others(main) {
             if (player.sprite.scale.x > 0) {
                 player.sprite.scale.x *= -1;
                 player.hit_sprite.scale.x *= -1;
+                player.hpBar.scale.x *= -1;
             }
             player.sprite.animations.play('right');
             player.hit_sprite.animations.play('right');
@@ -80,6 +90,13 @@ function Others(main) {
         eachPlayer(function (player) {
             player.hit_sprite.x = player.sprite.x;
             player.hit_sprite.y = player.sprite.y;
+            if (player.lastDirection === 'right') {
+                if (player.sprite.scale.x > 0) {
+                    player.sprite.scale.x *= -1;
+                    player.hit_sprite.scale.x *= -1;
+                    player.hpBar.scale.x *= -1;
+                }
+            }
             if (player.queue.length > 0) {
                 console.log('queue size:', player.queue.length);
                 if (player.queue.length > maxQueueLength) {
@@ -92,12 +109,6 @@ function Others(main) {
                 movePlayer(player, destination);
                 player.game = destination;
             } else {
-                if (player.lastDirection === 'right') {
-                    if (player.sprite.scale.x > 0) {
-                        player.sprite.scale.x *= -1;
-                        player.hit_sprite.scale.x *= -1;
-                    }
-                }
                 player.sprite.animations.stop();
                 player.hit_sprite.animations.stop();
                 player.sprite.frame = player.stillFrame;
@@ -111,6 +122,7 @@ function Others(main) {
         p.inHitMode = true;
         p.hit_sprite.revive();
         p.sprite.kill();
+        p.hit_sprite.addChild(p.hpBar);
 
         if (p.shirt) {
             p.hit_shirt.revive();
@@ -131,6 +143,7 @@ function Others(main) {
         p.inHitMode = false;
         p.sprite.revive();
         p.hit_sprite.kill();
+        p.sprite.addChild(p.hpBar);
 
         if (p.shirt) {
             p.shirt.revive();
@@ -366,7 +379,30 @@ function Others(main) {
         }
     }
 
-
+    function updateHpBar(p) {
+        var maxHp = p.maxHp;
+        var hp = p.game.wellness.hp;
+        var width = 50;
+        var height = 5;
+        var greenWidth = (hp/maxHp)*width;
+        var redWidth = width - greenWidth;
+        var bmd = main.game.add.bitmapData(width, height);
+        console.log("Updating other HP bar", maxHp, hp);
+        bmd.ctx.beginPath();
+        bmd.ctx.rect(0, 0, greenWidth, height);
+        bmd.ctx.fillStyle = '#00FF00';
+        bmd.ctx.fill();
+        bmd.ctx.closePath();
+        bmd.ctx.beginPath();
+        bmd.ctx.rect(greenWidth,0,redWidth, height);
+        bmd.ctx.fillStyle = '#FF0000';
+        bmd.ctx.fill();
+        p.hpBar = main.game.add.sprite(0, -80, bmd);
+        p.hpBar.anchor.setTo(0.5, 0.5);
+        p.sprite.addChild(p.hpBar);
+        //console.log('hp scale:', p.hpBar.scale.x, p.sprite.scale.x);
+        p.hpBar.scale.x = p.sprite.scale.x;
+    }
 
     self.update = function () {
         if (lastMove + moveTime < Date.now()) {
@@ -463,15 +499,24 @@ function Others(main) {
             others[data.username].game = data.game;
             others[data.username].queue = [];
             others[data.username].inHitMode = false;
+            others[data.username].maxHp = data.maxHp;
             others[data.username].hitSwitchInterval = null;
             setUpGear(others[data.username]);
+            updateHpBar(others[data.username]);
             others[data.username].ready = true;
         }
+        others[data.username].maxHp = data.maxHp;
         others[data.username].queue.push(data.game);
         if (data.hitMode) {
             startHitMode(others[data.username]);
         } else {
             stopHitMode(others[data.username]);
+        }
+        console.log(others[data.username].game);
+        var lastHp = others[data.username].game.wellness.hp;
+        if (lastHp !== data.game.wellness.hp) {
+            others[data.username].game.wellness = data.game.wellness;
+            updateHpBar(others[data.username]);
         }
         if (gearShouldUpdate(others[data.username], data.game.gear)) {
             console.log('updating other players gear');

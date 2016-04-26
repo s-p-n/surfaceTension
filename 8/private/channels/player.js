@@ -80,7 +80,8 @@ module.exports = function (m, session) {
 	function hungerIntervalFunction () {
 		var maxHP = player.game.skills.life.level * 10;
 		if (player.game.wellness.hunger < 100) {
-			player.game.wellness.hunger += 1;
+			//player.game.wellness.hunger += 1;
+			player.game.wellness.hunger = 100;
 		} else {
 			player.game.wellness.hp -= 1;
 		}
@@ -129,8 +130,11 @@ module.exports = function (m, session) {
 				socket.emit('others-update', {username: other.username, game: {
 					x: other.game.x,
 					y: other.game.y,
-					gear: other.game.gear
-				}});
+					gear: other.game.gear,
+	                wellness: {
+	                    hp: other.game.wellness.hp
+	                }
+				}, hitMode: other.hitMode, maxHp: other.game.skills.life.level * 10});
 			//}
 		}
 	}
@@ -157,6 +161,7 @@ module.exports = function (m, session) {
             }
         };
         isDead = false;
+        socket.emit('player-move', {game: player.game});
         updatePlayer();
 	})
 	session.event.on('logged_in', function (result) {

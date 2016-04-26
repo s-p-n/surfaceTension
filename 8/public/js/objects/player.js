@@ -48,7 +48,7 @@ function Player(main) {
         inHitMode = true;
         self.hit_player.revive();
         self.player.kill();
-
+        self.hit_player.addChild(self.hpBar);
         if (self.shirt) {
             self.hit_shirt.revive();
             self.shirt.kill();
@@ -68,7 +68,7 @@ function Player(main) {
         inHitMode = false;
         self.player.revive();
         self.hit_player.kill();
-
+        self.player.addChild(self.hpBar);
         if (self.shirt) {
             self.shirt.revive();
             self.hit_shirt.kill();
@@ -304,6 +304,29 @@ function Player(main) {
             self.rightShoe.frame = self.stillFrame;
         }
     }
+    function updateHpBar() {
+        var maxHp = self.playerData.game.skills.life.level * 10;
+        var hp = self.playerData.game.wellness.hp;
+        var width = 50;
+        var height = 5;
+        var greenWidth = (hp/maxHp)*width;
+        var redWidth = width - greenWidth;
+        var bmd = main.game.add.bitmapData(width, height);
+        bmd.ctx.beginPath();
+        bmd.ctx.rect(0, 0, greenWidth, height);
+        bmd.ctx.fillStyle = '#00FF00';
+        bmd.ctx.fill();
+        bmd.ctx.closePath();
+        bmd.ctx.beginPath();
+        bmd.ctx.rect(greenWidth,0,redWidth, height);
+        bmd.ctx.fillStyle = '#FF0000';
+        bmd.ctx.fill();
+        self.hpBar = main.game.add.sprite(0, -80, bmd);
+        self.hpBar.anchor.setTo(0.5, 0.5);
+        self.player.addChild(self.hpBar);
+        //console.log('hp scale:', self.hpBar.scale.x, self.player.scale.x);
+        self.hpBar.scale.x = self.player.scale.x;
+    }
 
     function serverCommand(command) {
         var t = 500;//Math.floor(Math.random() * 1000);
@@ -362,6 +385,9 @@ function Player(main) {
         self.text.strokeThickness = 3;
         self.text.fill = '#FFFFFF';
 
+        // Set up the HP bar above player
+        updateHpBar();
+
         // Set up listeners for keyboard input
         self.key = new Keys(main.game);
 
@@ -399,6 +425,7 @@ function Player(main) {
             if (self.player.scale.x < 0) {
                 self.player.scale.x *= -1;
                 self.hit_player.scale.x *= -1;
+                self.hpBar.scale.x *= -1;
             }
             if (self.key.isDown('enter') || self.key.isDown('t')) {
                 console.log("Game focusing chat");
@@ -426,6 +453,7 @@ function Player(main) {
                 if (self.player.scale.x > 0) {
                     self.player.scale.x *= -1;
                     self.hit_player.scale.x *= -1;
+                    self.hpBar.scale.x *= -1;
                 }
                 self.player.anchor.x = 0.5;
                 self.hit_player.anchor.x = 0.5;
@@ -460,6 +488,7 @@ function Player(main) {
                     if (self.player.scale.x > 0) {
                         self.player.scale.x *= -1;
                         self.hit_player.scale.x *= -1;
+                        self.hpBar.scale.x *= -1;
                     }
                 }
 
@@ -525,14 +554,23 @@ function Player(main) {
         gear.restore(data);
     });
     comms.on('player-move', function (data) {
-        //console.log('player-move:', data.game);
-        var lag = Date.now() - data.time;
+        var lastHp = self.playerData.game.wellness.hp;
+        
         self.playerData.game = data.game;
-        //console.log("lag:", lag);
-        serverStep = data.step;
+        if (lastHp !== data.game.wellness.hp) {
+            updateHpBar();
+        }
+        wellnessUpdate(data.game.wellness);
+        if (data.step) {
+            serverStep = data.step;
+        }
     });
     comms.on('player-wellness', function (data) {
-        self.playerData.game.welness = data;
+        var lastHp = self.playerData.game.wellness.hp;
+        self.playerData.game.wellness = data;
+        if (lastHp !== data.hp) {
+            updateHpBar();
+        }
         wellnessUpdate(data);
     });
     comms.on('eatqueue-update', function (data) {
