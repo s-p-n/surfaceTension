@@ -34,7 +34,7 @@ function calcLvlXp (lvl) {
     return xp;
 }
 function setXpAfterDeath (game, skill) {
-	var penaltyPerc = 0.09; // 9%
+	var penaltyPerc = 0.2; // 20%
 	var nextLvlXp = calcLvlXp(game.skills[skill].level);
 	var penalty = penaltyPerc * nextLvlXp;
 	var leftoverPenalty = 0;
