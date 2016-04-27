@@ -125,7 +125,7 @@ module.exports = function (m, session) {
                 result[i] = groundItems[i];
             }
         }
-        if (ready && session.user.inventory === void 0) {
+        if (session.user.inventory === void 0) {
             session.user.inventory = new Inventory(m, session);
             socket.emit('ground-items-init', result);
         }
