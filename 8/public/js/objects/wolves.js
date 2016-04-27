@@ -98,6 +98,7 @@ function Wolves (main) {
     self.preload = function () {
         main.game.load.spritesheet('wolf', '/assets/game/wolf_sprite.png', 50, 32, 14);
     };
+    /*
     self.create = function () {
         var testSprite = main.objects.create(
             250,
@@ -112,6 +113,7 @@ function Wolves (main) {
         );
         testSprite.animations.play('left');
     }
+    */
     self.update = function () {
         if (lastMove + moveTime < Date.now()) {
             lastMove = Date.now();
