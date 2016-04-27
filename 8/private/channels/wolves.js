@@ -8,9 +8,24 @@ module.exports = function (m, session) {
         socket.emit('wolf-update', wolf);
     }
 
+    function wolfRemoved (id) {
+        session.state4Broadcast('wolf-removed', id);
+        socket.emit('wolf-removed', id);
+    }
+
     if (wolves.instance === null) {
         //console.log("Instantiating Herbs");
         wolves.instance = new wolves.class(m, function (wolf) {
+            //console.log(typeof wolf);
+            if (typeof wolf !== 'object') {
+                // wolf should be an ID 
+                // of the one to remove
+                // in this case.
+                //console.log("wolf dead (3)");
+                delete wolves[wolf];
+                wolfRemoved(wolf);
+                return;
+            }
             wolves[wolf._id] = wolf;
             wolfUpdate(wolf);
         });

@@ -101,6 +101,7 @@ module.exports = function (m, session) {
 	}
 	socket.on('disconnect', function () {
 		if (hungerInterval !== null) {
+			m.game.onlineUsers -= 1;
 			clearInterval(hungerInterval);
 			clearInterval(hitInterval)
 			hungerInterval = null;
@@ -208,6 +209,7 @@ module.exports = function (m, session) {
 
 	function initPlayer () {
 		var userId, other;
+		m.game.onlineUsers += 1;
 		session.state = 4;
 		player.section = m.map.getSection([player.game.x, player.game.y]);
 		player.hitMode = false;

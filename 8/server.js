@@ -14,7 +14,7 @@ var main = {
 	fs: fs,
 	io: io,
 	root: __dirname,
-    game: {},
+    game: {onlineUsers: 0},
 	session: {}
 };
 

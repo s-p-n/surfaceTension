@@ -1,7 +1,7 @@
 function Wolves (main) {
     var self = this;
     var wolves = Object.create(null);
-    var moveTime = 100;
+    var moveTime = 250;
     var tweenTime = 0.9;
     var lastMove = 0;
     var maxQueueLength = 3;
@@ -196,10 +196,12 @@ function Wolves (main) {
         }
     });
     comms.on('wolf-removed', function (id) {
-        if (others[id] !== void 0) {
-            others[id].sprite.destroy();
-            others[id].text.destroy();
-            delete others[id];
+        //console.log("wolf dead (4)");
+        if (wolves[id] !== void 0) {
+            wolves[id].sprite.destroy();
+            wolves[id].text.destroy();
+            delete wolves[id];
+        //console.log("wolf dead (5)- completely removed from game.. OP");
         }
     });
 }

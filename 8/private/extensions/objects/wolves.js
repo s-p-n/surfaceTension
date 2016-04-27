@@ -5,7 +5,7 @@ function Wolves (main, wolfTickCallback) {
     var wolves = [];
     var wolfRemoval = [];
     var interval = void 0;
-    var intervalTime = 100;
+    var intervalTime = 250;
     function randLevel (max) {
         return Math.round(Math.random() * (max - 1) + 1);
     }
@@ -90,7 +90,17 @@ function Wolves (main, wolfTickCallback) {
                     wolves.splice(index, 1);
                     return;
                 }
-                wolf.cycle();
+                if (wolf.cycle(main) === "kill") {
+                    //console.log("wolf dead (2)");
+                    wolves.splice(index, 1);
+                    self.remove(wolf.doc._id);
+                    self.cycleCallback(wolf.doc._id.toString());
+                    return;
+                }
+
+                main.db.wolves.update({
+                    '_id': wolf.doc._id
+                }, wolf.doc);
                 self.cycleCallback(wolf.doc);
             });
         }, intervalTime);
