@@ -145,6 +145,15 @@ var commands = {
             }
         });
         return true;
+    },
+    'spawn': function (subCmd, m, session) {
+        if (subCmd === 'wolf') {
+            process.nextTick(function () {
+                m.game.objects.wolves.instance.spawn();
+            });
+            return true;
+        }
+        return false;
     }
 }
 

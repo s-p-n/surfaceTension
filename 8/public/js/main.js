@@ -12,6 +12,7 @@ function initializeGame (main) {
     main.map = new Map (main);
     main.player = new Player(main);
     main.herbs = new Herbs(main);
+    main.herbs = new Wolves(main);
     main.mines = new Mines(main);
     main.groundItems = new GroundItems(main);
     main.utils = {

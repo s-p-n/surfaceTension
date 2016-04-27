@@ -530,6 +530,7 @@ function Others(main) {
             others[player].sprite.destroy();
             others[player].hit_sprite.destroy();
             others[player].text.destroy();
+            others[player].hpBar.destroy();
             destroyGear(others[player]);
             delete others[player];
         }

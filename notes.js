@@ -39,6 +39,9 @@ db.users.update(
     {}, 
     {
         '$set': {
+            'game.eatQueue': null,
+            'game.wellness.hp': 10,
+            'game.wellness.hunger': 0,
             'game.skills.life.level': 1,
             'game.skills.medic.level': 1,
             'game.skills.melee.level': 1
@@ -54,4 +57,23 @@ db.users.find().forEach(function (doc) {
         }
     });
     db.users.update({_id: doc._id}, {$set:{'game.inventory':doc.game.inventory}})
+});
+
+db.wolves.insert({
+    place: place,
+    weaponMaxHit: 4,
+    wellness: {
+        hp: (lifeLevel * 10),
+        healRate: (lifeLevel * 0.1)
+    },
+    skills: {
+        life: {
+            level: lifeLevel,
+            experience: 0
+        },
+        melee: {
+            level: meleeLevel,
+            experience: 0
+        }
+    }
 });
