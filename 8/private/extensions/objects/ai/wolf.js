@@ -64,15 +64,12 @@ function FindDestination(ai) {
     copyPlace(ai.memories.place, lastPlace);
     ai.memories.destination = [0, 0];
     copyPlace(ai.memories.place, ai.memories.destination);
-    function xInBounds (x) {
-        return x > ai.memories.bounds[0] && x < ai.memories.bounds[2];
-    }
-    function yInBounds (y) {
-        return y > ai.memories.bounds[1] && y < ai.memories.bounds[3];
-    }
     function newDestination () {
         var place = ai.memories.place;
-        var dest = randPlaceInBounds(ai.memories.bounds);
+        var dest = [0, 0];
+        var randIndex = Math.round(Math.random());
+        copyPlace(place, dest);
+        dest[randIndex] = randPlaceInBounds(ai.memories.bounds)[randIndex];
         ai.memories.destination = dest;
     }
     self.cycle = function () {

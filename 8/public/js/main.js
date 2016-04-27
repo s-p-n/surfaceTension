@@ -11,8 +11,9 @@ function initializeGame (main) {
     main.objects;
     main.map = new Map (main);
     main.player = new Player(main);
+    main.others = new Others(main);
     main.herbs = new Herbs(main);
-    main.herbs = new Wolves(main);
+    main.wolves = new Wolves(main);
     main.mines = new Mines(main);
     main.groundItems = new GroundItems(main);
     main.utils = {
@@ -40,7 +41,7 @@ function initializeGame (main) {
         }
     }
     main.scale = 1;
-    var plugins = new Plugins(main.player, new Others(main), main.herbs, main.mines, main.groundItems);
+    var plugins = new Plugins(main.player, main.others, main.herbs, main.mines, main.groundItems, main.wolves);
 
     function preload() {
         main.game.time.advancedTiming = true;

@@ -95,6 +95,23 @@ function Wolves (main) {
         wolf.hpBar.anchor.setTo(0.5, 0.5);
         wolf.sprite.addChild(wolf.hpBar);
     }
+    self.preload = function () {
+        main.game.load.spritesheet('wolf', '/assets/game/wolf_sprite.png', 50, 32, 14);
+    };
+    self.create = function () {
+        var testSprite = main.objects.create(
+            250,
+            250,
+            'wolf'
+        );
+        testSprite.animations.add(
+            'left',
+            [7, 8, 9],
+            7.5,
+            true
+        );
+        testSprite.animations.play('left');
+    }
     self.update = function () {
         if (lastMove + moveTime < Date.now()) {
             lastMove = Date.now();
@@ -102,120 +119,79 @@ function Wolves (main) {
         }
     };
     comms.on('wolf-update', function (data) {
-        console.log("got wolf update", data.place);
-        /*
-        if (!(data.username in others)) {
-            others[data.username] = {};
-            // Set up player sprite
-            others[data.username].sprite = main.objects.create(
-                data.game.x, 
-                data.game.y, 
-                'player'
+        //console.log("got wolf update", data.place);
+        var game = {
+            x: data.place[0],
+            y: data.place[1],
+            wellness: data.wellness,
+            skills: data.skills
+        };
+        if (!(data._id in wolves)) {
+            wolves[data._id] = {};
+            wolves[data._id].stillFrames = {
+                up: 0,
+                down: 3,
+                left: 6,
+                right: 11
+            };
+            wolves[data._id].sprite = main.objects.create(
+                data.place[0],
+                data.place[1],
+                'wolf'
             );
-            others[data.username].sprite.anchor.setTo(0.5, 0.9);
-            others[data.username].sprite.animations.add(
-                'down', 
-                [0, 1, 0, 2], 
-                10, 
+            wolves[data._id].sprite.anchor.setTo(0.5, 0.9);
+            wolves[data._id].sprite.animations.add(
+                'down',
+                [1, 2],
+                2.5,
                 true
             );
-            others[data.username].sprite.animations.add(
-                'left', 
-                [3, 4, 3, 5], 
-                10, 
+            wolves[data._id].sprite.animations.add(
+                'up',
+                [4, 5],
+                2.5,
                 true
             );
-            others[data.username].sprite.animations.add(
-                'right', 
-                [3, 4, 3, 5], 
-                10, 
+            wolves[data._id].sprite.animations.add(
+                'left',
+                [7, 8, 9],
+                5,
                 true
             );
-            others[data.username].sprite.animations.add(
-                'up', 
-                [6, 7, 6, 8], 
-                10, 
+            wolves[data._id].sprite.animations.add(
+                'right',
+                [11, 12, 13],
+                5,
                 true
             );
+            wolves[data._id].text = main.game.add.text(
+                data.place[0] - 2, 
+                data.place[1] - 60, 
+                'Wolf (' + (data.skills.life.level * 10) + ')'
+            );
+            wolves[data._id].text.anchor.setTo(0.5);
+            wolves[data._id].text.align = 'center';
+            wolves[data._id].text.font = 'Arial Black';
+            wolves[data._id].text.fontSize = 16;
+            wolves[data._id].text.stroke = '#000000';
+            wolves[data._id].text.strokeThickness = 3;
+            wolves[data._id].text.fill = '#FFCCCC';
 
-            others[data.username].hit_sprite = main.objects.create(
-                data.game.x, 
-                data.game.y, 
-                'player_hit'
-            );
-            others[data.username].hit_sprite.anchor.setTo(0.5, 0.9);
-            others[data.username].hit_sprite.animations.add(
-                'down', 
-                [0, 1, 0, 2], 
-                10, 
-                true
-            );
-            others[data.username].hit_sprite.animations.add(
-                'left', 
-                [3, 4, 3, 5], 
-                10, 
-                true
-            );
-            others[data.username].hit_sprite.animations.add(
-                'right', 
-                [3, 4, 3, 5], 
-                10, 
-                true
-            );
-            others[data.username].hit_sprite.animations.add(
-                'up', 
-                [6, 7, 6, 8], 
-                10, 
-                true
-            );
-            others[data.username].hit_sprite.kill();
-
-            // Set up text above player
-            others[data.username].text = main.game.add.text(
-                data.game.x - 2, 
-                data.game.y - 60, 
-                data.username + ' (' + data.maxHp + ')'
-            );
-            others[data.username].text.anchor.setTo(0.5);
-            others[data.username].text.align = 'center';
-            others[data.username].text.font = 'Arial Black';
-            others[data.username].text.fontSize = 16;
-            others[data.username].text.stroke = '#000000';
-            others[data.username].text.strokeThickness = 3;
-            others[data.username].text.fill = '#FFFFFF';
-
-            // Set up miscellaneous data for player.
-            others[data.username].stillFrame = 0;
-            others[data.username].lastDirection = 'down';
-            others[data.username].game = data.game;
-            others[data.username].queue = [];
-            others[data.username].inHitMode = false;
-            others[data.username].maxHp = data.maxHp;
-            others[data.username].hitSwitchInterval = null;
-            setUpGear(others[data.username]);
-            updateHpBar(others[data.username]);
-            others[data.username].ready = true;
+            wolves[data._id].stillFrame = wolves[data._id].stillFrames.down;
+            wolves[data._id].game = game;
+            wolves[data._id].queue = [];
+            wolves[data._id].maxHp = data.skills.life.level * 10;
+            updateHpBar(wolves[data._id]);
+            wolves[data._id].ready = true;
         }
-        others[data.username].text.text = data.username + ' (' + data.maxHp + ')';
-        others[data.username].maxHp = data.maxHp;
-        others[data.username].queue.push(data.game);
-        if (data.hitMode) {
-            startHitMode(others[data.username]);
-        } else {
-            stopHitMode(others[data.username]);
+        wolves[data._id].text.text = 'Wolf (' + (data.skills.life.level * 10) + ')';
+        wolves[data._id].maxHp = (data.skills.life.level * 10);
+        wolves[data._id].queue.push(game);
+        var lastHp = wolves[data._id].game.wellness.hp;
+        if (lastHp !== game.wellness.hp) {
+            wolves[data._id].game.wellness = game.wellness;
+            updateHpBar(wolves[data._id]);
         }
-        console.log(others[data.username].game);
-        var lastHp = others[data.username].game.wellness.hp;
-        if (lastHp !== data.game.wellness.hp) {
-            others[data.username].game.wellness = data.game.wellness;
-            updateHpBar(others[data.username]);
-        }
-        if (gearShouldUpdate(others[data.username], data.game.gear)) {
-            console.log('updating other players gear');
-            others[data.username].game.gear = data.game.gear;
-            setUpGear(others[data.username]);
-        }
-        */
     });
     comms.on('wolf-removed', function (id) {
         if (others[id] !== void 0) {
