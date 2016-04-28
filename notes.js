@@ -61,7 +61,7 @@ db.users.find().forEach(function (doc) {
 
 db.wolves.insert({
     place: place,
-    weaponMaxHit: 4,
+    weaponMaxHit: biteLevel,
     wellness: {
         hp: (lifeLevel * 10),
         healRate: (lifeLevel * 0.1)
@@ -73,6 +73,10 @@ db.wolves.insert({
         },
         melee: {
             level: meleeLevel,
+            experience: 0
+        },
+        bite: {
+            level: biteLevel,
             experience: 0
         }
     }

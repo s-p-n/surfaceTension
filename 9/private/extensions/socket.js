@@ -33,7 +33,7 @@ module.exports = function (m) {
 			ifSectEmit: function ifSectEmit(name, data, place) {
 				var nonSectTag = '-not-in-sect';
 				if (this.state === 4) {
-					if (m.map.inSection(place, this.section)) {
+					if (m.map.inSection(place, this.user.section)) {
 						this.socket.emit(name, data);
 					} else {
 						this.socket.emit(name + nonSectTag, data);
