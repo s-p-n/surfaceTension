@@ -145,7 +145,7 @@ function AttackPrey(ai) {
         m = ai.memories.main;
         maxHit = doc.skills.bite.level + (doc.skills.melee.level * 0.3);
         hit = parseFloat((Math.random() * maxHit).toFixed(1));
-        user = ai.memories.target.user;
+        user = ai.memories.target.user;a
         /*
         //console.log("wolf gonna hit:", hit);
         if (user.hitMode) {
@@ -167,6 +167,7 @@ function AttackPrey(ai) {
             //console.log("Wolf dead (1)");
             return "kill";
         }
+        console.log("wolf hitting " + user.username);
         wolfHitsUser(wolf, user, hit);
         m.db.users.update({
             'username': user.username
