@@ -243,7 +243,7 @@ function FindPrey(ai) {
             }
         }
         if (closest && canSee(ai.memories.place, targetDest(closest))) {
-            console.log("Found target:", closest.user.username);
+            //console.log("Found target:", closest.user.username);
             ai.memories.target = closest;
             return true;
         } else if (checkPlaces(lastPlace, ai.memories.place)) {
