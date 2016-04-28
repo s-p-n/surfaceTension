@@ -24,8 +24,7 @@ function Wolves (main, wolfTickCallback) {
             place: place,
             weaponMaxHit: biteLevel,
             wellness: {
-                hp: (lifeLevel * 10),
-                healRate: (lifeLevel * 0.1)
+                hp: (lifeLevel * 10)
             },
             skills: {
                 life: {

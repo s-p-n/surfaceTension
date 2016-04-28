@@ -220,6 +220,21 @@ function FindPrey(ai) {
     }
 }
 
+function Heal(ai) {
+    var self = this;
+    var lastHeal = Date.now();
+    var healTime = 1000;
+    self.cycle = function () {
+        if (lastHeal + healTime > Date.now()) {
+            return;
+        }
+        lastHeal = Date.now();
+        if (ai.memories.doc.wellness.hp < (ai.memories.doc.skills.life.level * 10)) {
+            ai.memories.doc.wellness.hp += ai.memories.doc.skills.life.level * 0.5;
+        }
+    }
+}
+
 function FindDestination(ai) {
     var self = this;
     var lastPlace = [0, 0];
@@ -262,6 +277,7 @@ function Wolf (params) {
     self.brain.left.createFeedback(FindPrey);
     self.brain.left.createFeedback(AttackPrey);
     self.brain.left.createFeedback(WalkTowards);
+    self.brain.left.createFeedback(Heal);
     self.cycle = function (main) {
         self.doc.place = memories.place;
         self.brain.left.memories.main = main;
