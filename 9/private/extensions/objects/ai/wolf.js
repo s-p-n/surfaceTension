@@ -145,7 +145,7 @@ function AttackPrey(ai) {
         m = ai.memories.main;
         maxHit = doc.skills.bite.level + (doc.skills.melee.level * 0.3);
         hit = parseFloat((Math.random() * maxHit).toFixed(1));
-        user = ai.memories.target.user;a
+        user = ai.memories.target.user;
         /*
         //console.log("wolf gonna hit:", hit);
         if (user.hitMode) {
