@@ -149,6 +149,7 @@ var commands = {
     'spawn': function (subCmd, m, session) {
         if (subCmd === 'wolf') {
             process.nextTick(function () {
+                console.log("Wolf spawned by", session.user.username);
                 m.game.objects.wolves.instance.spawn();
             });
             return true;
