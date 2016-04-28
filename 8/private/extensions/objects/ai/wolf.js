@@ -223,7 +223,7 @@ function FindPrey(ai) {
 function Heal(ai) {
     var self = this;
     var lastHeal = Date.now();
-    var healTime = 1000;
+    var healTime = 10000;
     self.cycle = function () {
         if (lastHeal + healTime > Date.now()) {
             return;
