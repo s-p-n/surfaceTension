@@ -1,11 +1,24 @@
 "use strict";
 var Brain = require('./brain.js');
 
+// Possible drops for this mob- cumulative.
+// 'item_name': (Integer 1-1000 where higher is more likely)
+var drops = {
+    'wolf_tooth': 100
+}
+
 function isClose (me, destination) {
     return !(me[0] + 50 < destination[0] ||
         me[1] + 25 < destination[1] ||
         destination[0] + 25 < me[0] ||
         destination[1] + 25 < me[1]);
+}
+
+function canSee (me, destination) {
+    return !(me[0] + 250 < destination[0] ||
+        me[1] + 250 < destination[1] ||
+        destination[0] + 250 < me[0] ||
+        destination[1] + 250 < me[1]);
 }
 
 function calcLvlXp (lvl) {
@@ -51,6 +64,19 @@ function wolfHitsUser (wolf, user, hit) {
     if (user.game.skills.life.experience >= calcLvlXp(user.game.skills.life.level)) {
         user.game.skills.life.level += 1;
         user.game.skills.life.experience = 0;
+    }
+}
+
+function handleDrops (m, place) {
+    var itemName, item = {name: '', place: place}, r;
+    for (itemName in drops) {
+        r = Math.ceil(Math.random() * 1000);
+        console.log("drop info:");
+        console.log(itemName, "needs less than", drops[itemName], "and got", r);
+        if(drops[itemName] >= r) {
+            item.name = itemName;
+            m.game.objects.groundItems.instance.add(item);
+        }
     }
 }
 
@@ -154,6 +180,7 @@ function AttackPrey(ai) {
             }, {
                 $set: {game: user.game}
             });
+            handleDrops(m, wolf.place);
             //console.log("Wolf dead (1)");
             return "kill";
         }
@@ -185,35 +212,69 @@ function AttackPrey(ai) {
 
 function FindPrey(ai) {
     var self = this;
+    var lastPlace = [0, 0];
+    copyPlace(ai.memories.place, lastPlace);
+    ai.memories.destination = [0, 0];
+    copyPlace(ai.memories.place, ai.memories.destination);
     ai.memories.target = null;
+    function newDestination () {
+        var place = ai.memories.place;
+        var dest = [0, 0];
+        var randIndex = Math.round(Math.random());
+        copyPlace(place, dest);
+        dest[randIndex] = randPlaceInBounds(ai.memories.bounds)[randIndex];
+        ai.memories.destination = dest;
+    }
+    function newTarget () {}
     function findTarget () {
         var userId;
         var m = ai.memories.main;
         var closest = null;
-        for (userId in m.session) {
-            if (m.session[userId].state !== 4) {
-                continue;
+        if(ai.memories.main.game.onlineUsers > 0) {
+            for (userId in m.session) {
+                if (m.session[userId].state !== 4) {
+                    continue;
+                }
+                if (closest === null) {
+                    closest = m.session[userId];
+                    continue;
+                }
+                closest = getClosest(ai.memories.place, closest, m.session[userId]);
             }
-            if (closest === null) {
-                closest = m.session[userId];
-                continue;
-            }
-            closest = getClosest(ai.memories.place, closest, m.session[userId]);
         }
-        console.log("Found closest:", closest);
-        ai.memories.target = closest;
-        ai.memories.destination = targetDest(closest);
+        if (closest && canSee(ai.memories.place, targetDest(closest))) {
+            console.log("Found target:", closest.user.username);
+            ai.memories.target = closest;
+            return true;
+        } else if (checkPlaces(lastPlace, ai.memories.place)) {
+            newDestination();
+        }
+        copyPlace(ai.memories.place, lastPlace);
     }
     self.cycle = function () {
         //console.log("online users (wolf atk cycle):", ai.memories.main.game.onlineUsers);
-        if (!ai.memories.target && ai.memories.main.game.onlineUsers > 0) {
-            ai.addDecision({
-                weight: 10,
-                action: findTarget,
-                title: 'find target'
-            });
+        if (!ai.memories.target) {
+            if (findTarget()) {
+                ai.addDecision({
+                    weight: 1,
+                    action: newTarget,
+                    title: 'found target'
+                });
+            } else if (checkPlaces(lastPlace, ai.memories.place)) {
+                ai.addDecision({
+                    weight: 1,
+                    action: newDestination,
+                    title: 'find destination'
+                });
+            }
+            copyPlace(ai.memories.place, lastPlace);
         } else {
-            if (ai.memories.target && !(ai.memories.target.id in ai.memories.main.session)) {
+            if (ai.memories.target && (
+                    !(ai.memories.target.id in ai.memories.main.session) ||
+                    !canSee(ai.memories.place, targetDest(ai.memories.target))
+                )
+            ) {
+                console.log("lost target");
                 ai.memories.target = null;
             }
         }
@@ -234,7 +295,7 @@ function Heal(ai) {
         }
     }
 }
-
+/*
 function FindDestination(ai) {
     var self = this;
     var lastPlace = [0, 0];
@@ -260,7 +321,7 @@ function FindDestination(ai) {
         copyPlace(ai.memories.place, lastPlace);
     }
 }
-
+*/
 function Wolf (params) {
     var self = this;
     var memories;
@@ -273,7 +334,7 @@ function Wolf (params) {
     memories.place = self.doc.place;
     memories.bounds = [2000, 2000];
     memories.doc = self.doc;
-    self.brain.left.createFeedback(FindDestination);
+    //self.brain.left.createFeedback(FindDestination);
     self.brain.left.createFeedback(FindPrey);
     self.brain.left.createFeedback(AttackPrey);
     self.brain.left.createFeedback(WalkTowards);

@@ -1,7 +1,6 @@
 function GroundItems(main, childCallback) {
     "use strict";
     var self = this;
-    var items = [];
 
     function serializePlace(item) {
         return item.place[0] + 
@@ -9,13 +8,7 @@ function GroundItems(main, childCallback) {
             item.place[1];
     }
     function placeAvailable(item) {
-        console.log((groundPlaces[serializePlace(item)] === false),
-            item.place[0] > 0 ,
-            item.place[0] < main.map.bounds[0] ,
-            item.place[1] > 0 ,
-            item.place[1] < main.map.bounds[1]);
-        return (groundPlaces[serializePlace(item)] === false &&
-            item.place[0] > 0 &&
+        return (item.place[0] > 0 &&
             item.place[0] < main.map.bounds[0] &&
             item.place[1] > 0 &&
             item.place[1] < main.map.bounds[1]);
@@ -25,9 +18,7 @@ function GroundItems(main, childCallback) {
             main.db.groundItems.find().forEach(function (err, doc) {
                 if (!doc || err) {
                     // out of documents, or error.
-                    if (!err && typeof done === "function") {
-                        done();
-                    } else {
+                    if (err) {
                         console.log("GroundItem Find Error!");
                         console.log(err);
                     }
@@ -55,9 +46,14 @@ function GroundItems(main, childCallback) {
             });
         }
     };
-    self.add = function (item, fn) {
-        items.push(item);
-        self.db.add(item, fn);
+    self.add = function (item) {
+        self.db.add(item, function (err, doc) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            self.cycleCallback(doc);
+        });
     };
     self.remove = function (item) {
         self.db.remove(item._id);
@@ -65,7 +61,6 @@ function GroundItems(main, childCallback) {
     self.cycleCallback = childCallback;
     // Construct the items list from db:
     self.db.each(function (item) {
-        items.push(item);
         self.cycleCallback(item);
     });
 }

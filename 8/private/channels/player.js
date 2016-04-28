@@ -113,7 +113,7 @@ module.exports = function (m, session) {
 		if (!player.hitMode) {
 			return;
 		}
-		console.log(player.username, "hitting!");
+		//console.log(player.username, "hitting!");
 		playerRect = {
 	        x: player.game.x - 50,
 	        y: player.game.y - 40,

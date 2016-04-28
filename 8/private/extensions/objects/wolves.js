@@ -96,7 +96,7 @@ function Wolves (main, wolfTickCallback) {
                     self.cycleCallback(wolf.doc._id.toString());
                     return;
                 }
-
+                console.log(wolf.brain.left.memories.lastAction);
                 main.db.wolves.update({
                     '_id': wolf.doc._id
                 }, wolf.doc);
