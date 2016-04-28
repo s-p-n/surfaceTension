@@ -533,13 +533,13 @@ function Others(main) {
     });
     function destroyPlayer(player) {
         if (others[player] !== void 0) {
-            others[player].sprite.destroy();
-            others[player].hit_sprite.destroy();
+            destroyGear(others[player]);
             others[player].text.destroy();
             others[player].hpBar.destroy();
+            others[player].sprite.destroy();
+            others[player].hit_sprite.destroy();
             clearInterval(others[player].hitSwitchInterval);
             others[player].hitSwitchInterval = null;
-            destroyGear(others[player]);
             delete others[player];
         }
     }
