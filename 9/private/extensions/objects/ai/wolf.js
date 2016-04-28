@@ -155,18 +155,7 @@ function AttackPrey(ai) {
             //console.log("user gonna hit:", userHit);
         }
         */
-        if (wolf.wellness.hp < 0) {
-            // If wolf is dead, update user then
-            // signal to kill this wolf.
-            m.db.users.update({
-                'username': user.username
-            }, {
-                $set: {game: user.game}
-            });
-            handleDrops(m, wolf.place);
-            //console.log("Wolf dead (1)");
-            return "kill";
-        }
+        
         console.log("wolf hitting " + user.username);
         wolfHitsUser(wolf, user, hit);
         m.db.users.update({
@@ -183,8 +172,22 @@ function AttackPrey(ai) {
         m.event.emit('player-update', user);
         ai.memories.target.socket.emit('player-move', {game: user.game});
     }
+    function die () {
+        return "kill";
+    }
     self.cycle = function () {
-        if (ai.memories.target &&
+        if (ai.memories.doc.wellness.hp < 0) {
+            // If wolf is dead
+            // signal to kill this wolf.
+            handleDrops(ai.memories.main, ai.memories.place);
+            //console.log("Wolf dead (1)");
+            ai.addDecision({
+                weight: 9999,
+                action: die,
+                title: 'die'
+            });
+            return;
+        } else if (ai.memories.target &&
             ai.memories.main.map.inSection(ai.memories.place, ai.memories.target.user.section) && 
             isClose(ai.memories.place, targetDest(ai.memories.target))) {
             ai.addDecision({
