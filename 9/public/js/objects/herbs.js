@@ -104,6 +104,7 @@ function Herbs (main) {
             sprite.events.onInputOver.add(onOver);
             sprite.events.onInputOut.add(onOut);
             herbs[herb._id].sprite = sprite;
+            main.utils.sortUp(sprite);
         } else {
             herbs[herb._id].sprite.revive();
         }

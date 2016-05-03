@@ -3,7 +3,7 @@ var Wolf = require('./ai/wolf.js');
 function Wolves (main, wolfTickCallback) {
     var self = this;
     var wolves = [];
-    var maxWolves = 20;
+    var maxWolves = 100;
     var naturalSpawnTime = 60000;
     var wolfRemoval = [];
     var interval = void 0;
@@ -73,8 +73,12 @@ function Wolves (main, wolfTickCallback) {
             });
         }
     };
-    self.spawn = function () {
-        self.db.add(randWolfDoc(7, 4, 2), function (err, wolf) {
+    self.spawn = function (place) {
+        var randWolf = randWolfDoc(7, 4, 2);
+        if (place) {
+            randWolf.place = place;
+        }
+        self.db.add(randWolf, function (err, wolf) {
             wolves.push(new Wolf(wolf));
             self.cycleCallback(wolf);
         });

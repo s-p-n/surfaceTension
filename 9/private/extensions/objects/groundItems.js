@@ -1,6 +1,7 @@
 function GroundItems(main, childCallback) {
     "use strict";
     var self = this;
+    var impassableNames = ['block'];
 
     function serializePlace(item) {
         return item.place[0] + 
@@ -15,7 +16,7 @@ function GroundItems(main, childCallback) {
     }
     self.db = {
         each: function (fn, done) {
-            main.db.groundItems.find().forEach(function (err, doc) {
+            main.db.groundItems.find().sort({'place.1':-1}).forEach(function (err, doc) {
                 if (!doc || err) {
                     // out of documents, or error.
                     if (err) {
@@ -47,6 +48,12 @@ function GroundItems(main, childCallback) {
         }
     };
     self.add = function (item) {
+        main.map.places[serializePlace(item)] = true;
+        impassableNames.forEach(function (name) {
+            if (item.name === name) {
+                main.map.impassable[serializePlace(item)] = true;
+            }
+        });
         self.db.add(item, function (err, doc) {
             if (err) {
                 console.error(err);
@@ -56,11 +63,21 @@ function GroundItems(main, childCallback) {
         });
     };
     self.remove = function (item) {
+        var serialPlace = serializePlace(item);
+        if (serialPlace in main.map.impassable) {
+            delete main.map.impassable[serialPlace];
+        }
         self.db.remove(item._id);
     };
     self.cycleCallback = childCallback;
     // Construct the items list from db:
     self.db.each(function (item) {
+        main.map.places[serializePlace(item)] = true;
+        impassableNames.forEach(function (name) {
+            if (item.name === name) {
+                main.map.impassable[serializePlace(item)] = true;
+            }
+        });
         self.cycleCallback(item);
     });
 }

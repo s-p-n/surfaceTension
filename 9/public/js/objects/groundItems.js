@@ -14,11 +14,15 @@ function GroundItems(main) {
     self.createItem = function (item) {
         if (!(item._id in self.items)) {
             item.sprite = main.objects.create(item.place[0], item.place[1], item.name);
+            if (item.sprite.height > 25) {
+                //item.sprite.anchor.setTo(0, 25 / item.sprite.height);
+            }
             item.sprite._id = item._id;
             item.sprite.inputEnabled = true;
             item.sprite.input.useHandCursor = true;
             item.sprite.events.onInputDown.add(onDown);
             self.items[item._id] = item;
+            console.log(item.sprite.bottom);
         } else {
             self.items[item._id].sprite.revive();
         }
@@ -31,6 +35,8 @@ function GroundItems(main) {
         delete self.items[id];
     };
     self.preload = function () {
+        main.game.load.image('wield1', './assets/game/items/wield1.png');
+        main.game.load.image('wield2', './assets/game/items/wield2.png');
         main.game.load.image('wolf_tooth', './assets/game/items/wolf_tooth.png');
         main.game.load.image('block', './assets/game/items/block.png');
         main.game.load.image('iron', './assets/game/items/iron.png');
@@ -50,7 +56,7 @@ function GroundItems(main) {
         for (id in items) {
             self.createItem(items[id]);
         }
-        main.objects.sort('bottom', Phaser.Group.SORT_ASCENDING);
+        //main.objects.sort('bottom', Phaser.Group.SORT_ASCENDING);
     });
     comms.on('ground-item-added', function (item) {
         console.log("Ground item added:", item);

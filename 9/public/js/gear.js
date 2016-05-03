@@ -1,3 +1,4 @@
+
 var gear = {
     slots: {
         head: {
@@ -22,6 +23,14 @@ var gear = {
             type: 0
         }
     },
+    slotName: function (slot) {
+        return slot.replace('rightS', 's').
+            replace('leftS', 's').
+            replace('rightG', 'g').
+            replace('leftG', 'g').
+            replace('rightW', 'w').
+            replace('leftW', 'w') + this.slots[slot].type;
+    },
     restore: function (gear) {
         this.slots = gear;
         this.render();
@@ -35,7 +44,7 @@ var gear = {
         }
     },
     remove: function (slot) {
-        var invItem = slot.replace('rightS', 's').replace('leftS', 's').replace('rightG', 'g').replace('leftG', 'g') + this.slots[slot].type;
+        var invItem = this.slotName(slot);
         console.log('slots inventory item name:', invItem);
         if (this.slots[slot].type !== 0 &&
             inventory.add(invItem)

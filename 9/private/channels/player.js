@@ -1,23 +1,33 @@
+var weapons = [
+	1,
+	2,
+	4
+];
+
+var speed = 25;
 var exec = {
 	up: function (player, m) {
-		if (player.game.y - 7.5 > 0) {
-			player.game.y -= 7.5;
+		if (player.game.y - speed > 0) {
+			player.game.y -= speed;
 		}
 	},
 	down: function (player, m) {
-		if (player.game.y + 7.5 < m.map.bounds[1]) {
-			player.game.y += 7.5;
+		if (player.game.y + speed < m.map.bounds[1]) {
+			player.game.y += speed;
 		}
 	},
 	left: function (player, m) {
-		if (player.game.x - 7.5 > 0) {
-			player.game.x -= 7.5;
+		if (player.game.x - speed > 0) {
+			player.game.x -= speed;
 		}
 	},
 	right: function (player, m) {
-		if (player.game.x + 7.5 < m.map.bounds[0]) {
-			player.game.x += 7.5;
+		if (player.game.x + speed < m.map.bounds[0]) {
+			player.game.x += speed;
 		}
+	},
+	stop: function (player, m) {
+
 	},
 	startHit: function (player, m) {
 		player.hitMode = true;
@@ -26,6 +36,29 @@ var exec = {
 		player.hitMode = false;
 	}
 };
+function deserializePlace (serialPlace) {
+	return serialPlace.split(',');
+}
+function itemRectFromSerialPlace (serialPlace) {
+	var place = deserializePlace(serialPlace);
+	return {
+		x: parseInt(place[0])+1,
+		y: parseInt(place[1])+1,
+		w: 23,
+		h: 23
+	};
+}
+function allowedInPlace (playerRect, m) {
+	var serialPlace, itemRect;
+	for (serialPlace in m.map.impassable) {
+		itemRect = itemRectFromSerialPlace(serialPlace);
+		if (intersects(playerRect, itemRect)) {
+			console.log(playerRect, "not allowed in place", itemRect);
+			return false;
+		}
+	}
+	return true;
+}
 function calcLvlXp (lvl) {
     var i, xp = 100, multi = 1.3;
     for (i = 1; i < lvl; i += 1) {
@@ -86,7 +119,8 @@ module.exports = function (m, session) {
 		if (handleDeath()) {
 			return;
 		}
-		
+		weaponMaxHit = weapons[player.game.gear.rightWield.type];
+		//console.log("weaponMaxHit:", weaponMaxHit);
 		m.db.users.update({
 			'username': player.username
 		}, {
@@ -147,7 +181,8 @@ module.exports = function (m, session) {
 	    };
 	    maxHit = weaponMaxHit + (player.game.skills.melee.level * 0.3);
 	    hit = parseFloat((Math.random() * maxHit).toFixed(1));
-	    
+	    //console.log("maxHit:", maxHit);
+	    //console.log("hit:", hit);
 	    for (userId in m.session) {
 			if (userId === session.id || 
 				m.session[userId].user === void 0 || 
@@ -316,6 +351,9 @@ module.exports = function (m, session) {
 		var now = Date.now();
 		var lag = now - data.time;
 		var cmd = data.action;
+		var playerRect;
+		var lastX = player.game.x;
+		var lastY = player.game.y;
 		if (session.state !== 4) {
 			return;
 		}
@@ -323,6 +361,16 @@ module.exports = function (m, session) {
 			if ((lastCmdTime + intervalTime) > now * 2) {
 			} else {
 				exec[cmd](player, m);
+				playerRect = {
+					x: player.game.x,
+					y: player.game.y,
+					w: 21,
+					h: 10
+				};
+				if (!allowedInPlace(playerRect, m)) {
+					player.game.x = lastX;
+					player.game.y = lastY;
+				}
 				if (hitInterval === null && player.hitMode) {
 					hitInterval = setInterval(hitIntervalFunction, hitIntervalTime);
 				} else if (hitInterval !== null && !player.hitMode) {

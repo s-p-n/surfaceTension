@@ -7,6 +7,8 @@ function IronMines(m, bitUpdateCallback) {
         var b = mine.place[0] + 25 + ',' + mine.place[1];
         m.map.places[a] = true;
         m.map.places[b] = true;
+        m.map.impassable[a] = true;
+        m.map.impassable[b] = true;
     }
     self.db = {
         each: function (fn, done) {

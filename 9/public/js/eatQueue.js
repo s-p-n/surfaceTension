@@ -20,11 +20,11 @@ var eatQueue = {
         if (this.food === null) {
             return false;
         }
-        if (this.food.num > 1) {
-            this.food.num -= 1;
-        } else {
+        //if (this.food.num > 1) {
+        //    this.food.num -= 1;
+        //} else {
             this.food = null;
-        }
+        //}
         comms.emit('eatQueue-item-removed');
         this.render();
         return true;

@@ -22,22 +22,34 @@ function initializeGame (main) {
             return result
         },
         sortUp: function (sprite) {
+            main.objects.sort('bottom', Phaser.Group.SORT_ASCENDING);
+            /*
             var curIndex = main.objects.getIndex(sprite);
             var i = curIndex - 1;
             var sprBottom = sprite.bottom;
-            while (i > 0 && sprBottom < main.objects.children[i].bottom) {
+            console.log("start index:", curIndex);
+            while (i > 0 && sprBottom <= main.objects.children[i].bottom) {
+                console.log("up swapping", sprBottom, "with", main.objects.children[i].bottom);
                 main.objects.swap(main.objects.children[i], sprite);
                 i -= 1;
             }
+            console.log("end index:", main.objects.getIndex(sprite));
+            */
         },
         sortDown: function (sprite) {
+            main.objects.sort('bottom', Phaser.Group.SORT_ASCENDING);
+            /*
             var curIndex = main.objects.getIndex(sprite);
             var i = curIndex + 1;
             var sprBottom = sprite.bottom;
-            while (i < main.objects.length && sprBottom > main.objects.children[i].bottom) {
+            console.log("start index:", curIndex);
+            while (i < main.objects.length && sprBottom >= main.objects.children[i].bottom) {
+                console.log("down swapping", sprBottom, "with", main.objects.children[i].bottom);
                 main.objects.swap(main.objects.children[i], sprite);
                 i += 1;
             }
+            console.log("end index:", main.objects.getIndex(sprite));
+            */
         }
     }
     main.scale = 1;

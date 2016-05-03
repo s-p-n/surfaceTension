@@ -43,6 +43,15 @@ function Inventory (main, session) {
         self.update();
         return true;
     };
+    self.indexOf = function (name) {
+        var i;
+        for (i = self.items.length - 1; i >= 0; i -= 1) {
+            if (name === self.items[i].name) {
+                return i;
+            }
+        }
+        return -1;
+    };
     self.update = function () {
         //console.log('inventory update:');
         //console.log(player._id, self.items);

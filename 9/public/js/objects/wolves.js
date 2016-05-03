@@ -141,7 +141,7 @@ function Wolves (main) {
                 data.place[1],
                 'wolf'
             );
-            wolves[data._id].sprite.anchor.setTo(0.5, 0.9);
+            //wolves[data._id].sprite.anchor.setTo(0.5, 0.9);
             wolves[data._id].sprite.animations.add(
                 'down',
                 [1, 2],

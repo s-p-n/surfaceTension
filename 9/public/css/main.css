@@ -91,7 +91,7 @@ html, body {
         #gameShell {
             margin: 0;
             padding: 0;
-            width: 1200px;
+            width: 1220px;
             height: auto;
         }
         #canvas {
@@ -104,8 +104,10 @@ html, body {
             background: #222;
             margin: 0;
             float: right;
-            width: 200px;
+            width: 220px;
             height: 700px;
+            overflow-y: scroll;
+            overflow-x: hidden;
         }
         .head,.pants,.eatQueue {
             width: 32px;
@@ -114,24 +116,30 @@ html, body {
             border-radius: 7px;
             padding: 2px;
             text-align: center;
-            overflow: hidden;
             display: block;
+            position: relative;
             margin: 5px auto;
+            overflow: hidden;
+            color: black;
+            font-weight: bold;
         }
         .middle, .bottom {
             display: block;
             margin: 5px auto;
             text-align: center;
         }
-        #rightPanel .item, .shirt, .leftGlove, .rightGlove, .leftShoe, .rightShoe {
+        #rightPanel .item, .shirt, .leftWield, .leftGlove, .rightGlove, .rightWield, .leftShoe, .rightShoe, .placeholder {
             width: 32px;
             height: 32px;
             background: rgba(255, 255, 255, 0.5);
             border-radius: 7px;
             padding: 2px;
             display: inline-block;
+            position: relative;
             text-align: center;
             overflow: hidden;
+            color: black;
+            font-weight: bold;
         }
         .multiplier {
             text-shadow: 0px 0px 2px black;
@@ -140,18 +148,16 @@ html, body {
             display: block;
             left: auto;
             top: auto;
-            margin-left: 16px;
+            margin-left: 0px;
             margin-top: 18px;
             font-family: fantasy;
             font-size: 12px;
-        }
-        #rightPanelItems {
         }
         #bottomPanel {
             padding: 3px;
             background: rgba(0, 0, 0, .72);
             margin: 0;
-            width: 1200px;
+            width: 1224px;
             height: 150px;
         }
         #chatPanel {

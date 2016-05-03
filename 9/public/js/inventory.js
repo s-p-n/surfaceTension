@@ -35,7 +35,7 @@ var inventory = {
     },
     render: function () {
         var self = this;
-        $('#rightPanel .item').each(function (i, item) {
+        $('#rightPanelItems .item').each(function (i, item) {
             $(item).html('');
             $(item).attr('data-id', void 0);
             $(item).css('cursor', 'default');
@@ -50,7 +50,16 @@ var inventory = {
 (function () {
     var sprite = null;
     var gridSize = 25;
-    $(document).on('click', '#rightPanel .item', function (e) {
+    function gearNameFromSlot (slot) {
+        return slot.
+            replace('rightS', 's').
+            replace('leftS', 's').
+            replace('rightG', 'g').
+            replace('leftG', 'g').
+            replace('rightW', 'w').
+            replace('leftW', 'w');
+    }
+    $(document).on('click', '#rightPanelItems .item', function (e) {
         var id = $(this).attr('data-id');
         var item;
         if (id === void 0) {
@@ -124,7 +133,7 @@ var inventory = {
         if (sprite === null) {
             return true;
         }
-        gearSlot = $(this).attr('class').replace('rightS', 's').replace('leftS', 's').replace('rightG', 'g').replace('leftG', 'g');
+        gearSlot = gearNameFromSlot($(this).attr('class'));
         gear = {
             type: sprite.key.split(gearSlot)[1],
             slot: $(this).attr('class')
@@ -141,7 +150,7 @@ var inventory = {
         if (sprite === null) {
             return true;
         }
-        gearSlot = $(this).attr('class').replace('rightS', 's').replace('leftS', 's').replace('rightG', 'g').replace('leftG', 'g');
+        gearSlot = gearNameFromSlot($(this).attr('class'));
         gear = {
             type: sprite.key.split(gearSlot)[1],
             slot: $(this).attr('class')
@@ -161,7 +170,7 @@ var inventory = {
         }
 
         item = inventory.items[parseInt(sprite.inventory_id)];
-        gearSlot = $(this).attr('class').replace('rightS', 's').replace('leftS', 's').replace('rightG', 'g').replace('leftG', 'g');
+        gearSlot = gearNameFromSlot($(this).attr('class'));
         data.inventory_id = sprite.inventory_id;
         data.name = sprite.key;
         data.gear = {
@@ -231,6 +240,31 @@ var inventory = {
         });
         if(eatQueue.add(data.name)) {
             comms.emit('eatQueue-item-added', data);
+            //if (item.num === 1) {
+                inventory.items.splice(sprite.inventory_id, 1);
+                sprite.destroy();
+                sprite = null;
+            //} else {
+            //    item.num -= 1;
+            //}
+        }
+    });
+
+    $('#rightPanelCrafting').on('click', '.item', function () {
+        var data = {}, item;
+        if (sprite === null) {
+            crafting.remove($(this).attr('data-id'));
+            return;
+        }
+        item = inventory.items[parseInt(sprite.inventory_id)];
+        data.inventory_id = sprite.inventory_id;
+        data.name = sprite.key;
+        $(this).css({
+            'box-shadow': '',
+            'cursor': 'default'
+        });
+        if(crafting.add(data.name)) {
+            //comms.emit('eatQueue-item-added', data);
             if (item.num === 1) {
                 inventory.items.splice(sprite.inventory_id, 1);
                 sprite.destroy();
@@ -238,6 +272,7 @@ var inventory = {
             } else {
                 item.num -= 1;
             }
+            inventory.render();
         }
-});
+    });
 }());

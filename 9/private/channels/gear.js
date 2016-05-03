@@ -4,6 +4,16 @@ function Gear (main, session) {
     var socket = session.socket;
     var db = main.db;
     var self = this;
+
+    function slotName(slot) {
+        return slot.replace('rightS', 's').
+            replace('leftS', 's').
+            replace('rightG', 'g').
+            replace('leftG', 'g').
+            replace('rightW', 'w').
+            replace('leftW', 'w') + self.slots[slot].type;
+    }
+
     self.slots = player.game.gear;
     self.add = function (slot, type) {
         if (!(slot in self.slots)) {
@@ -21,7 +31,7 @@ function Gear (main, session) {
         return true;
     }
     self.remove = function (slot) {
-        var invItem = slot.replace('rightS', 's').replace('leftS', 's').replace('rightG', 'g').replace('leftG', 'g') + self.slots[slot].type;
+        var invItem = slotName(slot);
         if (self.slots[slot].type !== 0 &&
             player.inventory.add(invItem)
             ) {
@@ -71,21 +81,24 @@ module.exports = function (m, session) {
         if ((session.user.game.eatQueue !== null && 
             item.name !== session.user.game.eatQueue.name) ||
             (edibleItems.indexOf(item.name) === -1) ||
-            (!session.user.inventory.remove(item.inventory_id))
+            (!session.user.inventory.items[item.inventory_id])
         ) {
             console.log("eatQueue add failed");
             // do nothing
         } else {
             if (session.user.game.eatQueue === null) {
-                session.user.game.eatQueue = {name: item.name, num: 1};
+                session.user.game.eatQueue = session.user.inventory.items[item.inventory_id];
             } else {
-                session.user.game.eatQueue.num += 1;
+                session.user.game.eatQueue.num += session.user.inventory.items[item.inventory_id].num;
             }
+            session.user.inventory.items.splice(item.inventory_id, 1);
             m.db.users.update({_id: session.user._id}, {$set:{
-                'game.eatQueue': session.user.game.eatQueue
+                'game.eatQueue': session.user.game.eatQueue,
+                'game.inventory': session.user.inventory.items
             }});
         }
         socket.emit('eatqueue-update', session.user.game.eatQueue);
+        socket.emit('inventory-update', session.user.inventory.items);
     });
     socket.on('eatQueue-item-removed', function () {
         if (session.user.game.eatQueue !== null && 

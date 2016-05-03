@@ -81,3 +81,20 @@ db.wolves.insert({
         }
     }
 });
+
+for (x = 0; x < 16384; x += 512) {
+    for (y = 0; y < 16384; y += 512) {
+        db.map.insert({'name': grass, x: x, y: y});
+    }
+}
+
+db.users.find({
+    'game.inventory': {
+        $elemMatch: {name: 'wolf_tooth'}
+    }
+})
+
+t = 100;
+s = 7.5;
+
+25

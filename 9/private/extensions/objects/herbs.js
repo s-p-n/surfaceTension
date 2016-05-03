@@ -12,12 +12,14 @@ function Herbs(main, childCallback) {
             herb.place[1];
     }
     function placeAvailable(herb) {
+        /*
         console.log((main.map.places[serializePlace(herb)] === false),
             herb.place[0] > 0 ,
             herb.place[0] < main.map.bounds[0] ,
             herb.place[1] > 0 ,
             herb.place[1] < main.map.bounds[1]);
-        return (main.map.places[serializePlace(herb)] === false &&
+        */
+        return (main.map.places[serializePlace(herb)] !== true &&
             herb.place[0] > 0 &&
             herb.place[0] < main.map.bounds[0] &&
             herb.place[1] > 0 &&
@@ -40,16 +42,15 @@ function Herbs(main, childCallback) {
             });
         },
         add: function (herb, fn) {
+            var herbDoc = {
+                name: herb.name,
+                place: herb.place,
+                generation: herb.generation || 0
+            };
             if (typeof fn === 'function') {
-                main.db.herbs.insert({
-                    name: herb.name,
-                    place: herb.place
-                }, fn);
+                main.db.herbs.insert(herbDoc, fn);
             } else {
-                main.db.herbs.insert({
-                    name: herb.name,
-                    place: herb.place
-                });
+                main.db.herbs.insert(herbDoc);
             }
         },
         remove: function (herbId) {
@@ -59,6 +60,9 @@ function Herbs(main, childCallback) {
         }
     };
     self.add = function (data, fn) {
+        if (!data.generation) {
+            data.generation = 0;
+        }
         var herb = new Herb(data);
         if (placeAvailable(herb)) {
             herbs.push(herb);

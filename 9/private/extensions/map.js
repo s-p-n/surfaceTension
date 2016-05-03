@@ -19,6 +19,7 @@ module.exports = function (m) {
             )
     }
     m.map.places = {};
+    m.map.impassable = {};
     function initWorld () {
         var gridSize = 25;
         var sectSize = 512 * 2;

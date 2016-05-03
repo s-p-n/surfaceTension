@@ -24,14 +24,6 @@ var comms = (function () {
 	$('.logout').click(function () {
 		cookies.erase('sessionID');
 	});
-	$('#evilMode').change(function (e) {
-		console.log('evilMode ' + $(this).prop('checked'));
-		if ($(this).prop('checked')) {
-			$(this).siblings('label').css('color', '#FFCCCC');
-		} else {
-			$(this).siblings('label').css('color', '#CCCCCC');
-		}
-	});
 	socket.on('connect', function () {
 		if (window.gameObj === null) {
 		    window.gameObj = {};

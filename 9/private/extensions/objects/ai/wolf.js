@@ -4,7 +4,8 @@ var Brain = require('./brain.js');
 // Possible drops for this mob- cumulative.
 // 'item_name': (Integer 1-1000 where higher is more likely)
 var drops = {
-    'wolf_tooth': 100
+    'wolf_tooth': 100,
+    'wield1': 500
 }
 
 function isClose (me, destination) {
@@ -12,6 +13,44 @@ function isClose (me, destination) {
         me[1] + 25 < destination[1] ||
         destination[0] + 25 < me[0] ||
         destination[1] + 25 < me[1]);
+}
+function deserializePlace (serialPlace) {
+    return serialPlace.split(',');
+}
+function allowedInPlace (place, m) {
+    var serialPlace, itemRect;
+    var wolfRect = wolfRectFromPlace(place);
+    for (serialPlace in m.map.impassable) {
+        itemRect = itemRectFromSerialPlace(serialPlace);
+        if (intersects(wolfRect, itemRect)) {
+            console.log(wolfRect, "not allowed in place", itemRect);
+            return false;
+        }
+    }
+    return true;
+}
+function itemRectFromSerialPlace (serialPlace) {
+    var place = deserializePlace(serialPlace);
+    return {
+        x: parseInt(place[0])+1,
+        y: parseInt(place[1])+1,
+        w: 23,
+        h: 23
+    };
+}
+function wolfRectFromPlace (place) {
+    return {
+        x: parseInt(place[0])+1,
+        y: parseInt(place[1])+1,
+        w: 50,
+        h: 32
+    };
+}
+function intersects (a, b) {
+    return !(a.x + a.w < b.x ||
+        a.y + a.h < b.y ||
+        b.x + b.w < a.x ||
+        b.y + b.h < a.y);
 }
 
 function canSee (me, destination) {
@@ -74,10 +113,27 @@ function getClosest (me, a, b) {
     return b;
 }
 
-function randPlaceInBounds (bounds) {
+function randPlaceInBounds (bounds, curPlace) {
+    var highX = (bounds[0] - 50);
+    var highY = (bounds[1] - 50);
+    var lowX = 25;
+    var lowY = 25;
+    var maxMove = 250;
+    if ((curPlace[0] - maxMove) > lowX) {
+        lowX = curPlace[0] - maxMove;
+    }
+    if ((curPlace[1] - maxMove) > lowY) {
+        lowY = curPlace[1] - maxMove;
+    } 
+    if ((curPlace[0] + maxMove) < highX) {
+        highX = curPlace[0] + maxMove;
+    }
+    if ((curPlace[1] + maxMove) < highY) {
+        highY = curPlace[1] + maxMove;
+    }
     return [
-        Math.floor((Math.random() * (bounds[0] - 50)) + 25), 
-        Math.floor((Math.random() * (bounds[1] - 50)) + 25)
+        Math.floor((Math.random() * highX) + lowX), 
+        Math.floor((Math.random() * highY) + lowY)
     ];
 }
 
@@ -95,6 +151,9 @@ function WalkTowards(ai) {
     var walkSpeed = 7.5;
     var lastPlace = [0, 0];
     copyPlace(ai.memories.place, lastPlace);
+    function canWalk () {
+        return allowedInPlace(ai.memories.place, ai.memories.main)
+    }
     function walk () {
         var destination;
         if (ai.memories.target) {
@@ -115,6 +174,9 @@ function WalkTowards(ai) {
             ai.memories.place[i] -= walkSpeed;
         } else {
             ai.memories.place[i] += walkSpeed;
+        }
+        if (!canWalk()) {
+            copyPlace(lastPlace, ai.memories.place);
         }
     }
     self.cycle = function () {
@@ -166,6 +228,7 @@ function AttackPrey(ai) {
         m.db.wolves.update({
             '_id': wolf._id
         }, wolf);
+        console.log(user.game.wellness.hp);
         if (user.game.wellness.hp <= 0) {
             ai.memories.target.event.emit('death-1');
         }
@@ -211,8 +274,10 @@ function FindPrey(ai) {
         var dest = [0, 0];
         var randIndex = Math.round(Math.random());
         copyPlace(place, dest);
-        dest[randIndex] = randPlaceInBounds(ai.memories.bounds)[randIndex];
+        dest[randIndex] = randPlaceInBounds(ai.memories.bounds, place)[randIndex];
         ai.memories.destination = dest;
+        //console.log("Destination set:");
+        //console.log("From:", place, "To:", dest);
     }
     function newTarget () {}
     function findTarget () {
@@ -232,7 +297,7 @@ function FindPrey(ai) {
             }
         }
         if (closest && canSee(ai.memories.place, targetDest(closest))) {
-            //console.log("Found target:", closest.user.username);
+            console.log("Found target:", closest.user.username);
             ai.memories.target = closest;
             return true;
         } else if (checkPlaces(lastPlace, ai.memories.place)) {
@@ -321,7 +386,6 @@ function Wolf (params) {
     self.doc = params;
     memories = self.brain.left.memories;
     memories.place = self.doc.place;
-    memories.bounds = [2000, 2000];
     memories.doc = self.doc;
     //self.brain.left.createFeedback(FindDestination);
     self.brain.left.createFeedback(FindPrey);
@@ -329,6 +393,9 @@ function Wolf (params) {
     self.brain.left.createFeedback(WalkTowards);
     self.brain.left.createFeedback(Heal);
     self.cycle = function (main) {
+        if (!self.brain.left.memories.bounds) {
+            self.brain.left.memories.bounds = main.map.bounds;
+        }
         self.doc.place = memories.place;
         self.brain.left.memories.main = main;
         return self.brain.cycle();
