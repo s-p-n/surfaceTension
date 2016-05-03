@@ -182,6 +182,9 @@ function Others(main) {
     }
 
     function destroyGear(p) {
+        if (p.rightWield) {
+            p.rightWield.destroy();
+        }
         if (p.shirt) {
             p.shirt.destroy();
         }
@@ -197,7 +200,8 @@ function Others(main) {
     }
 
     function gearShouldUpdate(p, newGear) {
-        if (p.game.gear.shirt.type !== newGear.shirt.type ||
+        if (p.game.gear.rightWield.type !== newGear.rightWield.type ||
+            p.game.gear.rightWield.type !== newGear.rightWield.type ||
             p.game.gear.pants.type !== newGear.pants.type ||
             p.game.gear.leftShoe.type !== newGear.leftShoe.type ||
             p.game.gear.rightShoe.type !== newGear.rightShoe.type) {
@@ -210,6 +214,36 @@ function Others(main) {
         var gear = p.game.gear;
         console.log('other gear:', gear);
         destroyGear(p);
+        if (gear.rightWield.type === 1) {
+            p.rightWield = p.sprite.addChild(main.game.add.sprite(0, 0, 'player_rightWield1'));
+            p.rightWield.anchor.setTo(p.sprite.anchor.x, p.sprite.anchor.y);
+
+            p.rightWield.animations.add('down', [0, 1, 0, 2], 10, true);
+            p.rightWield.animations.add('left', [3, 4, 3, 5], 10, true);
+            p.rightWield.animations.add('right', [6, 7, 6, 8], 10, true);
+            p.rightWield.animations.add('up', [9, 10, 9, 11], 10, true);
+            p.rightWield.animations.add('hit_down', [12, 13, 12, 14], 10, true);
+            p.rightWield.animations.add('hit_left', [15, 16, 15, 17], 10, true);
+            p.rightWield.animations.add('hit_right', [18, 19, 18, 20], 10, true);
+            p.rightWield.animations.add('hit_up', [21, 22, 21, 23], 10, true);
+
+            p.rightWield.tint = gear.rightWield.color;
+        }
+        if (gear.rightWield.type === 2) {
+            p.rightWield = p.sprite.addChild(main.game.add.sprite(0, 0, 'player_rightWield2'));
+            p.rightWield.anchor.setTo(p.sprite.anchor.x, p.sprite.anchor.y);
+
+            p.rightWield.animations.add('down', [0, 1, 0, 2], 10, true);
+            p.rightWield.animations.add('left', [3, 4, 3, 5], 10, true);
+            p.rightWield.animations.add('right', [6, 7, 6, 8], 10, true);
+            p.rightWield.animations.add('up', [9, 10, 9, 11], 10, true);
+            p.rightWield.animations.add('hit_down', [12, 13, 12, 14], 10, true);
+            p.rightWield.animations.add('hit_left', [15, 16, 15, 17], 10, true);
+            p.rightWield.animations.add('hit_right', [18, 19, 18, 20], 10, true);
+            p.rightWield.animations.add('hit_up', [21, 22, 21, 23], 10, true);
+
+            p.rightWield.tint = gear.rightWield.color;
+        }
         if (gear.shirt.type === 1) {
             p.shirt = p.sprite.addChild(main.game.add.sprite(0, 0, 'player_shirt'));
             p.shirt.anchor.setTo(p.sprite.anchor.x, p.sprite.anchor.y);
@@ -287,6 +321,9 @@ function Others(main) {
     }
 
     function gearLeft(p) {
+        if (p.rightWield) {
+            p.rightWield.animations.play(animations.left(p));
+        }
         if (p.shirt) {
             p.shirt.animations.play(animations.left(p));
         }
@@ -302,6 +339,9 @@ function Others(main) {
     }
 
     function gearRight(p) {
+        if (p.rightWield) {
+            p.rightWield.animations.play(animations.right(p));
+        }
         if (p.shirt) {
             p.shirt.animations.play(animations.right(p));
         }
@@ -317,6 +357,9 @@ function Others(main) {
     }
 
     function gearUp(p) {
+        if (p.rightWield) {
+            p.rightWield.animations.play(animations.up(p));
+        }
         if (p.shirt) {
             p.shirt.animations.play(animations.up(p));
         }
@@ -332,6 +375,9 @@ function Others(main) {
     }
 
     function gearDown(p) {
+        if (p.rightWield) {
+            p.rightWield.animations.play(animations.down(p));
+        }
         if (p.shirt) {
             p.shirt.animations.play(animations.down(p));
         }
@@ -347,6 +393,10 @@ function Others(main) {
     }
 
     function gearStop(p) {
+        if (p.rightWield) {
+            p.rightWield.animations.stop();
+            p.rightWield.frame = stillFrames[p.direction](p);
+        }
         if (p.shirt) {
             p.shirt.animations.stop();
             p.shirt.frame = stillFrames[p.direction](p);

@@ -94,6 +94,12 @@ db.users.find({
     }
 })
 
+db.users.update({}, {$set: {'game.x': 250, 'game.y': 250}}, {multi:true});
+
+db.users.update({}, {$set: {
+    'game.gear.'
+}})
+
 t = 100;
 s = 7.5;
 
