@@ -23,7 +23,7 @@ function allowedInPlace (place, m) {
     for (serialPlace in m.map.impassable) {
         itemRect = itemRectFromSerialPlace(serialPlace);
         if (intersects(wolfRect, itemRect)) {
-            console.log(wolfRect, "not allowed in place", itemRect);
+            //console.log(wolfRect, "not allowed in place", itemRect);
             return false;
         }
     }
