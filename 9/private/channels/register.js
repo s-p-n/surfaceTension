@@ -44,12 +44,12 @@ module.exports = function (m, session) {
 						inventory: [{name: 'slire_roll', num: 5}, {name: 'slire_seed', num: 10}], 
 						gear: {
 							head: {type: 0, color: 0xFFFFFF},
-							pants: {type: 0, color: 0xFFFFFF},
-							shirt: {type: 0, color: 0xFFFFFF},
+							pants: {type: 1, color: 0xFFFFFF},
+							shirt: {type: 1, color: 0xFFFFFF},
 							rightGlove: {type: 0, color: 0xFFFFFF},
 							leftGlove: {type: 0, color: 0xFFFFFF},
-							rightShoe: {type: 0, color: 0xFFFFFF},
-							leftShoe: {type: 0, color: 0xFFFFFF},
+							rightShoe: {type: 1, color: 0xFFFFFF},
+							leftShoe: {type: 1, color: 0xFFFFFF},
 							rightWield: {type: 0, color: 0xFFFFFF},
 							leftWield: {type: 0, color: 0xFFFFFF}
 						},
