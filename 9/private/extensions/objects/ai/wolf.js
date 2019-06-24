@@ -149,7 +149,10 @@ function copyPlace (p1, p2) {
 function WalkTowards(ai) {
     var self = this;
     var walkSpeed = 7.5;
-    var lastPlace = [0, 0];
+    var lastPlace = [25, 25];
+    if (!ai.memories.place) {
+        ai.memories.place = lastPlace;
+    }
     copyPlace(ai.memories.place, lastPlace);
     function canWalk () {
         return allowedInPlace(ai.memories.place, ai.memories.main)
@@ -276,10 +279,12 @@ function FindPrey(ai) {
         copyPlace(place, dest);
         dest[randIndex] = randPlaceInBounds(ai.memories.bounds, place)[randIndex];
         ai.memories.destination = dest;
-        //console.log("Destination set:");
-        //console.log("From:", place, "To:", dest);
+        console.log("Destination set:");
+        console.log("From:", place, "To:", dest);
     }
-    function newTarget () {}
+    function newTarget () {
+        console.log("new target:", arguments);
+    }
     function findTarget () {
         var userId;
         var m = ai.memories.main;
@@ -307,6 +312,7 @@ function FindPrey(ai) {
     }
     self.cycle = function () {
         //console.log("online users (wolf atk cycle):", ai.memories.main.game.onlineUsers);
+        //console.log(!ai.memories.target)
         if (!ai.memories.target) {
             if (findTarget()) {
                 ai.addDecision({
@@ -323,15 +329,19 @@ function FindPrey(ai) {
             }
             copyPlace(ai.memories.place, lastPlace);
         } else {
-            if (ai.memories.target && (
-                    !(ai.memories.target.id in ai.memories.main.session) ||
-                    !canSee(ai.memories.place, targetDest(ai.memories.target))
-                )
+            if (!(ai.memories.target.id in ai.memories.main.session) ||
+                !canSee(ai.memories.place, targetDest(ai.memories.target))
             ) {
                 console.log("lost target");
                 ai.memories.target = null;
             } else {
-                console.log("no move")
+                console.log("going to target");
+                /*ai.addDecision({
+                    weight: 2,
+                    action: WalkTowards,
+                    title: 'walk towards target'
+                });
+                copyPlace(ai.memories.place, lastPlace);*/
             }
         }
     }
