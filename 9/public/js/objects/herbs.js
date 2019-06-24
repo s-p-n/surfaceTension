@@ -13,7 +13,7 @@ function Herbs (main) {
     function onDown (sprite) {
         var herb = herbs[sprite._id];
         if (main.utils.isClose(sprite) &&
-            inventory.add(herbs[sprite._id].name)
+            inventory.add(herbs[sprite._id].name + "_roll")
         ) {
             self.deleteHerb(sprite._id);
             comms.emit('herb-picked', sprite._id);

@@ -119,7 +119,7 @@ module.exports = function (m, session) {
 		if (handleDeath()) {
 			return;
 		}
-		weaponMaxHit = weapons[player.game.gear.rightWield.type];
+		//weaponMaxHit = weapons[player.game.gear.rightWield.type];
 		//console.log("weaponMaxHit:", weaponMaxHit);
 		m.db.users.update({
 			'username': player.username
@@ -343,6 +343,7 @@ module.exports = function (m, session) {
 		}
 	});
 	socket.on('player-evilMode', function (mode) {
+		console.log(player.username, "changed evil mode to", mode)
 		var evilMode = !!mode;
 		player.game.evilMode = evilMode;
 		updatePlayer();

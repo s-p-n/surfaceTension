@@ -164,37 +164,41 @@ function Player(main) {
         if (self.rightShoe) {
             self.rightShoe.destroy();
         }
-        if (gear.rightWield.type === 1) {
-            self.rightWield = self.player.addChild(main.game.add.sprite(0, 0, 'player_rightWield1'));
-            self.rightWield.anchor.setTo(self.player.anchor.x, self.player.anchor.y);
+        if (gear.rightWield) {
+        
+        
+            if (gear.rightWield.type === 1) {
+                self.rightWield = self.player.addChild(main.game.add.sprite(0, 0, 'player_rightWield1'));
+                self.rightWield.anchor.setTo(self.player.anchor.x, self.player.anchor.y);
 
-            self.rightWield.animations.add('down', [0, 1, 0, 2], 10, true);
-            self.rightWield.animations.add('left', [3, 4, 3, 5], 10, true);
-            self.rightWield.animations.add('right', [6, 7, 6, 8], 10, true);
-            self.rightWield.animations.add('up', [9, 10, 9, 11], 10, true);
-            self.rightWield.animations.add('hit_down', [12, 13, 12, 14], 10, true);
-            self.rightWield.animations.add('hit_left', [15, 16, 15, 17], 10, true);
-            self.rightWield.animations.add('hit_right', [18, 19, 18, 20], 10, true);
-            self.rightWield.animations.add('hit_up', [21, 22, 21, 23], 10, true);
+                self.rightWield.animations.add('down', [0, 1, 0, 2], 10, true);
+                self.rightWield.animations.add('left', [3, 4, 3, 5], 10, true);
+                self.rightWield.animations.add('right', [6, 7, 6, 8], 10, true);
+                self.rightWield.animations.add('up', [9, 10, 9, 11], 10, true);
+                self.rightWield.animations.add('hit_down', [12, 13, 12, 14], 10, true);
+                self.rightWield.animations.add('hit_left', [15, 16, 15, 17], 10, true);
+                self.rightWield.animations.add('hit_right', [18, 19, 18, 20], 10, true);
+                self.rightWield.animations.add('hit_up', [21, 22, 21, 23], 10, true);
 
-            self.rightWield.tint = gear.rightWield.color;
+                self.rightWield.tint = gear.rightWield.color;
+            }
+            if (gear.rightWield.type === 2) {
+                self.rightWield = self.player.addChild(main.game.add.sprite(0, 0, 'player_rightWield2'));
+                self.rightWield.anchor.setTo(self.player.anchor.x, self.player.anchor.y);
+
+                self.rightWield.animations.add('down', [0, 1, 0, 2], 10, true);
+                self.rightWield.animations.add('left', [3, 4, 3, 5], 10, true);
+                self.rightWield.animations.add('right', [6, 7, 6, 8], 10, true);
+                self.rightWield.animations.add('up', [9, 10, 9, 11], 10, true);
+                self.rightWield.animations.add('hit_down', [12, 13, 12, 14], 10, true);
+                self.rightWield.animations.add('hit_left', [15, 16, 15, 17], 10, true);
+                self.rightWield.animations.add('hit_right', [18, 19, 18, 20], 10, true);
+                self.rightWield.animations.add('hit_up', [21, 22, 21, 23], 10, true);
+
+                self.rightWield.tint = gear.rightWield.color;
+            }
         }
-        if (gear.rightWield.type === 2) {
-            self.rightWield = self.player.addChild(main.game.add.sprite(0, 0, 'player_rightWield2'));
-            self.rightWield.anchor.setTo(self.player.anchor.x, self.player.anchor.y);
-
-            self.rightWield.animations.add('down', [0, 1, 0, 2], 10, true);
-            self.rightWield.animations.add('left', [3, 4, 3, 5], 10, true);
-            self.rightWield.animations.add('right', [6, 7, 6, 8], 10, true);
-            self.rightWield.animations.add('up', [9, 10, 9, 11], 10, true);
-            self.rightWield.animations.add('hit_down', [12, 13, 12, 14], 10, true);
-            self.rightWield.animations.add('hit_left', [15, 16, 15, 17], 10, true);
-            self.rightWield.animations.add('hit_right', [18, 19, 18, 20], 10, true);
-            self.rightWield.animations.add('hit_up', [21, 22, 21, 23], 10, true);
-
-            self.rightWield.tint = gear.rightWield.color;
-        }
-        if (gear.shirt.type === 1) {
+        if (gear.shirt && gear.shirt.type === 1) {
             self.shirt = self.player.addChild(main.game.add.sprite(0, 0, 'player_shirt'));
             self.shirt.anchor.setTo(self.player.anchor.x, self.player.anchor.y);
 
@@ -209,7 +213,7 @@ function Player(main) {
 
             self.shirt.tint = gear.shirt.color;
         }
-        if (gear.pants.type === 1) {
+        if (gear.pants && gear.pants.type === 1) {
             self.pants = self.player.addChild(main.game.add.sprite(0, 0, 'player_pants'));
             self.pants.anchor.setTo(self.player.anchor.x, self.player.anchor.y);
 
@@ -224,7 +228,7 @@ function Player(main) {
 
             self.pants.tint = gear.pants.color;
         }
-        if (gear.leftShoe.type === 1) {
+        if (gear.leftShoe && gear.leftShoe.type === 1) {
             self.leftShoe = self.player.addChild(main.game.add.sprite(0, 0, 'player_leftShoe'));
             self.leftShoe.anchor.setTo(self.player.anchor.x, self.player.anchor.y);
 
@@ -235,7 +239,7 @@ function Player(main) {
 
             self.leftShoe.tint = gear.leftShoe.color;
         }
-        if (gear.rightShoe.type === 1) {
+        if (gear.rightShoe && gear.rightShoe.type === 1) {
             self.rightShoe = self.player.addChild(main.game.add.sprite(0, 0, 'player_rightShoe'));
             self.rightShoe.anchor.setTo(self.player.anchor.x, self.player.anchor.y);
 
@@ -246,7 +250,7 @@ function Player(main) {
 
             self.rightShoe.tint = gear.rightShoe.color;
         }
-        if (gear.leftShoe.type === 2) {
+        if (gear.leftShoe && gear.leftShoe.type === 2) {
             self.leftShoe = self.player.addChild(main.game.add.sprite(0, 0, 'player_leftShoe2'));
             self.leftShoe.anchor.setTo(self.player.anchor.x, self.player.anchor.y);
 
@@ -257,7 +261,7 @@ function Player(main) {
 
             self.leftShoe.tint = gear.leftShoe.color;
         }
-        if (gear.rightShoe.type === 2) {
+        if (gear.rightShoe && gear.rightShoe.type === 2) {
             self.rightShoe = self.player.addChild(main.game.add.sprite(0, 0, 'player_rightShoe2'));
             self.rightShoe.anchor.setTo(self.player.anchor.x, self.player.anchor.y);
 

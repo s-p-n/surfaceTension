@@ -330,6 +330,8 @@ function FindPrey(ai) {
             ) {
                 console.log("lost target");
                 ai.memories.target = null;
+            } else {
+                console.log("no move")
             }
         }
     }

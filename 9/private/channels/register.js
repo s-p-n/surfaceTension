@@ -49,7 +49,9 @@ module.exports = function (m, session) {
 							rightGlove: {type: 0, color: 0xFFFFFF},
 							leftGlove: {type: 0, color: 0xFFFFFF},
 							rightShoe: {type: 0, color: 0xFFFFFF},
-							leftShoe: {type: 0, color: 0xFFFFFF}
+							leftShoe: {type: 0, color: 0xFFFFFF},
+							rightWield: {type: 0, color: 0xFFFFFF},
+							leftWield: {type: 0, color: 0xFFFFFF}
 						},
 						wellness: {
 							hp: 10,

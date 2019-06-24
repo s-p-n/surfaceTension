@@ -31,6 +31,7 @@ var inventory = {
         this.render();
     },
     getItemImage: function (item) {
+        console.log(item);
         return $('<span class="multiplier">x' + item.num + '</span><img src="/assets/game/items/' + item.name + '.png" />');
     },
     render: function () {
