@@ -1,2 +1,4 @@
 #ignore database.
 /data
+git-off
+node_modules
