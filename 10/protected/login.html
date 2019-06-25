@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Returning to Surface Tension - ALPHA</title>
+	<link rel="stylesheet" href="css/main.css">
+	<style>
+	#loginContainer {
+		position: relative;
+	    width: 340px;
+	    height: 280px;
+	    margin: 75px auto;
+		background: #eee;
+	    border-radius: 3px;
+	    border: 1px solid #444;
+	    box-shadow: 0 1px 2px rgba(255, 255, 255, .1);
+	}
+	#loginLower {
+	    background: #ecf2f5;
+	    width: 100%;
+	    height: 105px;
+	}
+
+	#loginStatus {
+		color: red;
+		font-weight: bold;
+		text-align: center;
+		padding: 5px;
+	}
+
+	</style>
+</head>
+<body>
+	<div id="gameShell">
+		<audio id="background-music" 
+		src="git-off/CreativeSpark-Unified_String_Theory-V2.mp3" 
+		controls 
+		loop 
+		autobuffer>
+		Your browser does not support background music.
+	</audio>
+	<div id="rightPanel">
+		<div id="account">
+			<a class="logout" href="/">Log out</a>
+		</div>
+		<h2> &nbsp; Gear</h2>
+		<div id="rightPanelGear">
+			<div class="head"> X </div>
+			<section class="middle">
+				<div class="placeholder"> X </div>
+				<div class="placeholder"> X </div>
+				<div class="shirt"> </div>
+				<div class="placeholder"> X </div>
+				<div class="rightWield"> </div>
+			</section>
+			<div class="pants"> </div>
+			<section class="bottom">
+				<div class="leftShoe"> </div>
+				<div class="rightShoe"> </div>
+			</section>
+		</div>
+		<div id="rightPanelPrefs">
+			<input id="evilMode" name="evilMode" class="check" type="checkbox" checked="false"> 
+			<label for="evilMode">
+				Evil Mode
+			</label>
+		</div>
+		<h2> &nbsp; Inventory</h2>
+		<div id="rightPanelItems">
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+		</div>
+		<h2> &nbsp; Munchies</h2>
+		<div id="rightPanelEatQueue">
+			<div class="eatQueue"></div>
+		</div>
+		<h2> &nbsp; Crafting</h2>
+		<div id="rightPanelCrafting">
+			<div class="item"></div>
+		</div>
+	</div>
+		<div id="canvas">
+		<div id="loginContainer">
+			<div id="loginStatus">Log in / Sign up</div>
+			<form action="login" method="socket">
+				<label for="username">Username:</label>
+				<input type="text" id="username" name="username" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$" value="%username%">
+				<label for="password">Password:</label>
+				<input type="password" id="password" name="password" pattern="^.{5,511}$">
+				<input type="checkbox" id="showPassCheckbox"><label for="showPassCheckbox">Show password</label>
+				<div id="loginLower">
+					<input type="checkbox" name="keepMeIn" id="keepMeInCheckbox"><label for="keepMeInCheckbox">Use cookies to keep me logged in.</label>
+					<br>
+					<input type="submit" value="Play">
+				</div>
+			</form>
+		</div>
+		</div>
+		
+		<div style="clear:both;"></div>
+		<div id="bottomPanel">
+			<div id="chatPanel">
+				<div id="chatBox">
+					<ul id="chatText">
+					</ul>
+					<input id="chatInput" type="text" maxlength="100">
+				</div>
+				<div id="chatBtn">
+				</div>
+			</div>
+			<div id="infoBox">
+			</div>
+		</div>
+	</div>
+	<script src="/js/cookies.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="/js/jquery.js"></script>
+	<script src="/js/io.js"></script>
+	<script src="/js/chat.js"></script>
+	<script src="/js/phaser.min.js"></script>
+	<script src="/js/plugins.js"></script>
+	<script src="/js/inventory.js"></script>
+	<script src="/js/crafting.js"></script>
+	<script src="/js/eatQueue.js"></script>
+	<script src="/js/gear.js"></script>
+	<script src="/js/stats.js"></script>
+	<script src="/js/maps/map.js"></script>
+	<script src="/js/objects/player.js"></script>
+	<script src="/js/objects/others.js"></script>
+	<script src="/js/objects/herbs.js"></script>
+	<script src="/js/objects/mines.js"></script>
+	<script src="/js/objects/wolves.js"></script>
+	<script src="/js/objects/groundItems.js"></script>
+	<script src="/js/main.js"></script>
+<script>
+(function () {
+	var registerring = false;
+	comms.on('login', function (data) {
+		console.log("status:", data);
+		$('#loginStatus').text(data.status);
+		if (data.code === 3) {
+			$('#loginStatus').html("Unable to find user, " + 
+				$('#username').val() + 
+				'. <a id="register" href="/doesnt/matter">Create it?</a>');
+		}
+	});
+	$('#loginContainer').on('click', '#register', function (e) {
+		if (!registerring) {
+			registerring = true;
+			var data = $('form[action="login"]').serializeArray();
+			comms.emit('register', data);
+		}
+		e.preventDefault();
+		return false;
+	});
+	$('#showPassCheckbox').on('click', function () {
+		if (this.checked) {
+			$('#password').attr('type', 'text');
+		} else {
+			$('#password').attr('type', 'password');
+		}
+	});
+	$('#username').focus();
+}());
+</script>
+</body>
+</html>

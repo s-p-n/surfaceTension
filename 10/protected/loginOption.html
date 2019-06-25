@@ -1,0 +1,10 @@
+<a class="login" href="/login">Log in</a> 
+<form style="display:inline" id="show-register-btn" method="socket" action="show-register">
+	 Or <button>Save Progress</button>
+</form>
+<script>
+	$('#show-register-btn').submit(function () {
+		console.log("showing #top")
+		$('#top').css('display', 'block')
+	});
+</script>

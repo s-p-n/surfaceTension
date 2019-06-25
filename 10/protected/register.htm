@@ -1,0 +1,76 @@
+<style>
+	#loginContainer {
+		position: relative;
+	    width: 340px;
+	    height: 280px;
+	    margin: 75px auto;
+		background: #eee;
+	    border-radius: 3px;
+	    border: 1px solid #444;
+	    box-shadow: 0 1px 2px rgba(255, 255, 255, .1);
+	}
+	#loginLower {
+	    background: #ecf2f5;
+	    width: 100%;
+	    height: 105px;
+	}
+
+	#loginStatus {
+		color: red;
+		font-weight: bold;
+		text-align: center;
+		padding: 5px;
+	}
+
+</style>
+
+<div id="loginContainer">
+	<div id="loginStatus">Save Progress</div>
+	<form action="register" method="socket">
+		<label for="username">Username:</label>
+		<input type="text" id="username" name="username" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$" value="%username%">
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password" pattern="^.{5,511}$">
+		<input type="checkbox" id="showPassCheckbox"><label for="showPassCheckbox">Show password</label>
+		<div id="loginLower">
+			<input type="checkbox" name="keepMeIn" id="keepMeInCheckbox"><label for="keepMeInCheckbox">Use cookies to keep me logged in.</label>
+			<br>
+			<input type="submit" value="Play">
+		</div>
+	</form>
+</div>
+
+<script>
+(function () {
+	var registerring = false;
+	comms.on('login', function (data) {
+		console.log("status:", data);
+		$('#loginStatus').text(data.status + " " + data.code);
+		console.log(data.code)
+		if (data.code === 3) {
+			$('#loginStatus').html("Unable to find user, " + 
+				$('#username').val() + 
+				'. <a id="register" href="/doesnt/matter">Create it?</a>');
+		} else {
+			$('#top').hide()
+		}
+	});
+	$('#loginContainer').on('click', '#register', function (e) {
+		if (!registerring) {
+			registerring = true;
+			var data = $('form[action="login"]').serializeArray();
+			comms.emit('register', data);
+		}
+		e.preventDefault();
+		return false;
+	});
+	$('#showPassCheckbox').on('click', function () {
+		if (this.checked) {
+			$('#password').attr('type', 'text');
+		} else {
+			$('#password').attr('type', 'password');
+		}
+	});
+	$('#username').focus();
+}());
+</script>

@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Try Surface Tension - ALPHA</title>
+	<link rel="stylesheet" href="/css/main.css"></link>
+</head>
+<body>
+<div id="top">
+</div>
+<div id="gameShell">
+	<audio id="background-music" 
+		src="git-off/CreativeSpark-Unified_String_Theory-V2.mp3" 
+		controls 
+		loop 
+		autobuffer>
+		Your browser does not support background music.
+	</audio>
+	<div id="rightPanel">
+		<div id="account">
+			<a class="logout" href="/">Log out</a>
+		</div>
+		<h2> &nbsp; Gear</h2>
+		<div id="rightPanelGear">
+			<div class="head"> X </div>
+			<section class="middle">
+				<div class="placeholder"> X </div>
+				<div class="placeholder"> X </div>
+				<div class="shirt"> </div>
+				<div class="placeholder"> X </div>
+				<div class="rightWield"> </div>
+			</section>
+			<div class="pants"> </div>
+			<section class="bottom">
+				<div class="leftShoe"> </div>
+				<div class="rightShoe"> </div>
+			</section>
+		</div>
+		<div id="rightPanelPrefs">
+			<input id="evilMode" name="evilMode" class="check" type="checkbox" checked="false"> 
+			<label for="evilMode">
+				Evil Mode
+			</label>
+		</div>
+		<h2> &nbsp; Inventory</h2>
+		<div id="rightPanelItems">
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+			<div class="item"> </div>
+		</div>
+		<h2> &nbsp; Munchies</h2>
+		<div id="rightPanelEatQueue">
+			<div class="eatQueue"></div>
+		</div>
+		<h2> &nbsp; Crafting</h2>
+		<div id="rightPanelCrafting">
+			<div class="item"></div>
+		</div>
+	</div>
+	<div id="canvas">
+		
+	</div>
+	
+	<div style="clear:both;"></div>
+	<div id="bottomPanel">
+		<div id="chatPanel">
+			<div id="chatBox">
+				<ul id="chatText">
+				</ul>
+				<input id="chatInput" type="text" maxlength="100">
+			</div>
+			<div id="chatBtn">
+			</div>
+		</div>
+		<div id="infoBox">
+		</div>
+	</div>
+</div>
+	<script src="/js/cookies.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="/js/jquery.js"></script>
+	<script src="/js/io.js"></script>
+	<script src="/js/chat.js"></script>
+	<script src="/js/phaser.min.js"></script>
+	<script src="/js/plugins.js"></script>
+	<script src="/js/inventory.js"></script>
+	<script src="/js/crafting.js"></script>
+	<script src="/js/eatQueue.js"></script>
+	<script src="/js/gear.js"></script>
+	<script src="/js/stats.js"></script>
+	<script src="/js/maps/map.js"></script>
+	<script src="/js/objects/player.js"></script>
+	<script src="/js/objects/others.js"></script>
+	<script src="/js/objects/herbs.js"></script>
+	<script src="/js/objects/mines.js"></script>
+	<script src="/js/objects/wolves.js"></script>
+	<script src="/js/objects/groundItems.js"></script>
+	<script src="/js/main.js"></script>
+</body>
+</html>

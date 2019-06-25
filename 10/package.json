@@ -1,0 +1,21 @@
+{
+  "name": "surfacetension",
+  "version": "1.0.0",
+  "description": "An MMO from scratch in HTML5 and Node",
+  "main": "server.js",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.17.1",
+    "mongojs": "^2.6.0",
+    "socket.io": "^2.2.0",
+    "socket.io-cookie-parser": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Spencer A. Lockhart",
+  "license": "MIT"
+}

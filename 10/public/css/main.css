@@ -1,0 +1,251 @@
+html, body {
+    background: #000;
+    width: 100%;   
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica Neue", Helvetica, sans-serif;   
+    color: #bbb;   
+    -webkit-font-smoothing: antialiased;
+}
+a,a:visited {
+    color: #0099EE;
+}
+a:active,a:hover {
+    color: #00AAFF;
+}
+h2 {
+    font-size: 1.3em;
+    margin: 2px;
+}
+form {
+    margin: 0 auto;
+    margin-top: 20px;
+}
+label {
+    color: #555;
+    display: inline-block;
+    margin-left: 18px;
+    padding-top: 10px;
+    font-size: 14px;
+}
+p a {
+    font-size: 11px;
+    color: #aaa;
+    float: right;
+    margin-top: -13px;
+    margin-right: 20px;
+}
+p a:hover {
+    color: #555;
+}
+input {
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 12px;
+    outline: none;
+}
+input[type=text],
+input[type=password] {
+    color: #777;
+    padding-left: 10px;
+    margin: 10px;
+    margin-top: 12px;
+    margin-left: 18px;
+    width: 290px;
+    height: 35px;
+    border: 1px solid #c7d0d2;
+    border-radius: 2px;
+    box-shadow: inset 0 1.5px 3px rgba(190, 190, 190, .4), 0 0 0 5px #f5f7f8;
+}
+input[type=checkbox] {
+    margin-left: 20px;
+    margin-top: 30px;
+}
+.check {
+    margin-left: 3px;
+}
+input[type=submit] {
+    float: right;
+    margin-right: 20px;
+    margin-top: 20px;
+    width: 80px;
+    height: 30px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #acd6ef; /*IE fallback*/
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#acd6ef), to(#6ec2e8));
+    background-image: -moz-linear-gradient(top left 90deg, #acd6ef 0%, #6ec2e8 100%);
+    background-image: linear-gradient(top left 90deg, #acd6ef 0%, #6ec2e8 100%);
+    border-radius: 30px;
+    border: 1px solid #66add6;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .3), inset 0 1px 0 rgba(255, 255, 255, .5);
+    cursor: pointer;
+}
+label[for=evilMode] {
+    color: #FFCCCC;
+    font-weight: bold;
+    font-size: 14px;
+    margin-left: 5px;
+}
+#background-music {
+    width: 1000px;
+    height:25px;
+}
+#top {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 9999;
+    display: none;
+}
+#gameShell {
+    margin: 0;
+    padding: 0;
+    width: 1220px;
+    height: auto;
+}
+#canvas {
+    width: 1000px;
+    height: 700px;
+    margin: 0;
+    float: left;
+}
+#rightPanel {
+    background: #222;
+    margin: 0;
+    float: right;
+    width: 220px;
+    height: 730px;
+    overflow: hidden;
+}
+#account {
+    margin: 10px;
+    text-align: center;
+}
+.head,.pants,.eatQueue {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 7px;
+    padding: 2px;
+    text-align: center;
+    display: block;
+    position: relative;
+    margin: 5px auto;
+    overflow: hidden;
+    color: black;
+    font-weight: bold;
+}
+.middle, .bottom {
+    display: block;
+    margin: 5px auto;
+    text-align: center;
+}
+#rightPanel .item, .shirt, .leftWield, .leftGlove, .rightGlove, .rightWield, .leftShoe, .rightShoe, .placeholder {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 7px;
+    padding: 2px;
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+    color: black;
+    font-weight: bold;
+}
+#rightPanelItems {
+    margin: 11px;
+}
+#rightPanelCrafting {
+    margin: 11px;
+}
+.multiplier {
+    text-shadow: 0px 0px 2px black;
+    color: yellow;
+    position: absolute;
+    display: block;
+    left: auto;
+    top: auto;
+    margin-left: 0px;
+    margin-top: 18px;
+    font-family: fantasy;
+    font-size: 12px;
+}
+#bottomPanel {
+    padding: 3px;
+    background: rgba(0, 0, 0, .72);
+    margin: 0;
+    width: 1224px;
+    height: 150px;
+}
+#chatPanel {
+    width: 447px;
+    height: 133px;
+    float: left;
+}
+#chatBox {
+    background-image: url('/assets/ui/chatBox.png');
+    color: black;
+    width: 374px;
+    height: 133px;
+    vertical-align: bottom;
+    float: left;
+}
+#chatText {
+    height: 113px;
+    list-style: none;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin: 0;
+}
+.chatItem:nth-child(even) {
+    background:rgba(0,215,255,0.3);
+}
+#chatInput {
+    height: 20px;
+    border: 0 none;
+    width: 368px;
+    padding-left: 5px;
+    margin: 0;
+    border-radius: 10px;
+    box-shadow: none;
+}
+#chatBtn {
+    background-image: url('/assets/ui/chatBtn_up.png');
+    width: 72px;
+    height: 49px;
+    float: right;
+    margin-top: 84px;
+    cursor: pointer;
+}
+#chatBtnDown {
+    background-image: url('assets/ui/chatBtn.png');
+    width: 72px;
+    height: 49px;
+    float: right;
+    margin-top: 84px;
+}
+#infoBox {
+    background: #222;
+    color: white;
+    width: 738px;
+    height: 133px;
+    float: right;
+    margin-right: 7px;
+    overflow: scroll;
+}
+
+.lambImg {
+    display:inline-block;
+    background: url('/assets/game/sheep_sprite.png');
+    background-position:-200px 0px;
+    width:40px;
+    height:40px;
+    float: left;
+}
+.infoTable {
+    display: inline-block;
+}

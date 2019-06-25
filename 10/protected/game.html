@@ -1,0 +1,13 @@
+<script>
+	(function () {
+		function retry () {
+			if ("initializeGame" in window) {
+				initializeGame(gameObj);
+			} else {
+				console.log("not ready to init, retrying..")
+				window.setTimeout(retry, 0);
+			}
+		}
+		window.setTimeout(retry, 0);
+	}());
+</script>
