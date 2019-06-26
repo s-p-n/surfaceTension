@@ -35,7 +35,7 @@ module.exports = function (m, session) {
 				html: content.game || (content.game = m.fs.readFileSync(m.root + '/protected/game.html', 'utf8'))
 			});
 		} else {
-			console.log("game already sent, skipped.")
+			//console.log("game already sent, skipped.")
 		}
 	}
 
@@ -44,7 +44,7 @@ module.exports = function (m, session) {
 	if (url !== '/login' && !socket.request.cookies.sessionID) {
 		sendLoginOption()
 		process.nextTick(function () {
-			console.log("No session ID, setting up guest")
+			//console.log("No session ID, setting up guest")
 			session.event.emit("setup-guest");
 		});
 	}

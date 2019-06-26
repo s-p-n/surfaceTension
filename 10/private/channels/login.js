@@ -11,15 +11,15 @@ module.exports = function (m, session) {
 			key: socket.request.cookies.sessionID
 		}, function (err, user) {
 			if (err) {
-				console.log(err);
+				//console.log(err);
 				return;
 			}
 			if (user !== null) {
-				console.log("logged in via cookie")
+				//console.log("logged in via cookie")
 				session.user = user;
 				session.event.emit('logged_in', true);
 			} else {
-				console.log("cookie was invalid.");
+				//console.log("cookie was invalid.");
 				session.event.emit('logged_in', false);
 			}
 		});
@@ -27,12 +27,12 @@ module.exports = function (m, session) {
 
 	socket.on("login", function (data) {
 		socket.emit('login', {'status': "Processing Login.."});
-		console.log("Processing Login..");
-		console.log(data.username, socket.id);
+		//console.log("Processing Login..");
+		//console.log(data.username, socket.id);
 		var result = m.form.process(expected, data);
 		
 		if (result === false) {
-			console.log("Login Error: incompatible input");
+			//console.log("Login Error: incompatible input");
 			socket.emit('login', {'status': "(1) No Bueno.", 'code': 1});
 			return;
 		}
@@ -41,18 +41,18 @@ module.exports = function (m, session) {
 			username: result.username
 		}, function (err, user) {
 			if (err) {
-				console.log('login', {'status': "(2) No Bueno."});
+				//console.log('login', {'status': "(2) No Bueno."});
 				socket.emit('login', {'status': "(2) No Bueno.", 'code': 2});
 				return;
 			}
 			
 			if (user === null || !m.form.compare(result.password, user.password)) {
-				console.log('login', {'status': "(3) Unable to find user."});
+				//console.log('login', {'status': "(3) Unable to find user."});
 				socket.emit('login', {'status': "(3) Unable to find user.", 'code': 3});
 				return;
 			}
 			session.user = user;
-			console.log("User:", user.username);
+			//console.log("User:", user.username);
 			session.event.emit('logged_in', true);
 			var myKey = false;
 			if (result.keepMeIn) {

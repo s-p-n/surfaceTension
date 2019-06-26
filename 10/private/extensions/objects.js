@@ -26,5 +26,5 @@ module.exports = function (m) {
             setupGameObj(m.game.objects[objName], require('./objects/' + dir[index]));
         }
     }
-    console.log("Set up game objects:", m.game.objects);
+    //console.log("Set up game objects:", m.game.objects);
 };

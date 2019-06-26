@@ -12,7 +12,7 @@ module.exports = function (m, session) {
         session.state4Broadcast('iron-updated', iron);
     }
     if (mines.instance === null) {
-        console.log("Instantiating Mines");
+        //console.log("Instantiating Mines");
         mines.instance = new mines.class(m, function (iron) {
             mines[iron._id] = iron;
             mineUpdated(iron);

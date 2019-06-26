@@ -91,8 +91,8 @@ function handleDrops (m, place) {
     var itemName, item = {name: '', place: place}, r;
     for (itemName in drops) {
         r = Math.ceil(Math.random() * 1000);
-        console.log("drop info:");
-        console.log(itemName, "needs less than", drops[itemName], "and got", r);
+        //console.log("drop info:");
+        //console.log(itemName, "needs less than", drops[itemName], "and got", r);
         if(drops[itemName] >= r) {
             item.name = itemName;
             m.game.objects.groundItems.instance.add(item);
@@ -221,7 +221,7 @@ function AttackPrey(ai) {
         }
         */
         
-        console.log("wolf hitting " + user.username);
+        //console.log("wolf hitting " + user.username);
         wolfHitsUser(wolf, user, hit);
         m.db.users.update({
             'username': user.username
@@ -231,7 +231,7 @@ function AttackPrey(ai) {
         m.db.wolves.update({
             '_id': wolf._id
         }, wolf);
-        console.log(user.game.wellness.hp);
+        //console.log(user.game.wellness.hp);
         if (user.game.wellness.hp <= 0) {
             ai.memories.target.event.emit('death-1');
         }
@@ -279,11 +279,11 @@ function FindPrey(ai) {
         copyPlace(place, dest);
         dest[randIndex] = randPlaceInBounds(ai.memories.bounds, place)[randIndex];
         ai.memories.destination = dest;
-        console.log("Destination set:");
-        console.log("From:", place, "To:", dest);
+        //console.log("Destination set:");
+        //console.log("From:", place, "To:", dest);
     }
     function newTarget () {
-        console.log("new target:", arguments);
+        //console.log("new target:", arguments);
     }
     function findTarget () {
         var userId;
@@ -302,7 +302,7 @@ function FindPrey(ai) {
             }
         }
         if (closest && canSee(ai.memories.place, targetDest(closest))) {
-            console.log("Found target:", closest.user.username);
+            //console.log("Found target:", closest.user.username);
             ai.memories.target = closest;
             return true;
         } else if (checkPlaces(lastPlace, ai.memories.place)) {
@@ -332,10 +332,10 @@ function FindPrey(ai) {
             if (!(ai.memories.target.id in ai.memories.main.session) ||
                 !canSee(ai.memories.place, targetDest(ai.memories.target))
             ) {
-                console.log("lost target");
+                //console.log("lost target");
                 ai.memories.target = null;
             } else {
-                console.log("going to target");
+                //console.log("going to target");
                 /*ai.addDecision({
                     weight: 2,
                     action: WalkTowards,

@@ -7,19 +7,19 @@ var craftCombos = [
 
 function findCombo (items) {
     var i, j;
-        console.log('craft attempt:', items);
+        //console.log('craft attempt:', items);
         for (i = 0; i < craftCombos.length; i += 1) {
             if (craftCombos[i].items.length !== items.length) {
                 continue;
             }
-            console.log("combo length match")
+            //console.log("combo length match")
             for (j = 0; j < items.length; j += 1) {
                 if (craftCombos[i].items.indexOf(items[j]) === -1) {
-                    console.log('item not in combo:', items[j]);
+                    //console.log('item not in combo:', items[j]);
                     break;
                 }
                 if (j === items.length - 1) {
-                    console.log('combo found:', craftCombos[i]);
+                    //console.log('combo found:', craftCombos[i]);
                     return craftCombos[i];
                 }
             }

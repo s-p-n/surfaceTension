@@ -32,9 +32,9 @@ module.exports = function (m, session) {
     }
     function placeItem (item) {
         var groundItem;
-        console.log("placeItem:", item);
+        //console.log("placeItem:", item);
         if (session.user.inventory.remove(item.inventory_id)) {
-            console.log("placed successfully");
+            //console.log("placed successfully");
             groundItem = {name: item.name, place: item.place};
             groundItems.instance.add(groundItem);
         }
@@ -62,7 +62,7 @@ module.exports = function (m, session) {
         var items = session.user.inventory.items;
         var place = makePlace(session.user.game.x, session.user.game.y);
         var bulk = m.db.groundItems.initializeOrderedBulkOp();
-        console.log("Handling Death Drop");
+        //console.log("Handling Death Drop");
         items.forEach(function (item) {
             while (item.num > 0) {
                 item.num -= 1;
@@ -73,7 +73,7 @@ module.exports = function (m, session) {
         var gear = session.user.gear.slots;
         for (gearName in gear) {
             if (gear[gearName].type > 0) {
-                console.log(gearName, gear[gearName]);
+                //console.log(gearName, gear[gearName]);
                 bulk.insert({
                     name: gearName.replace('rightS', 's').
                         replace('leftS', 's').
@@ -136,7 +136,7 @@ module.exports = function (m, session) {
         if (intersects(playerRect, itemRect) &&
             session.user.inventory.add(item.name)
         ) {
-            console.log("Picking ground item:", item);
+            //console.log("Picking ground item:", item);
             groundItems.instance.remove(item);
             delete groundItems[id];
             session.state4Broadcast('ground-item-removed', id);

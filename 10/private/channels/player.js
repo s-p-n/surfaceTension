@@ -53,7 +53,7 @@ function allowedInPlace (playerRect, m) {
 	for (serialPlace in m.map.impassable) {
 		itemRect = itemRectFromSerialPlace(serialPlace);
 		if (intersects(playerRect, itemRect)) {
-			console.log(playerRect, "not allowed in place", itemRect);
+			//console.log(playerRect, "not allowed in place", itemRect);
 			return false;
 		}
 	}
@@ -200,7 +200,7 @@ module.exports = function (m, session) {
 			otherRect.x = other.game.x - 50;
 			otherRect.y = other.game.y - 40;
 			if (intersects(playerRect, otherRect)) {
-				console.log(other.username, hit);
+				//console.log(other.username, hit);
 				other.game.wellness.hp -= hit;
 				player.game.skills.melee.experience += Math.round(hit);
 				player.game.skills.life.experience += Math.round(hit/2);
@@ -347,7 +347,7 @@ module.exports = function (m, session) {
 		}
 	});
 	socket.on('player-evilMode', function (mode) {
-		console.log(player.username, "changed evil mode to", mode)
+		//console.log(player.username, "changed evil mode to", mode)
 		var evilMode = !!mode;
 		player.game.evilMode = evilMode;
 		updatePlayer();

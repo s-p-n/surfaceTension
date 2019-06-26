@@ -7,12 +7,12 @@ module.exports = function (m, session) {
 	socket.on('register', function (data) {
 
 		socket.emit('login', {'status': "Processing Registration.."});
-		console.log("Processing Registration..");
-		console.log(data.username, socket.id);
+		//console.log("Processing Registration..");
+		//console.log(data.username, socket.id);
 		var result = m.form.process(expected, data);
 		
 		if (result === false) {
-			console.log("Register Error: incompatible input");
+			//console.log("Register Error: incompatible input");
 			socket.emit('login', {'status': "(4) No Bueno.", 'code': 4});
 			return;
 		}
@@ -39,11 +39,11 @@ module.exports = function (m, session) {
 	});
 
 	session.event.on("setup-guest", function () {
-		console.log("Setting up guest..");
+		//console.log("Setting up guest..");
 		session.user = m.user.setupGuest();
 		session.event.emit("logged_in", true);
 	});
-	console.log("guest setup listener ready.");
+	//console.log("guest setup listener ready.");
 	session.event.on("register-user", function (result) {
 		m.db.users.insert({
 			username: result.username, 

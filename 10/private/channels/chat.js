@@ -21,40 +21,35 @@ function makePlace(x, y) {
 var commands = {
     'put': function (subCmd, m, session) {
         var entity;
-        console.log('put', subCmd);
+        //console.log('put', subCmd);
         switch(subCmd) {
             case "slire":
                 entity = {
                     name: 'slire',
                     place: makePlace(session.user.game.x, session.user.game.y)
                 };
-                console.log("placing slire..", entity);
+                //console.log("placing slire..", entity);
                 m.game.objects.herbs.instance.add(entity, function (err, herb) {
                     if (err) {
                         //console.log("Insert error!");
-                        console.error(err);
+                        //console.error(err);
                         return;
                     }
-                    console.log("herb created(3)");
+                    //console.log("herb created(3)");
                     m.game.objects.herbs[herb._id] = herb;
                     session.state4Broadcast('herb-created', herb);
                 });
                 break;
             case "mine":
                 entity = makePlace(session.user.game.x, session.user.game.y);
-                console.log("placing iron mine..", entity);
+                //console.log("placing iron mine..", entity);
                 m.game.objects.ironMines.instance.add(entity, function (mine) {
                     entity = {};
                     entity[mine._id] = mine;
-                    console.log("mine created");
+                    //console.log("mine created");
                     session.state4Broadcast('mines-init', entity);
                 });
                 break;
-            /*
-            case "bits":
-                console.log('put iron bits down');
-                break;
-            */
             default:
                 return false;
         }
@@ -79,8 +74,8 @@ var commands = {
                 var i;
                 session.user.inventory.items.length = 0;
                 session.user.inventory.update();
-                console.log(session.user.inventory.items);
-                console.log(session.user.game.inventory);
+                //console.log(session.user.inventory.items);
+                //console.log(session.user.game.inventory);
             });
             return true;
         }
@@ -101,7 +96,7 @@ var commands = {
                         users += ', ' + item.username;
                     }
                 });
-                console.log("list users:", users);
+                //console.log("list users:", users);
                 session.socket.emit('chat-msg', {text: 'Server: ' + users});
             });
             return true;
@@ -121,7 +116,7 @@ var commands = {
                         }
                     }
                 }
-                console.log('list online:', users);
+                //console.log('list online:', users);
                 session.socket.emit('chat-msg', {text: 'Server: ' + users});
             });
             return true;
@@ -135,7 +130,7 @@ var commands = {
             if (isNaN(num)) {
                 num = 1;
             }
-            console.log("Giving", num, item + 's');
+            //console.log("Giving", num, item + 's');
             while(num > 0 && !(
                 session.user.inventory.items.length >= 30 &&
                 session.user.inventory.items[29].num >= 64
@@ -149,7 +144,7 @@ var commands = {
     'spawn': function (subCmd, m, session) {
         if (subCmd === 'wolf') {
             process.nextTick(function () {
-                console.log("Wolf spawned by", session.user.username);
+                //console.log("Wolf spawned by", session.user.username);
                 m.game.objects.wolves.instance.spawn([session.user.game.x, session.user.game.y]);
             });
             return true;
@@ -183,7 +178,7 @@ module.exports = function (m, session) {
 
         if (data[0] === '\\') {
             command = splitCmd(data);
-            console.log("command:", command);
+            //console.log("command:", command);
             if (command[0] in commands && commands[command[0]](command[1], m, session)) {
                 socket.emit('chat-msg', {text: 'Server: Command executed.'});
                 return;

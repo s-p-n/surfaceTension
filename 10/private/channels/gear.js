@@ -43,8 +43,8 @@ function Gear (main, session) {
     }
 
     self.update = function () {
-        console.log('gear update:');
-        console.log(player._id, self.slots);
+        //console.log('gear update:');
+        //console.log(player._id, self.slots);
         db.users.update({_id: player._id}, {$set: {'game.gear': self.slots}}, function (err, doc) {
             if (err) {
                 console.error(err);
@@ -83,7 +83,7 @@ module.exports = function (m, session) {
             (edibleItems.indexOf(item.name) === -1) ||
             (!session.user.inventory.items[item.inventory_id])
         ) {
-            console.log("eatQueue add failed");
+            //console.log("eatQueue add failed");
             // do nothing
         } else {
             if (session.user.game.eatQueue === null) {
