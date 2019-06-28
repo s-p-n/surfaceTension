@@ -1,0 +1,37 @@
+{
+    "place": [25, 25],
+    "weaponMaxHit": 1,
+    "wellness": {
+        "hp": 10,
+        "hunger" : 0,
+        "infection" : {
+            "minor" : [ ],
+            "normal" : [ ],
+            "chronic" : [ ]
+        },
+        "illness" : {
+            "minor" : [ ],
+            "normal" : [ ],
+            "chronic" : [ ]
+        },
+        "disease" : {
+            "minor" : [ ],
+            "normal" : [ ],
+            "chronic" : [ ]
+        }
+    },
+    "skills": {
+        "life": {
+            "level": 1,
+            "experience": 0
+        },
+        "melee": {
+            "level": 1,
+            "experience": 0
+        },
+        "bite": {
+            "level": 1,
+            "experience": 0
+        }
+    }
+}
