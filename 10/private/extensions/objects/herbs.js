@@ -71,10 +71,12 @@ function Herbs(main, childCallback) {
         }
     };
     self.remove = function (data) {
+        console.log("removing herb: ", data._id)
         var serialPlace = serializePlace(data)
         main.map.places[serialPlace] = false;
         herbRemoval.push(serialPlace);
         self.db.remove(data._id);
+        main.event.emit("herb-picked", data._id)
     }
     self.stop = function () {
         clearInterval(interval);

@@ -13,18 +13,18 @@ module.exports = function (m) {
     }
     m.map.inSection = function (place, sectionIndex) {
         let result;
-        try {
+        //try {
             result = (place[0] >= m.map.sections[sectionIndex].x && 
                     place[0] < m.map.sections[sectionIndex].w + m.map.sections[sectionIndex].x &&
                     place[1] >= m.map.sections[sectionIndex].y &&
                     place[1] < m.map.sections[sectionIndex].h + m.map.sections[sectionIndex].y
                 )
-        } catch (e) {
-            console.log("Warning: m.map.inSection Exception raised")
-            console.log(sectionIndex, place)
-            console.error(e)
-            result = false
-        }
+        //} catch (e) {
+        //    console.log("Warning: m.map.inSection Exception raised")
+        //    console.log(place, sectionIndex)
+        //    console.error(e)
+        //    result = false
+        //}
         return result;
     }
     m.map.places = {};

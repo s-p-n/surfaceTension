@@ -272,7 +272,7 @@ function Player(main) {
 
             self.rightShoe.tint = gear.rightShoe.color;
         }
-        console.log("my pants sprite:", self.pants);
+        //console.log("my pants sprite:", self.pants);
     }
 
     function gearLeft() {

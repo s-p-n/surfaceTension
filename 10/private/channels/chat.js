@@ -144,10 +144,18 @@ var commands = {
     'spawn': function (subCmd, m, session) {
         if (subCmd === 'wolf') {
             process.nextTick(function () {
-                //console.log("Wolf spawned by", session.user.username);
+                console.log("Wolf spawned by", session.user.username);
                 m.game.objects.wolves.instance.spawn([session.user.game.x, session.user.game.y]);
             });
             return true;
+        }
+        if (subCmd === 'sheep') {
+            process.nextTick(function () {
+                console.log("Sheep spawned by", session.user.username);
+                console.log(m.game.objects.sheep.instance)
+                m.game.objects.sheep.instance.spawn([session.user.game.x, session.user.game.y]);
+            });
+            return true
         }
         return false;
     }

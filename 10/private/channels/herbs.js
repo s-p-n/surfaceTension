@@ -13,6 +13,7 @@ module.exports = function (m, session) {
         session.ifSectBroadcast('herb-created', herb, herb.place);
     }
     function herbDeleted (id) {
+        console.log("herb deleted signal broadcast");
         session.state4Broadcast('herb-deleted', id);
     }
     if (herbs.instance === null) {
@@ -60,7 +61,7 @@ module.exports = function (m, session) {
         ) {
             herbs.instance.remove(herb);
             delete herbs[herbId];
-            herbDeleted(herbId);
+            //herbDeleted(herbId);
             while (numSeeds > 0) {
                 numSeeds -= 1;
                 session.user.inventory.add(herb.name + '_seed');
@@ -69,6 +70,7 @@ module.exports = function (m, session) {
             herbCreated(herb);
         }
     });
+    m.event.on('herb-picked', herbDeleted)
     session.event.on('herb-planted', function (herb) {
         if (session.state !== 4 || 
             herb === void 0 || 

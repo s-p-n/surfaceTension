@@ -49,7 +49,6 @@ module.exports = function (m, session) {
         var result = {};
         var i;
         for (i in groundItems) {
-            //console.log('herb:', herbs[i]);
             if (m.map.inSection(groundItems[i].place, session.user.section)) {
                 result[i] = groundItems[i];
             }

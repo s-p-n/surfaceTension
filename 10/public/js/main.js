@@ -14,6 +14,7 @@ function initializeGame (main) {
     main.others = new Others(main);
     main.herbs = new Herbs(main);
     main.wolves = new Wolves(main);
+    main.sheep = new Sheep(main);
     main.mines = new Mines(main);
     main.groundItems = new GroundItems(main);
     main.utils = {
@@ -53,14 +54,22 @@ function initializeGame (main) {
         }
     }
     main.scale = 1;
-    var plugins = new Plugins(main.player, main.others, main.herbs, main.mines, main.groundItems, main.wolves);
+    var plugins = new Plugins(
+        main.player, 
+        main.others, 
+        main.herbs, 
+        main.mines, 
+        main.groundItems, 
+        main.wolves, 
+        main.sheep
+    );
 
     function preload() {
         main.game.time.advancedTiming = true;
         main.game.stage.disableVisibilityChange = true;
         //main.game.stage.scale.setTo(3, 3);
         //main.game.scale.setScreenSize(true);
-        main.game.load.audio('background', 'git-off/CreativeSpark-Unified_String_Theory-V2.mp3')
+        //main.game.load.audio('background', 'git-off/CreativeSpark-Unified_String_Theory-V2.mp3')
         main.map.preload();
         plugins.preload();
     }

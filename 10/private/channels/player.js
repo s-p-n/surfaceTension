@@ -291,9 +291,11 @@ module.exports = function (m, session) {
 		var userId, other;
 		m.game.onlineUsers += 1;
 		session.state = 4;
+		player = session.user;
 		player.section = m.map.getSection([player.game.x, player.game.y]);
 		player.hitMode = false;
 		hungerInterval = setInterval(hungerIntervalFunction, hungerIntervalTime);
+		//console.log(player.section)
 		session.event.emit('game-ready', true);
 		socket.emit('player', {username: player.username, game: player.game});
 		m.event.emit('player-update', player);
